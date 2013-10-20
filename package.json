@@ -13,6 +13,7 @@
     "mongoose": "*",
     "redis": "*",
     "winston": "*",
-    "marked": "*"
+    "marked": "*",
+    "optimist": "*"
   }
 }
