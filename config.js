@@ -7,31 +7,24 @@
  *fall backs to defaults.json.
  */
 
-
-//All the required modules and variables needed to properly configure our app.
 var fs = require('fs'),
-    configFile = require('optimist').argv.config,
+    args = require('optimist').argv,
+    configFile = args.config,
     path = require('path'),
-    winston = require('winston'), //temporary logger to make sure we can parse the config files properly.
-    logger = new (winston.Logger)({
-        transports: [
-            new (winston.transports.File)({ filename: path.join(__dirname, '/.logs/yatt.log' )})
-        ]
-    }),
-    defaultsFile = 'defaultConfig.json',
-    conf = _constructConfig();
+    logger = require('winston'), //temporary logger to make sure we can parse the config files properly.
+    defaultsFile = './defaultConfig.json',
+    configuration = {};
 
 /**
- * Reads th file specified and parses it's JSON content.
+ * Reads the file and parses its JSON content.
  * @returns conf An object with zero or more settings.
  * @private
  */
-function _getConfig(filePath){
-    var conf = {};
-
-    if(!fs.existsSync(filePath)){
+function _parseConfigFile(filePath){
+    var conf = null;
+    if(!filePath || !fs.existsSync(filePath)){
         logger.warn('Couldn\'t find config file %s', filePath);
-        return conf;
+        return {};
     }
 
     try{
@@ -39,7 +32,7 @@ function _getConfig(filePath){
     }
     catch(err){
         logger.warn('Couldn\'t parse config file %s', filePath);
-        return conf;
+        return {};
     }
 
     return conf;
@@ -51,10 +44,10 @@ function _getConfig(filePath){
  * @param obj2 An object to use to augment obj1.
  * @private
  */
-function augmentObjects(obj1, obj2){
+function _augmentObjects(obj1, obj2){
     for(var i in obj2){
-        if(obj2.hasOwnProperty(i) && !obj1.hasOwnProperty(i.hasOwnProperty())){
-            obj1.i = obj2.i;
+        if(obj2.hasOwnProperty(i) && !obj1.hasOwnProperty(i)){
+            obj1[i] = obj2[i];
         }
     }
 }
@@ -65,20 +58,23 @@ function augmentObjects(obj1, obj2){
  * @private
  */
 function _constructConfig(){
-    var conf = {};
-
     if(configFile){
-        augmentObjects(conf, _getConfig(configFile));
+        _augmentObjects(configuration, _parseConfigFile(configFile));
     }
     if(defaultsFile){
-        augmentObjects(conf, _getConfig(defaultsFile));
+        _augmentObjects(configuration, _parseConfigFile(defaultsFile));
     }
+    // Gotta catch 'em all!
+    if(configuration === null ||
+        configuration === undefined ||
+        typeof configuration !== "object" ||
+        configuration.length === 0){
 
-    if(Object.keys(conf).length === 0){
-        logger.error('Couldn\'t create a config object. Exiting.');
-        setTimeout(function(){process.exit(1);}, 10);
+            logger.error('Couldn\'t create a config object. Exiting.');
+            setTimeout(function(){process.exit(1);}, 10);
     }
-    return conf;
 }
 
-module.exports = conf
+// Configure me!
+_constructConfig();
+module.exports.conf = configuration;
