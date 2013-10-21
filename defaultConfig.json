@@ -1,0 +1,41 @@
+{
+    "author": "Pontus Falk",
+    "appName": "YATT",
+    "setters": {
+        "port": 8080,
+        "views": "views/",
+        "view engine": "jade",
+        "stylesheet engine": "stylus",
+        "env": "development"
+    },
+    "uses": {
+        "favicon": "",
+        "logger": "winston",
+        "logFile": ".logs/app.log",
+        "logToConsole": true,
+        "cookieSecret": "g9dasgASK3GA435434ha2635764gdsfaFDA6SRE85opo234HSFSfdeWRRY8bvcVVV",
+        "static": "public/",
+        "stylesheets": "stylesheets/",
+        "javascripts": "javascripts/",
+        "images": "images/",
+        "session": "cookieSession",
+        "sessionStore": "redis",
+        "csrf": false,
+        "db": {
+            "dbs": "mongoose",
+            "connection": {
+                "host": "localhost",
+                "port": "27017",
+                "pool": 50,
+                "user": "pontus",
+                "pass": "pontus",
+                "database": "yatt"
+            }
+        }
+    },
+    "site": {
+        "password": false,
+        "ratio": false,
+        "registration": true
+    }
+}
