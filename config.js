@@ -18,10 +18,11 @@ var fs = require('fs'),
             new (winston.transports.File)({ filename: path.join(__dirname, '/.logs/yatt.log' )})
         ]
     }),
-    defaultsFile = 'defaults.json';
+    defaultsFile = 'defaultConfig.json',
+    conf = _constructConfig();
 
 /**
- * Reads the file specified and parses it's JSON content.
+ * Reads th file specified and parses it's JSON content.
  * @returns conf An object with zero or more settings.
  * @private
  */
@@ -80,4 +81,4 @@ function _constructConfig(){
     return conf;
 }
 
-module.exports = _constructConfig();
+module.exports = conf
