@@ -5,7 +5,7 @@
  * @version 0.0.1
  */
 
-var app = require('./init');
+var app = require('./lib/init');
 
 // Let the show begin.
 app();
