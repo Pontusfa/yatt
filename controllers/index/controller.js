@@ -4,14 +4,18 @@
  * @version 0.0.1
  */
 
-function _get(req, res){
-    res.write("aha!");
+function _getIndex(req, res){
+    res.write('token: )' + req.locals.csrfToken);
     res.end();
 }
 
+function _getRoot(req, res){
+    res.redirect('/index');
+}
+
 function setup(app){
-    //TODO redirect / to /index
-    app.get('/index', _get);
+    app.get('/', _getRoot);
+    app.get('/index', _getIndex);
     return true;
 }
 
