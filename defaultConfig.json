@@ -12,8 +12,8 @@
         "favicon": "",
         "logger": "winston",
         "logFile": ".logs/app.log",
-        "tmpDir": "tmp/",
         "logToConsole": true,
+        "tmpDir": "tmp/",
         "cookieSecret": "g9dasgASK3GA435434ha2635764gdsfaFDA6SRE85opo234HSFSfdeWRRY8bvcVVV",
         "static": "public/",
         "stylesheets": "stylesheets/",
@@ -21,7 +21,7 @@
         "images": "images/",
         "sessionType": "session",
         "sessionStore": "redis",
-        "csrf": true,
+        "csrf": false,
         "db": {
             "dbs": "mongoose",
             "connection": {
