@@ -3,6 +3,7 @@
     "appName": "YATT",
     "setters": {
         "port": 8081,
+        "https port": 8443,
         "views": "views/",
         "view engine": "jade",
         "stylesheet engine": "stylus",
@@ -10,33 +11,46 @@
     },
     "uses": {
         "favicon": "",
+        "https": true,
+        "https only" : true,
         "logger": "winston",
         "logFile": ".logs/app.log",
         "logToConsole": true,
         "tmpDir": "tmp/",
-        "cookieSecret": "g9dasgASK3GA435434ha2635764gdsfaFDA6SRE85opo234HSFSfdeWRRY8bvcVVV",
+        "cookieSecret": "g9dasgASK3GA435434ha2635#€%&/()=?=)(/&%€!764!!..-...jkAgdsfaFDA6SRE85opo234HSFSfdeWRRY8bvcVVV",
         "static": "public/",
         "stylesheets": "stylesheets/",
         "javascripts": "javascripts/",
         "images": "images/",
-        "sessionType": "session",
         "sessionStore": "redis",
-        "csrf": false,
+        "csrf": true,
         "db": {
-            "dbs": "mongoose",
-            "connection": {
-                "host": "localhost",
-                "port": "27017",
-                "pool": 50,
-                "user": "pontus",
-                "pass": "pontus",
-                "database": "yatt"
-            }
+            "host": "localhost",
+            "port": "27017",
+            "pool": 50,
+            "user": "pontus",
+            "pass": "pontus",
+            "database": "yatt"
         }
     },
     "site": {
-        "password": false,
+        "private": true,
+        "whitelist": ["/", "/index", "/login", "/register"],
         "ratio": false,
-        "registration": true
+        "registration": true,
+        "rank": [
+            "member",
+            "moderator",
+            "administrator",
+            "root"
+        ],
+        "usernameLength": {
+            "min": 4,
+            "max": 16
+        },
+        "passwordLength": {
+            "min": 4,
+            "max": 16
+        }
     }
 }
