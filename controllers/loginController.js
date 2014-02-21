@@ -33,13 +33,13 @@ function _postLogin(req, res){
  */
 function _postLoginCallback(req, res){
     return function(err, result){
-        if(result === true) {
-            req.session.loggedin = 1;
+        if(result) {
+            req.session.loggedIn = true;
             res.redirect(req.query.redirect || '/');
         }
         else{
-
-            res.write(err.toString());
+            req.session.loggedIn = false;
+            res.write(err.message);
             res.end();
         }
     };

@@ -15,6 +15,7 @@
         "winston": "*",
         "marked": "*",
         "connect": "*",
-        "optimist": "*"
+        "optimist": "*",
+        "underscore": "*"
     }
 }

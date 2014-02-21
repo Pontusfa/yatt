@@ -7,7 +7,6 @@
 
 function _getIndex(req, res){
     req.session.cnt = req.session.cnt+3 || 1;
-    req.session.loggedIn = 1;
     res.write('lo ' + req.session.cnt);
     res.end();
 }

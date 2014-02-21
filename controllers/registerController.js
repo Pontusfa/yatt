@@ -5,30 +5,41 @@
  */
 
 var registerModel = require('../models/registerModel'),
-    logger = require('../lib/logger').logger;
+    _ = require('underscore'),
+    logger = require('../lib/logger');
 
 function _getRegister(req, res){
-    res.render('register', {
-    });
+    if(req.session.loggedIn){
+        res.redirect('/');
+    }
+    else{
+        res.render('register',
+            {
+            });
+    }
 }
 
-function _postRegisterCallback(res){
-    return function(err, result)
-    {
-        if(err || result === false){
-            logger.info(err.code);
+function _postRegister(req, res){
+    if(req.session.loggedIn){
+        res.redirect('/');
+    }
+    else{
+        registerModel.registerUser(req.body, _postRegisterCallback(req, res));
+    }
+}
+
+function _postRegisterCallback(req, res){
+    return function(err, result){
+        if(_.isObject(err) || !result){
+            logger.info(err.message);
             res.write('couldn\'t register at this time. Please try again later.');
             res.end();
         }
         else{
-            res.write('all good in the hood');
+            res.redirect(req.query.redirect || '/');
             res.end();
         }
     };
-}
-
-function _postRegister(req, res){
-    registerModel.registerUser(req.body, _postRegisterCallback(res));
 }
 
 /**

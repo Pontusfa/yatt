@@ -15,6 +15,7 @@
         "https only" : true,
         "logger": "winston",
         "logFile": ".logs/app.log",
+        "certPath": "sslcert/",
         "logToConsole": true,
         "tmpDir": "tmp/",
         "cookieSecret": "g9dasgASK3GA435434ha2635#€%&/()=?=)(/&%€!764!!..-...jkAgdsfaFDA6SRE85opo234HSFSfdeWRRY8bvcVVV",
@@ -35,11 +36,12 @@
     },
     "site": {
         "private": true,
-        "whitelist": ["/", "/index", "/login", "/register"],
+        "publicPaths": ["/", "/index", "/login", "/register"],
         "ratio": false,
         "registration": true,
         "rank": [
             "member",
+            "uploader",
             "moderator",
             "administrator",
             "root"

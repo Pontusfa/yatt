@@ -5,23 +5,24 @@
  */
 
 var queries = require('./queries'),
-    usernameLength = require('../lib/config').conf.site.usernameLength,
+    modifyUser = require('./modifyUserModel'),
+    _ = require('underscore'),
+    usernameLength = require('../lib/config').site.usernameLength,
     usernamePattern = '^[a-zA-Z][a-zA-Z0-9_-]{' + (usernameLength.min-1) + ',' + (usernameLength.max-1) + '}$',
     usernameRegex = new RegExp(usernamePattern),
-    passwordLength = require('../lib/config').conf.site.passwordLength;
+    passwordLength = require('../lib/config').site.passwordLength;
 
 /**
  * Register a new user with unique username. Fails if username is already taken.
  * @param user all relevant info about the user
  * @param callback function(err, result) where result is a boolean representing successful registration.
- * @returns {boolean}
  */
 function registerUser(user, callback){
-    if(!user.username || !user.password){
+    if(!_.isString(user.username) || !_.isString(user.password)){
         callback(new Error('no pass/username'), false);
     }
 
-    else if(usernameRegex.test(user.username) === false){
+    else if(!usernameRegex.test(user.username)){
         callback(new Error('regex fail'), false);
     }
 
@@ -30,9 +31,16 @@ function registerUser(user, callback){
     }
 
     else{
-        queries.addUser(user, callback);
+        user.passkey = -1; // defaults to -1, will be updated to unique value after insertion
+        queries.addUser(user, function(err, result){
+            if(result){
+                modifyUser.updatePasskey(user, callback);
+            }
+            else{
+                callback(err, result);
+            }
+        });
     }
-    return true;
 }
 
 module.exports.registerUser = registerUser;
