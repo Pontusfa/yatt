@@ -1,13 +1,11 @@
 /**
  * Various functions to update a user's details.
  * @author Pontus Falk
- * @version 0.0.1
  */
 
 var queries = require('./queries'),
     crypto = require('crypto'),
     _ = require('underscore'),
-    passkeyRegex = new RegExp(/\W/g),
     passkeyMaxAttempts = 1000;
 
 /**
@@ -25,7 +23,7 @@ function updatePasskey(user, callback){
  * @private
  */
 function _updatePasskeyHelper(user, attempts, callback){
-    var newPasskey = crypto.randomBytes(64).toString('base64').replace(passkeyRegex, '');
+    var newPasskey = crypto.randomBytes(32).toString('base64').replace(/\W/g, '');
     if(attempts > 0){
         queries.getDocument({'passkey': newPasskey}, 'user', {username: 1},
             _updatePasskeyCallback(user, newPasskey, attempts, callback));
