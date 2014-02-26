@@ -11,11 +11,12 @@
         "jade": "*",
         "stylus": "*",
         "mongoose": "*",
-        "redis": "*",
+        "connect-redis": "*",
         "winston": "*",
-        "marked": "*",
-        "connect": "*",
         "optimist": "*",
-        "underscore": "*"
+        "busboy": "*",
+        "underscore": "*",
+        "bencode": "*",
+        "emblem": "*"
     }
 }

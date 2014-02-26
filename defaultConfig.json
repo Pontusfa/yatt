@@ -2,29 +2,29 @@
     "author": "Pontus Falk",
     "appName": "YATT",
     "setters": {
-        "port": 8081,
+        "port": 8080,
         "https port": 8443,
         "views": "views/",
-        "view engine": "jade",
-        "stylesheet engine": "stylus",
+        "certPath": "sslcert/",
+        "logFile": ".logs/app.log",
+        "static": "public/",
+        "stylesheets": "stylesheets/",
+        "logToConsole": true,
         "env": "development"
     },
     "uses": {
         "favicon": "",
         "https": true,
         "https only" : true,
-        "logger": "winston",
-        "logFile": ".logs/app.log",
-        "certPath": "sslcert/",
-        "logToConsole": true,
-        "tmpDir": "tmp/",
-        "cookieSecret": "g9dasgASK3GA435434ha2635#€%&/()=?=)(/&%€!764!!..-...jkAgdsfaFDA6SRE85opo234HSFSfdeWRRY8bvcVVV",
-        "static": "public/",
-        "stylesheets": "stylesheets/",
-        "javascripts": "javascripts/",
-        "images": "images/",
+        "view engine": "jade",
+        "stylesheet engine": "stylus",
+        "cookieSecret": "g9dasgAS-K3GA435434ha2635#€%&/()=?=)(/&%€!764!!..jkAgdsfaFDA6SRE85op.||o234HSFSfdeWRRY8bvcVVV",
         "sessionStore": "redis",
-        "csrf": true,
+        "redis": {
+            "host": "localhost",
+            "port": 6379,
+            "db": 0
+        },
         "db": {
             "host": "localhost",
             "port": "27017",
@@ -36,10 +36,9 @@
     },
     "site": {
         "private": true,
-        "publicPaths": ["/", "/index", "/login", "/register"],
         "ratio": false,
         "registration": true,
-        "rank": [
+        "ranks": [
             "member",
             "uploader",
             "moderator",
@@ -53,6 +52,14 @@
         "passwordLength": {
             "min": 4,
             "max": 16
-        }
+        },
+        "publicPaths": [
+            "/",
+            "/index",
+            "/login",
+            "/logout",
+            "/register"
+        ]
+
     }
 }

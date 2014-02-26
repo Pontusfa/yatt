@@ -1,24 +1,27 @@
 /**
  * Handling the register system.
  * @author Pontus Falk
- * @version 0.0.1
  */
 
 var registerModel = require('../models/registerModel'),
     _ = require('underscore'),
     logger = require('../lib/logger');
 
+/**
+ * @private
+ */
 function _getRegister(req, res){
     if(req.session.loggedIn){
         res.redirect('/');
     }
     else{
-        res.render('register',
-            {
-            });
+        res.render('register');
     }
 }
 
+/**
+ * @private
+ */
 function _postRegister(req, res){
     if(req.session.loggedIn){
         res.redirect('/');
@@ -28,6 +31,9 @@ function _postRegister(req, res){
     }
 }
 
+/**
+ * @private
+ */
 function _postRegisterCallback(req, res){
     return function(err, result){
         if(_.isObject(err) || !result){

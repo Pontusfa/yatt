@@ -1,7 +1,6 @@
 /**
  * Determine if a user has provided correct credentials for the site.
  * @author Pontus Falk
- * @version 0.0.1
  */
 
 var queries = require('./queries'),
@@ -9,12 +8,10 @@ var queries = require('./queries'),
 
 /**
  * Finds the user with user.username, creates hash for user.password and sends result to _validateUserCallback
- * @param user
- * @param callback
  * @private
  */
 function _validateUser(user, callback){
-    queries.getDocument({username: user.username}, 'user', {username: 1, password: 1, salt: 1},
+    queries.getDocument({username: user.username}, 'user', {username: 1, password: 1, salt: 1, passkey: 1},
         function(err, foundUser){
             if(err) {
                 callback(err, false);
@@ -36,7 +33,7 @@ function _validateUser(user, callback){
 function _validateUserCallback(user, foundUser, callback){
     return function(){
         if(_.isEqual(user.password, foundUser.password)){
-            callback(null, true);
+            callback(null, true, foundUser.passkey);
         }
         else{
             callback(new Error('Error: wrong password'), false);
@@ -50,7 +47,7 @@ function _validateUserCallback(user, foundUser, callback){
  * @param callback function(error, result) to handle the validation results.
  */
 function verify(user, callback){
-    if(_.isNull(user.username) || _.isNull(_.isNull(user.password))){
+    if(_.isNull(user.username) || _.isNull(user.password)){
         callback(new Error('Error: no username or password given.'), false);
     }
     else{

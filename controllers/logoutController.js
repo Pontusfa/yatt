@@ -1,7 +1,6 @@
 /**
  * Handles a user's logout.
  * @author Pontus Falk
- * @version 0.0.1
  */
 
 /**
@@ -10,6 +9,7 @@
  */
 function _logout(req, res){
     req.session.loggedIn = false;
+    req.session.destroy();
     res.redirect('/');
 }
 

@@ -7,7 +7,6 @@
 var verifyUser = require('../models/loginModel');
 
 /**
- *
  * @private
  */
 function _getLogin(req, res){
@@ -17,7 +16,6 @@ function _getLogin(req, res){
 }
 
 /**
- *
  * @private
  */
 function _postLogin(req, res){
@@ -25,20 +23,20 @@ function _postLogin(req, res){
 }
 
 /**
- *
- * @param req
- * @param res
- * @returns {Function}
  * @private
  */
 function _postLoginCallback(req, res){
-    return function(err, result){
+    return function(err, result, passkey){
         if(result) {
+            req.session.username = req.body.username;
             req.session.loggedIn = true;
+            req.session.passkey = passkey;
             res.redirect(req.query.redirect || '/');
         }
         else{
             req.session.loggedIn = false;
+            req.session.username = null;
+            req.session.passkey = null;
             res.write(err.message);
             res.end();
         }

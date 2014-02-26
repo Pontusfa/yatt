@@ -1,7 +1,6 @@
 /**
  * Registering a new unique user.
  * @author Pontus Falk
- * @version 0.0.1
  */
 
 var queries = require('./queries'),
@@ -31,7 +30,6 @@ function registerUser(user, callback){
     }
 
     else{
-        user.passkey = -1; // defaults to -1, will be updated to unique value after insertion
         queries.addUser(user, function(err, result){
             if(result){
                 modifyUser.updatePasskey(user, callback);

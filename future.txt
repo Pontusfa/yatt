@@ -1,8 +1,0 @@
-* do a few routes and views and styles to make sure it's fully functional.
-* db access, setup collections/schema.
-* secure db access.
-* secure log files.
-* sanitize/validate/escape user input.
-* csrf
-* redis
-* error handler

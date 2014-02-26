@@ -1,7 +1,6 @@
 /**
  * Handling all queries to the persistence layer.
  * @author Pontus Falk
- * @version 0.0.1
  */
 
 var models = require('../lib/db').models,
@@ -27,11 +26,11 @@ function createHash(user, salt, callback){
 }
 
 /**
- * Gets the db document for the wanted user.
- * @param criteria the specifics of the user that is searched for
+ * Gets the db document for the wanted document.
+ * @param criteria the specifics of the document that is searched for
  * @param model String declaring what model to search in
  * @param wantedFields an object with keys wanted to be returned, using {'key': 1, ...}
- * @param callback function(err, foundUser) to handle the results of the search.
+ * @param callback function(err, foundDocument) to handle the results of the search.
  */
 function getDocument(criteria, model, wantedFields, callback){
     models[model]
@@ -65,24 +64,30 @@ function _addUserCallback(user, callback){
     };
 }
 
-module.exports.removeUser = function(user, callback){
-
-};
-
 /**
- * Finds *one* user and updates it's document.
+ * Finds *one* document and updates it's fields.
  * @param user object with relevant information to find the user, e.g. user.username
  * @param model String declaring what model to search in
  * @param updates object containing the new information to add to it's document.
  * @param callback function(err, foundUser) to handle the result
  */
 function updateDocument(user, model, updates, callback){
-    console.log(model);
-    console.log(models[model]);
     models[model].findOneAndUpdate(user, updates, null, callback);
+}
+
+/**
+ * Adds a torrent file to the database.
+ * @param torrent an object representing a torrent file
+ * @param callback function(err, result) to handle success of the addition
+ */
+function addTorrent(torrent, callback){
+    models.torrent.create(torrent, function(err, savedTorrent){
+        callback(err, _.isObject(savedTorrent));
+    });
 }
 
 module.exports.createHash = createHash;
 module.exports.getDocument = getDocument;
 module.exports.addUser = addUser;
 module.exports.updateDocument = updateDocument;
+module.exports.addTorrent = addTorrent;
