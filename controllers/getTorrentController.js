@@ -25,7 +25,6 @@ function _getTorrent(req, res){
  * @private
  */
 function _getTorrentPrivate(req, res){
-    req.session.passkey = null;
     if(!_.isString(req.session.passkey)){
         modifyUserModel.updatePasskey({username: req.session.username},
             function(err, result){
@@ -78,4 +77,3 @@ function setup(app){
 }
 
 module.exports.setup = setup;
-

@@ -29,7 +29,7 @@ function _processTorrentHelper(name, torrentMeta, attempts, callback){
     var torrentIdent = crypto.randomBytes(32).toString('base64').replace(/\W/g, '');
 
     if(attempts > 0){
-        queries.getDocument({ident: torrentIdent}, 'torrent', {ident: 1},
+        queries.getDocument({ident: torrentIdent}, queries.TORRENTMODEL, {ident: 1},
             _processTorrentCallback(name, torrentMeta, torrentIdent, attempts, callback));
     }
     else{
@@ -46,7 +46,7 @@ function _processTorrentCallback(name, torrentMeta, ident, attempts, callback){
             callback(err, false);
         }
         else if(_.isNull(foundTorrent)){
-            queries.addTorrent({'name': name.replace('.torrent', ''), 'ident': ident, 'meta': torrentMeta}, callback);
+            queries.addTorrent({name: name.replace('.torrent', ''), ident: ident, meta: torrentMeta}, callback);
         }
         else{
             _processTorrentHelper(name, torrentMeta, --attempts, callback);

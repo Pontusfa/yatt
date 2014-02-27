@@ -91,3 +91,5 @@ module.exports.getDocument = getDocument;
 module.exports.addUser = addUser;
 module.exports.updateDocument = updateDocument;
 module.exports.addTorrent = addTorrent;
+module.exports.TORRENTMODEL = 'torrent';
+module.exports.USERMODEL = 'user';

@@ -11,16 +11,17 @@ var queries = require('./queries'),
  * @private
  */
 function _validateUser(user, callback){
-    queries.getDocument({username: user.username}, 'user', {username: 1, password: 1, salt: 1, passkey: 1},
+    queries.getDocument({username: user.username}, queries.USERMODEL, {username: 1, password: 1, salt: 1, passkey: 1},
         function(err, foundUser){
             if(err) {
                 callback(err, false);
             }
-            else if(!_.isNull(foundUser)){
-                queries.createHash(user, foundUser.salt, _validateUserCallback(user, foundUser, callback));
+            else if(_.isNull(foundUser)){
+                callback(new Error('Error: wrong username/password'), false);
             }
             else{
-                callback(new Error('Error: no such user'), false);
+                queries.createHash(user, foundUser.salt, _validateUserCallback(user, foundUser, callback));
+
             }
         });
 }
@@ -36,7 +37,7 @@ function _validateUserCallback(user, foundUser, callback){
             callback(null, true, foundUser.passkey);
         }
         else{
-            callback(new Error('Error: wrong password'), false);
+            callback(new Error('Error: wrong username/password'), false);
         }
     };
 }
@@ -47,7 +48,7 @@ function _validateUserCallback(user, foundUser, callback){
  * @param callback function(error, result) to handle the validation results.
  */
 function verify(user, callback){
-    if(_.isNull(user.username) || _.isNull(user.password)){
+    if(_.isEmpty(user.username) || _.isEmpty(user.password)){
         callback(new Error('Error: no username or password given.'), false);
     }
     else{

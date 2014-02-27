@@ -13,10 +13,10 @@
         "mongoose": "*",
         "connect-redis": "*",
         "winston": "*",
-        "optimist": "*",
         "busboy": "*",
         "underscore": "*",
         "bencode": "*",
-        "emblem": "*"
+        "emblem": "*",
+        "helmet": "*"
     }
 }

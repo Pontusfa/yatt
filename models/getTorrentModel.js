@@ -14,7 +14,7 @@ var queries = require('./queries'),
  * @param callback function(err, bencode) handles the produced bencoded torrent metafile buffer
  */
 function getTorrent(req, callback){
-    queries.getDocument({ident: req.id}, 'torrent', wantedFields,
+    queries.getDocument({ident: req.id}, queries.TORRENTMODEL, wantedFields,
         _getTorrentCallback(req.passkey, callback));
 }
 
@@ -25,7 +25,7 @@ function _getTorrentCallback(passkey, callback){
     return function(err, foundTorrent){
         if(_.isNull(err) && _.isObject(foundTorrent)){
             var formattedTorrent = _formatTorrent(foundTorrent, passkey);
-            callback(null, {name: foundTorrent.name, bencode: bencode.encode(formattedTorrent)});
+            callback(null, {name: foundTorrent.name + '.torrent', bencode: bencode.encode(formattedTorrent)});
         }
         else{
             callback(err || new Error('Error: no such torrent.'), null);
@@ -46,7 +46,7 @@ function _formatTorrent(foundTorrent, passkey){
     newTorrent.info.name = foundTorrent.meta.info.name.buffer;
     newTorrent.info.length = foundTorrent.meta.info.length;
     if(_.isString(passkey)){
-        newTorrent.announce = new Buffer(newTorrent.announce + '?passkey=' + passkey);
+        newTorrent.announce = newTorrent.announce + '?passkey=' + passkey;
     }
     return newTorrent;
 }

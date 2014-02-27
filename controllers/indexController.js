@@ -19,15 +19,6 @@ function _getRoot(req, res){
     res.redirect('/index');
 }
 
-/**
- * @private
- */
-function _postIndex(req, res){
-    req.session.username = req.body.username;
-    req.session.password = req.body.password;
-    res.write('logged in, ' + req.session.username);
-    res.end();
-}
 
 /**
  * Handles routing for / and /index
@@ -37,7 +28,6 @@ function _postIndex(req, res){
 function setup(app){
     app.get('/', _getRoot);
     app.get('/index', _getIndex);
-    app.post('/index', _postIndex);
     return true;
 }
 
