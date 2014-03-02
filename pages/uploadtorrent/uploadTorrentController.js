@@ -3,13 +3,13 @@
  * @author Pontus Falk
  */
 
-var uploadTorrentModel = require('../models/uploadTorrentModel');
+var uploadTorrentModel = null;
 
 /**
  * @private
  */
 function _getUploadTorrent(req, res) {
-    res.render('uploadtorrent');
+    res.send('här var du ja');
 }
 
 /**
@@ -34,6 +34,7 @@ function _postUploadTorrentCallback(res){
  * @returns {boolean}
  */
 function setup(app){
+    uploadTorrentModel = require('./uploadTorrentModel')(app.queries);
     app.get('/uploadtorrent', _getUploadTorrent);
     app.post('/uploadtorrent', _postUploadTorrent);
     return true;

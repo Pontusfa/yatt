@@ -3,9 +3,10 @@
  * @author Pontus Falk
  */
 
-var registerModel = require('../models/registerModel'),
-    _ = require('underscore'),
-    logger = require('../lib/logger');
+var _ = require('underscore'),
+    registerModel = null,
+    template = null,
+    logger = null;
 
 /**
  * @private
@@ -15,7 +16,7 @@ function _getRegister(req, res){
         res.redirect('/');
     }
     else{
-        res.render('register');
+        res.end(template(res.locals));
     }
 }
 
@@ -43,7 +44,6 @@ function _postRegisterCallback(req, res){
         }
         else{
             res.redirect(req.query.redirect || '/');
-            res.end();
         }
     };
 }
@@ -51,9 +51,13 @@ function _postRegisterCallback(req, res){
 /**
  * Sets up the routing for registering
  * @param app the app to setup
+ * @param jadeCompiler provide a compiler for jade templates
  * @returns {boolean}
  */
-function setup(app){
+function setup(app, jadeCompiler){
+    logger = app.logger;
+    template = jadeCompiler('register.jade');
+    registerModel = require('./registerModel')(app.queries, app.modifyUser, app.config);
     app.get('/register', _getRegister);
     app.post('/register', _postRegister);
     return true;

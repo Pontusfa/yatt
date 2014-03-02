@@ -3,9 +3,8 @@
  * @author Pontus Falk
  */
 
-var getTorrentModel = require('../models/getTorrentModel'),
-    config = require('../lib/config'),
-    modifyUserModel = require('../models/modifyUserModel'),
+var getTorrentModel = null,
+    modifyUser = null,
     _ = require('underscore');
 
 /**
@@ -16,7 +15,7 @@ function _getTorrent(req, res){
         getTorrentModel({id: req.query.id, passkey: req.session.passkey}, _getTorrentCallback(res));
     }
     else{
-        res.end();
+        res.send('');
     }
 }
 
@@ -26,14 +25,14 @@ function _getTorrent(req, res){
  */
 function _getTorrentPrivate(req, res){
     if(!_.isString(req.session.passkey)){
-        modifyUserModel.updatePasskey({username: req.session.username},
+        modifyUser.updatePasskey({username: req.session.username},
             function(err, result){
 
                 if(_.isObject(err)){
-                    res.end(err.message);
+                    res.send(err.message);
                 }
                 else if(!result){
-                    res.end('kunde int!');
+                    res.send('kunde int!');
                 }
                 else{
                     _getTorrent(req, res);
@@ -54,10 +53,10 @@ function _getTorrentCallback(res){
         if(_.isNull(err) && _.isObject(result)){
             res.type('application/x-bittorrent');
             res.setHeader('Content-disposition', 'attachment; filename=' + result.name);
-            res.end(result.bencode);
+            res.send(result.bencode);
         }
         else{
-            res.end(err.message);
+            res.send(err.message);
         }
     };
 }
@@ -67,7 +66,9 @@ function _getTorrentCallback(res){
  * @param app the app to install routing on
  */
 function setup(app){
-    if(config.site.private){
+    modifyUser = app.modifyUser;
+    getTorrentModel = require('./getTorrentModel')(app.queries);
+    if(app.config.site.private){
         app.get('/gettorrent', _getTorrentPrivate);
     }
     else{

@@ -4,15 +4,14 @@
  * @version 0.0.1
  */
 
-var verifyUser = require('../models/loginModel');
+var verifyUser = null,
+    getTemplate = null;
 
 /**
  * @private
  */
 function _getLogin(req, res){
-    res.render('login', {
-        pets : 'a'
-    });
+    res.send(getTemplate(res.locals));
 }
 
 /**
@@ -37,8 +36,7 @@ function _postLoginCallback(req, res){
             req.session.loggedIn = false;
             req.session.username = null;
             req.session.passkey = null;
-            res.write(err.message);
-            res.end();
+            res.send(err.message);
         }
     };
 }
@@ -48,7 +46,9 @@ function _postLoginCallback(req, res){
  * @param app the app to setup
  * @returns {boolean} signals the success of routing
  */
-function setup(app){
+function setup(app, jadeCompiler){
+    verifyUser = require('./loginModel').verify(app.queries);
+    getTemplate = jadeCompiler('login.jade');
     app.get('/login', _getLogin);
     app.post('/login', _postLogin);
     return true;

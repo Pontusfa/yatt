@@ -3,15 +3,15 @@
  * @author Pontus Falk
  */
 
-var queries = require('./queries'),
-    modifyUser = require('./modifyUserModel'),
-    _ = require('underscore'),
-    usernameLength = require('../lib/config').site.usernameLength,
-    usernamePattern = '^[a-zA-Z][a-zA-Z0-9_-]{' + (usernameLength.min-1) + ',' + (usernameLength.max-1) + '}$',
-    usernameRegex = new RegExp(usernamePattern),
-    passwordLength = require('../lib/config').site.passwordLength;
+var queries = null,
+    modifyUser = null,
+    usernameLength = null,
+    usernameRegex = null,
+    passwordLength = null,
+    _ = require('underscore');
 
-/**
+
+        /**
  * Register a new user with unique username. Fails if username is already taken.
  * @param user all relevant info about the user
  * @param callback function(err, result) where result is a boolean representing successful registration.
@@ -41,4 +41,17 @@ function registerUser(user, callback){
     }
 }
 
-module.exports.registerUser = registerUser;
+module.exports = function(queriesObject, modifyUserObject, config){
+    usernameLength = config.site.usernameLength;
+    usernameRegex = new RegExp('^[a-zA-Z][a-zA-Z0-9_-]{' +
+		(usernameLength.min-1) + ',' +
+		(usernameLength.max-1) + '}$');
+
+    passwordLength = config.site.passwordLength;
+    queries = queriesObject;
+    modifyUser = modifyUserObject;
+
+	module.exports = {};
+    module.exports.registerUser = registerUser;
+    return module.exports;
+};

@@ -1,0 +1,11 @@
+doctype html
+head
+	title=pets
+
+body
+	#login
+		form(name="login", action=url, method="post")
+			input(name="username", type="text", required=true)
+			input(name="password", type="password", required=false)
+			input(type="submit", value="login")
+			!=csrf

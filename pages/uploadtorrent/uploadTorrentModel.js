@@ -5,8 +5,7 @@
 
 var bencode = require('bencode'),
     _ = require('underscore'),
-    crypto = require('crypto'),
-    queries = require('./queries'),
+    queries = null,
     maxAttempts = 1000;
 
 /**
@@ -26,7 +25,8 @@ function processTorrent(name, data, callback){
  * @private
  */
 function _processTorrentHelper(name, torrentMeta, attempts, callback){
-    var torrentIdent = crypto.randomBytes(32).toString('base64').replace(/\W/g, '');
+    var crypto = require('crypto'),
+		torrentIdent = crypto.randomBytes(32).toString('base64').replace(/\W/g, '');
 
     if(attempts > 0){
         queries.getDocument({ident: torrentIdent}, queries.TORRENTMODEL, {ident: 1},
@@ -54,4 +54,10 @@ function _processTorrentCallback(name, torrentMeta, ident, attempts, callback){
     };
 }
 
-module.exports.processTorrent = processTorrent;
+module.exports = function(queriesObject){
+    queries = queriesObject;
+
+	module.exports = {};
+	module.exports.processTorrent = processTorrent;
+    return module.exports;
+};

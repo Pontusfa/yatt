@@ -8,8 +8,7 @@
  * @private
  */
 function _getIndex(req, res){
-    res.write('herro! try /uploadtorrent, /gettorrent, /login, /register or perhaps /logout.');
-    res.end();
+    res.send('herro! try /uploadtorrent, /gettorrent, /login, /register or perhaps /logout.');
 }
 
 /**

@@ -16,7 +16,6 @@
         "busboy": "*",
         "underscore": "*",
         "bencode": "*",
-        "emblem": "*",
         "helmet": "*"
     }
 }

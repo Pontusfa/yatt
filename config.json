@@ -4,7 +4,6 @@
     "setters": {
         "port": 8080,
         "https port": 8443,
-        "views": "views/",
         "certPath": "sslcert/",
         "logFile": ".logs/app.log",
         "static": "public/",
@@ -14,11 +13,9 @@
         "env": "development"
     },
     "uses": {
-        "favicon": "",
         "proxy": false,
         "https": true,
-        "https only" : true,
-        "view engine": "jade",
+        "https only" : false,
         "stylesheet engine": "stylus",
         "sessionStore": "redis",
         "redis": {
@@ -36,9 +33,11 @@
         }
     },
     "site": {
-        "private": true,
+        "private": false,
         "ratio": false,
         "registration": true,
+        "defaultLanguage": "en",
+        "favicon": "",
         "ranks": [
             "member",
             "uploader",

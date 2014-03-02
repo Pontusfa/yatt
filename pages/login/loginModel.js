@@ -3,7 +3,8 @@
  * @author Pontus Falk
  */
 
-var queries = require('./queries'),
+var queries = null,
+	returnFields = {username: 1, password: 1, salt: 1, passkey: 1},
     _ = require('underscore');
 
 /**
@@ -11,7 +12,7 @@ var queries = require('./queries'),
  * @private
  */
 function _validateUser(user, callback){
-    queries.getDocument({username: user.username}, queries.USERMODEL, {username: 1, password: 1, salt: 1, passkey: 1},
+    queries.getDocument({username: user.username}, queries.USERMODEL, returnFields,
         function(err, foundUser){
             if(err) {
                 callback(err, false);
@@ -56,4 +57,7 @@ function verify(user, callback){
     }
 }
 
-module.exports = verify;
+module.exports.verify = function(queriesObject){
+    queries = queriesObject;
+    return verify;
+};

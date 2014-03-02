@@ -3,7 +3,7 @@
  * @author Pontus Falk
  */
 
-var queries = require('./queries'),
+var queries = null,
     _ = require('underscore'),
     bencode = require('bencode'),
     wantedFields = {"name": 1, 'meta.announce': 1, 'meta.info': 1};
@@ -51,4 +51,7 @@ function _formatTorrent(foundTorrent, passkey){
     return newTorrent;
 }
 
-module.exports = getTorrent;
+module.exports = function(queriesObject){
+    queries = queriesObject;
+    return getTorrent;
+};
