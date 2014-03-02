@@ -6,7 +6,7 @@
 var queries = null,
     _ = require('underscore'),
     bencode = require('bencode'),
-    wantedFields = {"name": 1, 'meta.announce': 1, 'meta.info': 1};
+    wantedFields = {'name': 1, 'meta.announce': 1, 'meta.info': 1};
 
 /**
  * Produces a bencoded metafile buffer for the id torrent.

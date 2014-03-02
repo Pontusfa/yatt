@@ -57,6 +57,7 @@ function _postRegisterCallback(req, res){
 function setup(app, jadeCompiler){
     logger = app.logger;
     template = jadeCompiler('register.jade');
+
     registerModel = require('./registerModel')(app.queries, app.modifyUser, app.config);
     app.get('/register', _getRegister);
     app.post('/register', _postRegister);

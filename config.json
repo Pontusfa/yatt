@@ -17,19 +17,14 @@
         "https": true,
         "https only" : false,
         "stylesheet engine": "stylus",
-        "sessionStore": "redis",
-        "redis": {
-            "host": "localhost",
-            "port": 6379,
-            "db": 0
-        },
         "db": {
             "host": "localhost",
             "port": "27017",
             "pool": 50,
             "user": "pontus",
             "pass": "pontus",
-            "database": "yatt"
+            "database": "yatt",
+            "sessionCollection": "sessions"
         }
     },
     "site": {
