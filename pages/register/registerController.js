@@ -16,7 +16,7 @@ function _getRegister(req, res){
         res.redirect('/');
     }
     else{
-        res.end(template(res.locals));
+        res.send(template(res.locals, req.session.language));
     }
 }
 
@@ -39,8 +39,7 @@ function _postRegisterCallback(req, res){
     return function(err, result){
         if(_.isObject(err) || !result){
             logger.info(err.message);
-            res.write('couldn\'t register at this time. Please try again later.');
-            res.end();
+            res.send('couldn\'t register at this time. Please try again later.');
         }
         else{
             res.redirect(req.query.redirect || '/');
@@ -56,12 +55,11 @@ function _postRegisterCallback(req, res){
  */
 function setup(app, jadeCompiler){
     logger = app.logger;
-    template = jadeCompiler('register.jade');
-
+    template = jadeCompiler('register');
     registerModel = require('./registerModel')(app.queries, app.modifyUser, app.config);
     app.get('/register', _getRegister);
     app.post('/register', _postRegister);
-    return true;
+    return app.config.site.ranks.ANY;
 }
 
 module.exports.setup = setup;

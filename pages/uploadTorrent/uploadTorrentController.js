@@ -24,7 +24,7 @@ function _postUploadTorrent(req, res){
  */
 function _postUploadTorrentCallback(res){
     return function(err, result){
-        res.end(result.toString());
+        res.send(result.toString());
     };
 }
 

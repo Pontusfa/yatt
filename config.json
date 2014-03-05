@@ -2,7 +2,7 @@
     "author": "Pontus Falk",
     "appName": "YATT",
     "setters": {
-        "port": 8080,
+        "port": 8081,
         "https port": 8443,
         "certPath": "sslcert/",
         "logFile": ".logs/app.log",
@@ -15,7 +15,7 @@
     "uses": {
         "proxy": false,
         "https": true,
-        "https only" : false,
+        "https only" : true,
         "stylesheet engine": "stylus",
         "db": {
             "host": "localhost",
@@ -28,18 +28,19 @@
         }
     },
     "site": {
-        "private": false,
+        "private": true,
         "ratio": false,
         "registration": true,
         "defaultLanguage": "en",
         "favicon": "",
-        "ranks": [
-            "member",
-            "uploader",
-            "moderator",
-            "administrator",
-            "root"
-        ],
+        "ranks": {
+            "ANY": 0,
+            "MEMBER": 1,
+            "UPLOADER": 2,
+            "MODERATOR": 10,
+            "ADMINISTRATOR": 11,
+            "ROOT": 12
+        },
         "usernameLength": {
             "min": 4,
             "max": 16

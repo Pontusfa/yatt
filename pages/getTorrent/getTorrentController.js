@@ -74,7 +74,7 @@ function setup(app){
     else{
         app.get('/gettorrent', _getTorrent);
     }
-    return true;
+    return 5;
 }
 
 module.exports.setup = setup;

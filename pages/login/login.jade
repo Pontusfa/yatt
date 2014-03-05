@@ -1,11 +1,18 @@
 doctype html
-head
-	title=pets
-
-body
-	#login
-		form(name="login", action=url, method="post")
-			input(name="username", type="text", required=true)
-			input(name="password", type="password", required=false)
-			input(type="submit", value="login")
-			!=csrf
+html(lang=language )
+  head
+    title=lang.title
+    meta(charset='utf-8')
+    link(rel='stylesheet', href='stylesheets/bootstrap.min.css')
+    link(rel='stylesheet', href='stylesheets/login.css')
+  body
+  .container
+    form.form-signin(role='form' name='login' method='post' action=url)
+      h2.form-signin-heading=lang.request
+      input(type='text' name="username" class='form-control' placeholder=lang.username required autofocus)
+      input(type='password' name="password" class='form-control' placeholder=lang.password required)
+      !=csrf
+      label.checkbox
+        input(type='checkbox' value='a') 
+        =lang.rememberMe
+      button(class='btn btn-lg btn-primary btn-block' type='submit')=lang.login

@@ -3,12 +3,13 @@
  * @author Pontus Falk
  */
 
+var template = null;
 
-/**
+ /**
  * @private
  */
 function _getIndex(req, res){
-    res.send('herro! try /uploadtorrent, /gettorrent, /login, /register or perhaps /logout.');
+    res.send(template(req.locals, req.session.language));
 }
 
 /**
@@ -24,10 +25,76 @@ function _getRoot(req, res){
  * @param app the app to install routing to
  * @returns {boolean} successful routing
  */
-function setup(app){
-    app.get('/', _getRoot);
+function setup(app, jadeCompiler){
+    template = jadeCompiler('index.jade');
     app.get('/index', _getIndex);
-    return true;
+    app.get('/', _getRoot);
+    
+    return app.config.site.ranks.MEMBER;
 }
 
 module.exports.setup = setup;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
