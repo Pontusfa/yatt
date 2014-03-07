@@ -28,15 +28,17 @@
         }
     },
     "site": {
+        "name": "Yatt",
         "private": true,
         "ratio": false,
         "registration": true,
         "defaultLanguage": "en",
         "favicon": "",
         "ranks": {
-            "ANY": 0,
-            "MEMBER": 1,
-            "UPLOADER": 2,
+            "PUBLIC_ONLY": 0,
+            "ANY": 1,
+            "MEMBER": 2,
+            "UPLOADER": 3,
             "MODERATOR": 10,
             "ADMINISTRATOR": 11,
             "ROOT": 12
@@ -49,13 +51,18 @@
             "min": 4,
             "max": 16
         },
-        "publicPaths": [
-            "/",
-            "/index",
-            "/login",
-            "/logout",
-            "/register"
-        ]
-
+        "navbarOrder": {
+            "middle": [
+                "/gettorrent",
+                "/uploadtorrent",
+                "/forums"
+            ],
+            "right" : [
+                "/login",
+                "/register",
+                "/logout"
+            ]
+            
+        }
     }
 }

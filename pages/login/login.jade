@@ -1,18 +1,22 @@
 doctype html
-html(lang=language )
-  head
-    title=lang.title
-    meta(charset='utf-8')
-    link(rel='stylesheet', href='stylesheets/bootstrap.min.css')
-    link(rel='stylesheet', href='stylesheets/login.css')
+html(lang=language)
+  include ../../partials/head
   body
-  .container
-    form.form-signin(role='form' name='login' method='post' action=url)
-      h2.form-signin-heading=lang.request
-      input(type='text' name="username" class='form-control' placeholder=lang.username required autofocus)
-      input(type='password' name="password" class='form-control' placeholder=lang.password required)
-      !=csrf
-      label.checkbox
-        input(type='checkbox' value='a') 
-        =lang.rememberMe
-      button(class='btn btn-lg btn-primary btn-block' type='submit')=lang.login
+    .container
+      include ../../partials/navbar
+      
+
+      .jumbotron
+        form.form-login(name='login' method='post' action=url)
+          h2.form-login-heading=lang.pleaseLogin
+          input(type='text' name="username" class='form-control' placeholder=lang.username required autofocus)
+          input(type='password' name="password" class='form-control' placeholder=lang.password required)
+          !=csrf
+          label.checkbox
+            input(type='checkbox') 
+            =lang.rememberMe
+          button(class='btn btn-lg btn-primary btn-block' type='submit')=lang.login
+
+        if site.registration
+          form.form-register(name='register' method='get' action='/register')=lang.or
+            button(type='submit' class='btn btn-default')=lang.registerNow

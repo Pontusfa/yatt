@@ -59,7 +59,8 @@ function setup(app, jadeCompiler){
     registerModel = require('./registerModel')(app.queries, app.modifyUser, app.config);
     app.get('/register', _getRegister);
     app.post('/register', _postRegister);
-    return app.config.site.ranks.ANY;
+
+    return app.config.site.ranks.PUBLIC_ONLY;
 }
 
 module.exports.setup = setup;

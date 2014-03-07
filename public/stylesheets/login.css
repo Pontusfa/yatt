@@ -1,22 +1,22 @@
 body {
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: #eee;
+    padding-top: 100px;
+    padding-bottom: 40px;
+    background-color: rgb(240,240,240);
 }
 
-.form-signin {
-  max-width: 330px;
+
+.form-login {
+  max-width: 300px;
   padding: 15px;
   margin: 0 auto;
 }
-.form-signin .form-signin-heading,
-.form-signin .checkbox {
+
+.form-login .form-login-heading,
+.form-login .checkbox {
   margin-bottom: 10px;
 }
-.form-signin .checkbox {
-  font-weight: normal;
-}
-.form-signin .form-control {
+
+.form-login .form-control {
   position: relative;
   height: auto;
   -webkit-box-sizing: border-box;
@@ -25,16 +25,45 @@ body {
   padding: 10px;
   font-size: 16px;
 }
-.form-signin .form-control:focus {
-  z-index: 2;
+
+.form-register {
+    max-width: 165px;
+    padding:  15px;
+    margin: 0 auto;
 }
-.form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
+
+.container {
+    max-width: 1024px;
 }
-.form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+
+.jumbotron {
+    background-color: rgb(250,250,250);
+}
+
+li {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+
+.nav.navbar-nav > li > a{
+    padding-right: 0px;
+    padding-top: 15px;
+    padding-left: 0px;
+    border-bottom: 2px solid transparent; 
+
+}
+
+.nav.navbar-nav > li > a:hover,
+.nav.navbar-nav.navbar-right > li > a > :hover {
+    border-bottom: 2px solid transparent;
+    padding-bottom: 5px;
+    border-bottom-color: rgba(25,25,25,.25);
+}
+
+.nav.navbar-nav > li.location > a,
+.nav.navbar-nav.navbar-right > li.location > a {
+    padding-bottom: 5px;
+    border-bottom: 2px solid transparent;
+    border-bottom-color: rgb(50,205,250);
 }

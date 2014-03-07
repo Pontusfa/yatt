@@ -10,7 +10,6 @@ var queries = null,
     passwordLength = null,
     _ = require('underscore');
 
-
 /**
  * Register a new user with unique username. Fails if username is already taken.
  * @param user all relevant info about the user

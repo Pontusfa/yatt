@@ -8,7 +8,7 @@
  * @private
  */
 function _logout(req, res){
-    req.session.loggedIn = false;
+    req.session.user = null;
     req.session.destroy();
     res.redirect('/');
 }
@@ -20,7 +20,7 @@ function _logout(req, res){
 function setup(app){
     app.get('/logout', _logout);
     app.post('/logout', _logout);
-    return true;
+    return app.config.site.ranks.MEMBER;
 }
 
 module.exports.setup = setup;

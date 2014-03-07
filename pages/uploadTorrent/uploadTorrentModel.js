@@ -4,7 +4,7 @@
  */
 
 var bencode = require('bencode'),
-    _ = require('underscore'),
+_ = require('underscore'),
     queries = null,
     maxAttempts = 1000;
 

@@ -37,7 +37,7 @@ function setup(app){
     uploadTorrentModel = require('./uploadTorrentModel')(app.queries);
     app.get('/uploadtorrent', _getUploadTorrent);
     app.post('/uploadtorrent', _postUploadTorrent);
-    return true;
+    return app.config.site.ranks.MEMBER;
 }
 
 module.exports.setup = setup;

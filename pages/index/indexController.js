@@ -9,7 +9,7 @@ var template = null;
  * @private
  */
 function _getIndex(req, res){
-    res.send(template(req.locals, req.session.language));
+    res.send(template(res.locals));
 }
 
 /**
@@ -26,7 +26,7 @@ function _getRoot(req, res){
  * @returns {boolean} successful routing
  */
 function setup(app, jadeCompiler){
-    template = jadeCompiler('index.jade');
+    template = jadeCompiler('index');
     app.get('/index', _getIndex);
     app.get('/', _getRoot);
     

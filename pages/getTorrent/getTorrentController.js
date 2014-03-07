@@ -74,7 +74,7 @@ function setup(app){
     else{
         app.get('/gettorrent', _getTorrent);
     }
-    return 5;
+    return app.config.site.ranks.ANY; 
 }
 
 module.exports.setup = setup;
