@@ -7,17 +7,13 @@ var _ = require('underscore'),
     registerModel = null,
     template = null,
     ranks = null,
+    site,
     logger = null;
 
 /**
  * @private
  */
 function _getRegister(config){
-    var site = {name: config.site.name,
-                registration: config.site.registration,
-                usernameLength: config.site.usernameLength,
-                passwordLength: config.site.passwordLength};
-    
     return function(req, res){
         if(req.session.user.rank >= ranks.MEMBER){
             res.redirect('/');
@@ -49,6 +45,7 @@ function _postRegisterCallback(req, res){
     return function(alert, result){
         if(_.isObject(alert) || !result){
             res.locals[alert.type] = alert.message;
+            res.locals.site = site;
             res.send(template(res.locals));
         }
         else{
@@ -66,7 +63,13 @@ function _postRegisterCallback(req, res){
  */
 function setup(app, jadeCompiler){
     logger = app.logger;
+
     ranks = app.config.site.ranks;
+    site = {name: app.config.site.name,
+            registration: app.config.site.registration,
+            usernameLength: app.config.site.usernameLength,
+            passwordLength: app.config.site.passwordLength};
+    
     template = jadeCompiler('register');
     registerModel = require('./registerModel')(app.queries, app.modifyUser, app.config);
     app.get('/register', _getRegister(app.config));

@@ -4,29 +4,49 @@
  */
 
 var queries = null,
-    returnFields = {username: 1, password: 1, salt: 1, rank: 1, passkey: 1, active: 1, banned: 1},
+    returnFields = {username: 1,
+                    password: 1,
+                    salt: 1,
+                    rank: 1,
+                    passkey: 1,
+                    active: 1,
+                    banned: 1},
     _ = require('underscore');
 
 /**
- * Finds the user with user.username, creates hash for user.password and sends result to _validateUserCallback
+ * Finds the user with user.username, creates hash for
+ * user.password and sends result to _validateUserCallback
  * @private
  */
 function _validateUser(user, callback){
-    queries.getDocument({username: user.username}, queries.USERMODEL, returnFields,
-        function(err, foundUser){
-            if(_.isObject(err)){
-                callback(err);
-            }
-            else if(_.isNull(foundUser)){
-                callback({type: 'error', message: 'wrongUserPass'});
-            }
-            else{
-                queries.createHash(user, foundUser.salt, _validateUserCallback(user, foundUser, callback));
-
-            }
-        });
+    var limit = 1;
+    
+    queries.getDocument({username: user.username},
+                        queries.USERMODEL,
+                        limit,
+                        returnFields,
+                        _validateUserHelper(user, callback));
 }
 
+/**
+ * @private
+ */
+function _validateUserHelper(user, callback){
+    return function(err, foundUser){
+        if(_.isObject(err)){
+            callback(err);
+        }
+        else if(_.isObject(foundUser)){
+            queries.createHash(user,
+                               foundUser.salt,
+                               _validateUserCallback(user, foundUser, callback));
+            
+        }
+        else{
+            callback({type: 'error', message: 'wrongUserPass'});
+        }
+    };
+}
 /**
  * Receives the user trying to login and the user stored in db with matching usernames.
  * Compares the two hashes for the passwords and callbacks
@@ -68,5 +88,6 @@ function verify(user, callback){
 
 module.exports.verify = function(queriesObject){
     queries = queriesObject;
+    module.exports.verify = verify;
     return verify;
 };
