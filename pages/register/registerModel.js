@@ -10,34 +10,82 @@ var queries = null,
     passwordLength = null,
     _ = require('underscore');
 
+function _checkRequirements(user, callback) {
+    if(!_.isString(user.username) || !_.isString(user.password)){
+        callback({type: 'error', message: 'noUserPass'});
+    }
+
+    else if(!_.isEqual(user.vow, 'on')){
+        callback({type:'error', message: 'noVow'});
+    }
+    
+    else if(!_.isEqual(user.password, user.passwordAgain)){
+        callback({type:'error', message: 'passMissmatch'});
+    }
+    
+    else if(!usernameRegex.test(user.username)){
+         callback({type:'error', message: 'userFail'});
+    }
+
+    else if(user.password.length < passwordLength.min ||  user.password.length > passwordLength.max){
+        callback({type:'error', message: 'passwordFail'});
+    }
+
+    else{
+        _checkUniques(user, callback);
+    }
+}
+
+function _checkUniques(user, callback){
+    queries.getDocument(
+        {$or: [{username: user.username}, {email: user.email}]},
+        queries.USERMODEL,
+        {username: 1, email: 1},
+        function(err, foundUser){
+            if(_.isObject(err)){
+                callback({type: 'error', message: err.message});
+            }
+            else if(_.isObject(foundUser)){
+                if(_.isEqual(foundUser.username, user.username)){
+                    callback({type: 'error', message: 'userTaken'});
+                }
+                else if(_.isEqual(foundUser.email, user.email)){
+                    callback({type: 'error', message: 'emailTaken'});
+                }
+            }
+            else{
+                callback(null);
+            }
+        }
+    );
+}
+
+function _registerCallback(user, callback){
+    return function(err, result){
+        if(_.isObject(result)){
+            modifyUser.updatePasskey(user, callback);
+        }
+        else{
+            callback({type:'error', message: 'generic'});
+            
+        }
+    };
+}
+
 /**
- * Register a new user with unique username. Fails if username is already taken.
+ * Registers a new user.
  * @param user all relevant info about the user
  * @param callback function(err, result) where result is a boolean representing successful registration.
  */
 function registerUser(user, callback){
-    if(!_.isString(user.username) || !_.isString(user.password)){
-        callback(new Error('no pass/username'), false);
-    }
-
-    else if(!usernameRegex.test(user.username)){
-        callback(new Error('regex fail'), false);
-    }
-
-    else if(user.password.length < passwordLength.min ||  user.password.length > passwordLength.max){
-        callback(new Error('password length'), false);
-    }
-
-    else{
-        queries.addUser(user, function(err, result){
-            if(result){
-                modifyUser.updatePasskey(user, callback);
-            }
-            else{
-                callback(err, result);
-            }
-        });
-    }
+    _checkRequirements(user, function(error){
+        if(_.isObject(error)){
+            callback(error);
+        }
+        else{
+            queries.addUser(user, _registerCallback(user, callback));
+        }
+    });
 }
 
 module.exports = function(queriesObject, modifyUserObject, config){

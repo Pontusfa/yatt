@@ -4,7 +4,7 @@
  */
 
 var queries = null,
-    returnFields = {username: 1, password: 1, salt: 1, rank: 1, passkey: 1},
+    returnFields = {username: 1, password: 1, salt: 1, rank: 1, passkey: 1, active: 1, banned: 1},
     _ = require('underscore');
 
 /**
@@ -18,7 +18,7 @@ function _validateUser(user, callback){
                 callback(err);
             }
             else if(_.isNull(foundUser)){
-                callback(new Error('Error: wrong username/password'));
+                callback({type: 'error', message: 'wrongUserPass'});
             }
             else{
                 queries.createHash(user, foundUser.salt, _validateUserCallback(user, foundUser, callback));
@@ -34,11 +34,20 @@ function _validateUser(user, callback){
  */
 function _validateUserCallback(user, foundUser, callback){
     return function(){
-        if(_.isEqual(user.password, foundUser.password)){
-            callback(null, foundUser);
+        if(!_.isEqual(user.password, foundUser.password)){
+            callback({type: 'error', message: 'wrongUserPass'});
         }
-        else{
-            callback(new Error('Error: wrong username/password'));
+        
+        else if(foundUser.banned){
+            callback({type: 'error', message: 'banned'});
+        }
+        
+        else if(!foundUser.active){
+            callback({type: 'error', message: 'notActive'});
+        }
+        
+        else if(_.isEqual(user.password, foundUser.password)){
+            callback(null, foundUser);
         }
     };
 }
@@ -50,7 +59,7 @@ function _validateUserCallback(user, foundUser, callback){
  */
 function verify(user, callback){
     if(_.isEmpty(user.username) || _.isEmpty(user.password)){
-        callback(new Error('Error: no username or password given.'), false);
+        callback({type: 'error', message: 'noUserPass'});
     }
     else{
         _validateUser(user, callback);

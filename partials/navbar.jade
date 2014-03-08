@@ -1,17 +1,14 @@
 .navbar.navbar-default.navbar-fixed-top
   .container
     .navbar-header
-      a.navbar-brand(href='/') I made this
+      a.navbar-brand(href='/')=site.name
+        img(src='images/yatt.png')
     ul.nav.navbar-nav
       each page in navbarList.middle
-        - page.link = page.link.toLowerCase()
-        - var active = page.title.toLowerCase() === lang.title.toLowerCase() ? 'active' : ''
-         li(class=active)
-           a(href=page.link)=page.title
+       li(class=page.active)
+         a(href=page.link)=page.title
     ul.nav.navbar-nav.navbar-right
       each page in navbarList.right
-        - page.link = page.link.toLowerCase();
-        - var active = page.title.toLowerCase() === lang.title.toLowerCase() ? 'location' : ''
-        li(class=active)
+        li(class=page.active)
           a(href=page.link)=page.title
  

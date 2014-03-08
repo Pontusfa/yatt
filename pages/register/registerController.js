@@ -6,25 +6,34 @@
 var _ = require('underscore'),
     registerModel = null,
     template = null,
+    ranks = null,
     logger = null;
 
 /**
  * @private
  */
-function _getRegister(req, res){
-    if(req.session.loggedIn){
-        res.redirect('/');
-    }
-    else{
-        res.send(template(res.locals, req.session.language));
-    }
+function _getRegister(config){
+    var site = {name: config.site.name,
+                registration: config.site.registration,
+                usernameLength: config.site.usernameLength,
+                passwordLength: config.site.passwordLength};
+    
+    return function(req, res){
+        if(req.session.user.rank >= ranks.MEMBER){
+            res.redirect('/');
+        }
+        else{
+            res.locals.site = site;
+            res.send(template(res.locals));
+        }
+    };
 }
 
 /**
  * @private
  */
 function _postRegister(req, res){
-    if(req.session.loggedIn){
+    if(req.session.user.rank >= ranks.MEMBER){
         res.redirect('/');
     }
     else{
@@ -33,16 +42,18 @@ function _postRegister(req, res){
 }
 
 /**
+ * TODO: mail registration link
  * @private
  */
 function _postRegisterCallback(req, res){
-    return function(err, result){
-        if(_.isObject(err) || !result){
-            logger.info(err.message);
-            res.send('couldn\'t register at this time. Please try again later.');
+    return function(alert, result){
+        if(_.isObject(alert) || !result){
+            res.locals[alert.type] = alert.message;
+            res.send(template(res.locals));
         }
         else{
-            res.redirect(req.query.redirect || '/');
+            req.session.alert = {type: 'success' , message: 'successfulRegistration'};
+            res.redirect('/login');
         }
     };
 }
@@ -55,12 +66,14 @@ function _postRegisterCallback(req, res){
  */
 function setup(app, jadeCompiler){
     logger = app.logger;
+    ranks = app.config.site.ranks;
     template = jadeCompiler('register');
     registerModel = require('./registerModel')(app.queries, app.modifyUser, app.config);
-    app.get('/register', _getRegister);
+    app.get('/register', _getRegister(app.config));
     app.post('/register', _postRegister);
-
+    
     return app.config.site.ranks.PUBLIC_ONLY;
+
 }
 
 module.exports.setup = setup;
