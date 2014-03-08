@@ -1,9 +1,9 @@
 node_modules/*
-.idea/*
-.logs/*
+.idea/
+.logs/
 bootstrap/
-build/*
-pids/*
-sslcert/*
+build/
+pids/
+sslcert/
 *~
 startmongo
