@@ -40,6 +40,7 @@ function _checkRequirements(user, callback) {
 }
 
 /**
+ * Makes sure neither username nor email is already in use.
  * @private
  */
 function _checkUniques(user, callback){
@@ -54,6 +55,8 @@ function _checkUniques(user, callback){
 }
 
 /**
+ * Returns if either username or mail is in use, otherwise
+ * continue to register.
  * @private
  */
 function _checkUniquesCallback(user, callback){

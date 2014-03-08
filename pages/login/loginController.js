@@ -1,7 +1,6 @@
 /**
  * Handling a user logging in.
  * @author Pontus Falk
- * @version 0.0.1
  */
 
 var verifyUser = null,
@@ -52,6 +51,7 @@ function _postLoginCallback(req, res){
  * Sets up the routing for login
  * @param app the app to setup
  * @returns the rank constant needed to visit this page
+ * @param jadeCompiler a function to render the wanted template
  */
 function setup(app, jadeCompiler){
     verifyUser = require('./loginModel').verify(app.queries);

@@ -1,5 +1,0 @@
-{"level":"warn","message":"Couldn't find config file a.json","timestamp":"2013-10-20T23:25:17.141Z"}
-{"level":"warn","message":"Couldn't find config file defaults.json","timestamp":"2013-10-20T23:25:17.143Z"}
-{"level":"error","message":"Couldn't create a config object. Exiting.","timestamp":"2013-10-20T23:25:17.143Z"}
-{"level":"warn","message":"Couldn't find config file aaa","timestamp":"2013-10-21T20:43:20.139Z"}
-{"level":"warn","message":"Couldn't find config file aa","timestamp":"2013-10-21T20:43:29.564Z"}

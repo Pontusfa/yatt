@@ -47,6 +47,7 @@ function _validateUserHelper(user, callback){
         }
     };
 }
+
 /**
  * Receives the user trying to login and the user stored in db with matching usernames.
  * Compares the two hashes for the passwords and callbacks

@@ -13,7 +13,7 @@ var _ = require('underscore'),
 /**
  * @private
  */
-function _getRegister(config){
+function _getRegister(){
     return function(req, res){
         if(req.session.user.rank >= ranks.MEMBER){
             res.redirect('/');
@@ -38,7 +38,7 @@ function _postRegister(req, res){
 }
 
 /**
- * TODO: mail registration link
+ * TODO: mail a registration link
  * @private
  */
 function _postRegisterCallback(req, res){
@@ -49,7 +49,7 @@ function _postRegisterCallback(req, res){
             res.send(template(res.locals));
         }
         else{
-            req.session.alert = {type: 'success' , message: 'successfulRegistration'};
+            req.session.alert = {type: 'success', message: 'successfulRegistration'};
             res.redirect('/login');
         }
     };
