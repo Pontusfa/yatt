@@ -6,18 +6,15 @@
 
 var verifyUser = null,
     getTemplate = null,
+    config = null,
     _ =  require('underscore');
 
 /**
  * @private
  */
-function _getLogin(config){
-    var name = config.site.name;
-    
-    return function (req, res){
-        res.locals.site = {name: name};
-        res.send(getTemplate(res.locals));
-    };
+function _getLogin(req, res){
+    res.locals.site = {name: config.site.name};
+    res.send(getTemplate(res.locals));
 }
 
 /**
@@ -45,6 +42,7 @@ function _postLoginCallback(req, res){
         }
         else{
             res.locals[alert.type] = alert.message;
+            res.locals.site = {name: config.site.name};
             res.send(getTemplate(res.locals));
         }
     };
@@ -58,7 +56,8 @@ function _postLoginCallback(req, res){
 function setup(app, jadeCompiler){
     verifyUser = require('./loginModel').verify(app.queries);
     getTemplate = jadeCompiler('login');
-    app.get('/login', _getLogin(app.config));
+    config = app.config;
+    app.get('/login', _getLogin);
     app.post('/login', _postLogin);
 
     return app.config.site.ranks.PUBLIC_ONLY;

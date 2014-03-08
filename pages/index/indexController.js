@@ -3,14 +3,34 @@
  * @author Pontus Falk
  */
 
-var template = null;
+var template = null,
+    _ = require('underscore'),
+    config = null;
 
  /**
  * @private
  */
-function _getIndex(req, res){
-    res.send(template(res.locals));
+function _getIndex(){
+    var model = require('./indexModel'),
+        site = {name: config.site.name};
+    
+    return function(req, res){
+        res.locals.site = site;
+        
+        model.buildIndex(_getIndexCallback(req, res));
+    };
 }
+
+function _getIndexCallback(req, res){
+
+    return function(alert, result){
+        if(_.isObject(alert)){
+            res.locals[alert.type] = alert.message;
+        }
+        res.locals.index = result;
+        res.send(template(res.locals));
+    };
+ }
 
 /**
  * @private
@@ -27,10 +47,16 @@ function _getRoot(req, res){
  */
 function setup(app, jadeCompiler){
     template = jadeCompiler('index');
-    app.get('/index', _getIndex);
+    config = app.config;
+    app.get('/index', _getIndex());
     app.get('/', _getRoot);
-    
-    return app.config.site.ranks.MEMBER;
+
+    if(app.config.site.private){
+        return app.config.site.ranks.MEMBER;
+    }
+    else{
+        return app.config.site.ranks.ANY;
+    }
 }
 
 module.exports.setup = setup;

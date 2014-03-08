@@ -6,7 +6,7 @@
 var bencode = require('bencode'),
 _ = require('underscore'),
     queries = null,
-    maxAttempts = 1000;
+    maxAttempts = 128;
 
 /**
  * Transforms a torrent file into a format suitable for persistence and manipulation.
@@ -26,14 +26,21 @@ function processTorrent(name, data, callback){
  */
 function _processTorrentHelper(name, torrentMeta, attempts, callback){
     var crypto = require('crypto'),
-		torrentIdent = crypto.randomBytes(32).toString('base64').replace(/\W/g, '');
+        torrentIdent = crypto.randomBytes(32).toString('base64').replace(/\W/g, ''),
+        limit = 1;
 
     if(attempts > 0){
-        queries.getDocument({ident: torrentIdent}, queries.TORRENTMODEL, {ident: 1},
-            _processTorrentCallback(name, torrentMeta, torrentIdent, attempts, callback));
+        queries.getDocument({ident: torrentIdent},
+                            queries.TORRENTMODEL,
+                            limit, {ident: 1},
+                            _processTorrentCallback(
+                                name, torrentMeta,
+                                torrentIdent, attempts,
+                                callback));
     }
     else{
-        callback(new Error('Error: Couldn\'t create an unique torrent ident. Strange.'), false);
+        callback(new Error(
+            'Error: Couldn\'t create an unique torrent ident. Strange.'), false);
     }
 }
 
@@ -46,7 +53,10 @@ function _processTorrentCallback(name, torrentMeta, ident, attempts, callback){
             callback(err, false);
         }
         else if(_.isNull(foundTorrent)){
-            queries.addTorrent({name: name.replace('.torrent', ''), ident: ident, meta: torrentMeta}, callback);
+            queries.addDocument(
+                {name: name.replace('.torrent', ''),
+                 ident: ident, meta: torrentMeta},
+                queries.TORRENTMODEL, callback);
         }
         else{
             _processTorrentHelper(name, torrentMeta, --attempts, callback);
@@ -59,5 +69,6 @@ module.exports = function(queriesObject){
 
 	module.exports = {};
 	module.exports.processTorrent = processTorrent;
+    
     return module.exports;
 };

@@ -10,6 +10,9 @@ var queries = null,
     passwordLength = null,
     _ = require('underscore');
 
+/**
+ * @private
+ */
 function _checkRequirements(user, callback) {
     if(!_.isString(user.username) || !_.isString(user.password)){
         callback({type: 'error', message: 'noUserPass'});
@@ -36,30 +39,45 @@ function _checkRequirements(user, callback) {
     }
 }
 
+/**
+ * @private
+ */
 function _checkUniques(user, callback){
+    var limit = 1;
+    
     queries.getDocument(
         {$or: [{username: user.username}, {email: user.email}]},
-        queries.USERMODEL,
+        queries.USERMODEL, limit,
         {username: 1, email: 1},
-        function(err, foundUser){
-            if(_.isObject(err)){
-                callback({type: 'error', message: err.message});
-            }
-            else if(_.isObject(foundUser)){
-                if(_.isEqual(foundUser.username, user.username)){
-                    callback({type: 'error', message: 'userTaken'});
-                }
-                else if(_.isEqual(foundUser.email, user.email)){
-                    callback({type: 'error', message: 'emailTaken'});
-                }
-            }
-            else{
-                callback(null);
-            }
-        }
+        _checkUniquesCallback(user, callback)
     );
 }
 
+/**
+ * @private
+ */
+function _checkUniquesCallback(user, callback){
+    return function(err, foundUser){
+        if(_.isObject(err)){
+            callback({type: 'error', message: err.message});
+        }
+        else if(_.isObject(foundUser)){
+            if(_.isEqual(foundUser.username, user.username)){
+                callback({type: 'error', message: 'userTaken'});
+            }
+            else if(_.isEqual(foundUser.email, user.email)){
+                    callback({type: 'error', message: 'emailTaken'});
+            }
+        }
+        else{
+            callback(null);
+        }
+    };
+}
+
+/**
+ * @private
+ */
 function _registerCallback(user, callback){
     return function(err, result){
         if(_.isObject(result)){
@@ -100,5 +118,6 @@ module.exports = function(queriesObject, modifyUserObject, config){
 
     module.exports = {};
     module.exports.registerUser = registerUser;
+    
     return module.exports;
 };
