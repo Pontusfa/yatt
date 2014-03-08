@@ -1,0 +1,68 @@
+{
+    "author": "Pontus Falk",
+    "appName": "YATT",
+    "setters": {
+        "port": 8081,
+        "https port": 8443,
+        "certPath": "sslcert/",
+        "logFile": ".logs/app.log",
+        "static": "public/",
+        "cookieSecret": "OxDSOdYI5WTt5FFERSKOBveHpJcEtmyos7UtonagDieVNbkKrZO+P3kUlfQYS/1PvPGYxhSx5ROzBHFfhfV7rA==",
+        "stylesheets": "stylesheets/",
+        "logToConsole": true,
+        "env": "development"
+    },
+    "uses": {
+        "proxy": false,
+        "https": true,
+        "https only" : true,
+        "stylesheet engine": "stylus",
+        "db": {
+            "host": "localhost",
+            "port": "27017",
+            "pool": 50,
+            "user": "pontus",
+            "pass": "pontus",
+            "database": "yatt",
+            "sessionCollection": "sessions"
+        }
+    },
+    "site": {
+        "name": "Yatt",
+        "private": true,
+        "ratio": false,
+        "registration": true,
+        "defaultLanguage": "en",
+        "favicon": "",
+        "ranks": {
+            "PUBLIC_ONLY": 0,
+            "ANY": 1,
+            "MEMBER": 2,
+            "UPLOADER": 3,
+            "MODERATOR": 10,
+            "ADMINISTRATOR": 11,
+            "ROOT": 12
+        },
+        "usernameLength": {
+            "min": 4,
+            "max": 16
+        },
+        "passwordLength": {
+            "min": 4,
+            "max": 16
+        },
+        "navbarOrder": {
+            "middle": [
+                "/gettorrent",
+                "/uploadtorrent",
+                "/forums"
+            ],
+            "right" : [
+                "/login",
+                "/register",
+                "/logout"
+            ]
+            
+        }
+    }
+}

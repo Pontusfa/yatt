@@ -1,0 +1,9 @@
+node_modules/*
+.idea/*
+.logs/*
+bootstrap/
+build/*
+pids/*
+sslcert/*
+*~
+startmongo
