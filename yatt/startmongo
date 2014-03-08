@@ -1,3 +1,0 @@
-#!/bin/bash
-echo "EL MUY IMPORTANTE: not safe to use in production, move to seperate user to prevent full db access in case of a breach!"
-ulimit -n 2048 && mongod --dbpath=../mongo/db/ --auth --logpath=../mongo/logs/mongo.log --logappend --pidfilepath=../mongo/mongo.pid &
