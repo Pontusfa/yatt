@@ -1,0 +1,9 @@
+doctype html
+
+body
+    form(name="register", action=url, method="post")
+        input(name="username", type="text", required=true)
+        input(name="password", type="password", required=true)
+        input(name="register", type="submit", value="register")
+        br
+        !=csrf

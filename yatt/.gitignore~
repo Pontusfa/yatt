@@ -1,0 +1,10 @@
+node_modules/*
+.gitignore
+.idea/*
+.logs/*
+bootstrap/
+build/*
+pids/*
+sslcert/*
+*~
+startmongo

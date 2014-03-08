@@ -1,0 +1,13 @@
+.navbar.navbar-default.navbar-fixed-top(role='navigation')
+  .container
+    .navbar-header
+      a.navbar-brand(href='/') I made this
+    .navbar-collapse.collapse
+      ul.nav.navbar-nav
+        li.active
+          a(href='/download') download!
+        li 
+          a(href='a') more
+      ul.nav.navbar-nav.navbar-right
+        li
+          a(href='a') Biszh?

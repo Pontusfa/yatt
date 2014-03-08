@@ -1,0 +1,36 @@
+{"level":"info","message":"Logger setup.","timestamp":"2014-03-08T17:29:12.900Z"}
+{"level":"info","message":"Database connection setup.","timestamp":"2014-03-08T17:29:13.041Z"}
+{"level":"info","message":"Setters setup.","timestamp":"2014-03-08T17:29:13.043Z"}
+{"level":"info","message":"Session setup.","timestamp":"2014-03-08T17:29:13.156Z"}
+{"level":"info","message":"Login verifier setup.","timestamp":"2014-03-08T17:29:13.160Z"}
+{"level":"info","message":"Middleware setup.","timestamp":"2014-03-08T17:29:13.161Z"}
+{"level":"info","message":"getTorrent routing setup.","timestamp":"2014-03-08T17:29:13.330Z"}
+{"level":"info","message":"index routing setup.","timestamp":"2014-03-08T17:29:13.332Z"}
+{"level":"info","message":"login routing setup.","timestamp":"2014-03-08T17:29:13.333Z"}
+{"level":"info","message":"logout routing setup.","timestamp":"2014-03-08T17:29:13.334Z"}
+{"level":"info","message":"register routing setup.","timestamp":"2014-03-08T17:29:13.336Z"}
+{"level":"info","message":"uploadTorrent routing setup.","timestamp":"2014-03-08T17:29:13.338Z"}
+{"level":"info","message":"All routing setup.","timestamp":"2014-03-08T17:29:13.338Z"}
+{"level":"info","message":"App setup.","timestamp":"2014-03-08T17:29:13.339Z"}
+{"level":"info","message":"listening for HTTPS on port 8443.","timestamp":"2014-03-08T17:29:13.340Z"}
+{"level":"info","message":"listening for HTTP on port 8081.","timestamp":"2014-03-08T17:29:13.340Z"}
+{"level":"info","message":"Database connected.","timestamp":"2014-03-08T17:29:13.390Z"}
+{"level":"info","message":"Terminate/interrupt/exit received, shutting down.","timestamp":"2014-03-08T17:29:15.176Z"}
+{"level":"info","message":"Logger setup.","timestamp":"2014-03-08T17:29:16.328Z"}
+{"level":"info","message":"Database connection setup.","timestamp":"2014-03-08T17:29:16.481Z"}
+{"level":"info","message":"Setters setup.","timestamp":"2014-03-08T17:29:16.483Z"}
+{"level":"info","message":"Session setup.","timestamp":"2014-03-08T17:29:16.595Z"}
+{"level":"info","message":"Login verifier setup.","timestamp":"2014-03-08T17:29:16.599Z"}
+{"level":"info","message":"Middleware setup.","timestamp":"2014-03-08T17:29:16.600Z"}
+{"level":"info","message":"getTorrent routing setup.","timestamp":"2014-03-08T17:29:16.769Z"}
+{"level":"info","message":"index routing setup.","timestamp":"2014-03-08T17:29:16.771Z"}
+{"level":"info","message":"login routing setup.","timestamp":"2014-03-08T17:29:16.773Z"}
+{"level":"info","message":"logout routing setup.","timestamp":"2014-03-08T17:29:16.773Z"}
+{"level":"info","message":"register routing setup.","timestamp":"2014-03-08T17:29:16.775Z"}
+{"level":"info","message":"uploadTorrent routing setup.","timestamp":"2014-03-08T17:29:16.778Z"}
+{"level":"info","message":"All routing setup.","timestamp":"2014-03-08T17:29:16.778Z"}
+{"level":"info","message":"App setup.","timestamp":"2014-03-08T17:29:16.778Z"}
+{"level":"info","message":"listening for HTTPS on port 8443.","timestamp":"2014-03-08T17:29:16.779Z"}
+{"level":"info","message":"listening for HTTP on port 8081.","timestamp":"2014-03-08T17:29:16.779Z"}
+{"level":"info","message":"Database connected.","timestamp":"2014-03-08T17:29:16.846Z"}
+{"level":"info","message":"Terminate/interrupt/exit received, shutting down.","timestamp":"2014-03-08T17:33:54.519Z"}
