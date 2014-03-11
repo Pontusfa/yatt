@@ -1,0 +1,72 @@
+.form-register {
+    max-width: 300px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.form-register .form-register-heading {
+    margin-bottom: 20px;
+}
+
+.form-register .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom:5px;
+    font-size: 16px;
+}
+
+/* tooltip, kudos to http://cssdeck.com/user/obiscodingstuff */
+
+.on-focus {
+    width: 270px;
+    position: relative;
+    display: table;
+}
+
+.tool-tip{
+    color: black;
+    background-color: rgb(240, 240,240);
+    font-size: 14;
+    font-weight: bold;
+    border-radius: 7px;
+    text-align: center;
+    opacity: 0;
+    padding: 3px 8px;
+    position: absolute;
+    cursor: default;
+}
+.tool-tip{
+    max-width: 300px;
+    min-width: 200px;
+    margin-left: -43px;
+}
+.tool-tip{
+    top: 50%;
+    right: auto;
+    left: 106%;
+    margin-top: -15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.tool-tip:after{
+    left: -5px;
+    top: 50%;
+    margin-top: -6px;
+    bottom: auto;
+    border-top-color: transparent;
+    border-right-color: rgba( 0, 0, 0, .7);
+}
+*:not(.on-focus):hover > .tool-tip,
+.on-focus input:focus + .tool-tip{
+    visibility: visible;
+    opacity: 1;
+    -webkit-transition: all 240ms ease-in-out;
+    -moz-transition: all 240ms ease-in-out;
+    -ms-transition: all 240ms ease-in-out;
+    -o-transition: all 240ms ease-in-out;
+    transition: all 240ms ease-in-out;
+}

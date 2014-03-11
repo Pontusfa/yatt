@@ -1,13 +1,13 @@
 doctype html
 html(lang=language)
-  include ../../partials/head
+  include /partials/head
   body
     .container
-      include ../../partials/navbar
+      include /partials/navbar
 
       .jumbotron
 
-        include ../../partials/alerts
+        include /partials/alerts
 
         if site.registration
           form.form-register(name='register' method='post' action=url)
@@ -15,24 +15,22 @@ html(lang=language)
             p.form-register-heading=lang.pleaseFillOut
 
             .on-focus
-              - var tooltip = lang.inputLength + ' ' + site.usernameLength.min + ' ' + lang.and + ' ' + site.usernameLength.max + ' ' + lang.characters + ' ' + lang.beginCharacter;
               input(type='text' name="username" class='form-control' placeholder=lang.username required autofocus)
-              .tool-tip=tooltip
+              .tool-tip=usernameTooltip
               p
 
-              - var tooltip = lang.inputLength + ' ' + site.passwordLength.min + ' ' + lang.and + ' ' + site.passwordLength.max + ' ' + lang.characters;
             .on-focus
               input(type='password' name="password" class='form-control' placeholder=lang.password required)
-              .tool-tip=tooltip
+              .tool-tip=passwordTooltip
 
             .on-focus
               input(type='password' name='passwordAgain' class='form-control' placeholder=lang.passwordAgain required)
-              .tool-tip=lang.samePassword
+              .tool-tip=samePasswordTooltip
             p
 
             .on-focus
               input(type='email' name='email' class='form-control' placeholder=lang.mail required)
-              .tool-tip=lang.validMail
+              .tool-tip=validMailTooltip
             
             !=csrf
 

@@ -19,6 +19,7 @@ function _getRegister(){
             res.redirect('/');
         }
         else{
+            _setupTooltips(res);
             res.locals.site = site;
             res.send(template(res.locals));
         }
@@ -45,7 +46,9 @@ function _postRegisterCallback(req, res){
     return function(alert, result){
         if(_.isObject(alert) || !result){
             res.locals[alert.type] = alert.message;
+
             res.locals.site = site;
+            _setupTooltips(res);
             res.send(template(res.locals));
         }
         else{
@@ -55,6 +58,25 @@ function _postRegisterCallback(req, res){
     };
 }
 
+/**
+ * Creates the text ouput used to explain to the user
+ * the requirements for registering to the site.
+ * @param res
+ * @private
+ */
+function _setupTooltips(res){
+    res.locals.usernameTooltip =  res.locals.lang.inputLength + ' ' +
+        site.usernameLength.min + ' ' +  res.locals.lang.and + ' ' +
+        site.usernameLength.max + ' ' +  res.locals.lang.characters + ' ' +
+        res.locals.lang.beginCharacter;
+
+    res.locals.passwordTooltip = res.locals.lang.inputLength + ' ' +
+        site.passwordLength.min + ' ' + res.locals.lang.and + ' ' +
+        site.passwordLength.max + ' ' + res.locals.lang.characters;
+
+    res.locals.samePasswordTooltip = res.locals.lang.samePassword;
+    res.locals.validMailTooltip = res.locals.lang.validMail
+}
 /**
  * Sets up the routing for registering
  * @param app the app to setup
@@ -69,7 +91,7 @@ function setup(app, jadeCompiler){
             registration: app.config.site.registration,
             usernameLength: app.config.site.usernameLength,
             passwordLength: app.config.site.passwordLength};
-    
+
     template = jadeCompiler('register');
     registerModel = require('./registerModel')(app.queries, app.modifyUser, app.config);
     app.get('/register', _getRegister(app.config));

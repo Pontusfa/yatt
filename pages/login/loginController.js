@@ -5,14 +5,14 @@
 
 var verifyUser = null,
     getTemplate = null,
-    config = null,
+    site = null,
     _ =  require('underscore');
 
 /**
  * @private
  */
 function _getLogin(req, res){
-    res.locals.site = {name: config.site.name};
+    res.locals.site = site;
     res.send(getTemplate(res.locals));
 }
 
@@ -31,17 +31,19 @@ function _postLoginCallback(req, res){
     
     return function(alert, user){
         if(_.isNull(alert) && _.isObject(user)) {
-            req.session.user = user;
-            
-            if(req.body.rememberMe === 'on'){
+            req.session.user = {username: user.username,
+                                rank: user.rank,
+                                passkey: user.passkey};
+
+
+            if(_.isEqual(req.body.rememberMe,'on')){
                 req.session.cookie.maxAge = oneYear;
             }
-            
             res.redirect(req.query.redirect || '/');
         }
         else{
             res.locals[alert.type] = alert.message;
-            res.locals.site = {name: config.site.name};
+            res.locals.site = site;
             res.send(getTemplate(res.locals));
         }
     };
@@ -56,7 +58,8 @@ function _postLoginCallback(req, res){
 function setup(app, jadeCompiler){
     verifyUser = require('./loginModel').verify(app.queries);
     getTemplate = jadeCompiler('login');
-    config = app.config;
+    site = {name: app.config.site.name, registration: app.config.site.registration};
+
     app.get('/login', _getLogin);
     app.post('/login', _postLogin);
 

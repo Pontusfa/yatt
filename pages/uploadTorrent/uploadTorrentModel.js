@@ -27,12 +27,15 @@ function processTorrent(name, data, callback){
 function _processTorrentHelper(name, torrentMeta, attempts, callback){
     var crypto = require('crypto'),
         torrentIdent = crypto.randomBytes(32).toString('base64').replace(/\W/g, ''),
-        limit = 1;
+        criteria = {ident: torrentIdent},
+        sort = {},
+        limit = 1,
+        wantedFields = {ident: 1};
 
     if(attempts > 0){
-        queries.getDocument({ident: torrentIdent},
-                            queries.TORRENTMODEL,
-                            limit, {ident: 1},
+        queries.getDocument(criteria,
+                            queries.TORRENTMODEL, sort,
+                            limit, wantedFields,
                             _processTorrentCallback(
                                 name, torrentMeta,
                                 torrentIdent, attempts,

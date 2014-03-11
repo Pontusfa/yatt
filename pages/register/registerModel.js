@@ -44,12 +44,15 @@ function _checkRequirements(user, callback) {
  * @private
  */
 function _checkUniques(user, callback){
-    var limit = 1;
+    var criteria = {$or: [{username: user.username}, {email: user.email}]},
+        sort = {},
+        wantedFields = {username: 1, email: 1},
+        limit = 1;
     
     queries.getDocument(
-        {$or: [{username: user.username}, {email: user.email}]},
-        queries.USERMODEL, limit,
-        {username: 1, email: 1},
+        criteria,
+        queries.USERMODEL, sort, limit,
+        wantedFields,
         _checkUniquesCallback(user, callback)
     );
 }

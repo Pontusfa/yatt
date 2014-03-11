@@ -1,0 +1,28 @@
+span.glyphicon-plus {
+    font-size: 2em;
+}
+#news-toggle {
+    display: none;
+}
+
+.add-news {
+    display: none;
+}
+
+#news-toggle:checked + .add-news {
+    margin-bottom: 10px;
+    display: block;
+}
+
+button.btn.btn-default {
+    margin-top: 5px;
+}
+
+.news-footer {
+    text-align: right;
+    font-weight: bold;
+}
+
+.news-footer > a {
+    padding-left: 10px;
+}

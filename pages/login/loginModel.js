@@ -19,10 +19,13 @@ var queries = null,
  * @private
  */
 function _validateUser(user, callback){
-    var limit = 1;
+    var criteria = {username: user.username},
+        sort = {},
+        limit = 1;
     
-    queries.getDocument({username: user.username},
+    queries.getDocument(criteria,
                         queries.USERMODEL,
+                        sort,
                         limit,
                         returnFields,
                         _validateUserHelper(user, callback));

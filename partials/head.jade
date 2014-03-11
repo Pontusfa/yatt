@@ -1,6 +1,12 @@
 head
   title=lang.title + ' - ' + site.name
   meta(charset='utf-8')
-  link(rel='stylesheet', href='stylesheets/bootstrap.min.css')
-  link(rel='stylesheet', href='stylesheets/extra.css')
-
+  if dev
+    - var link = 'stylesheets/' + lang.title.toLowerCase() + '.css'
+        link(rel='stylesheet' href='stylesheets/bootstrap.min.css')
+        link(rel='stylesheet' href='stylesheets/general.css')
+        link(rel='stylesheet' href='stylesheets/navbar.css')
+        link(rel='stylesheet' href=link)
+  else
+      link(href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css", rel="stylesheet")
+      link(rel='stylesheet' href='stylesheets/all.css')

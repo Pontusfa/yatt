@@ -1,23 +1,27 @@
 doctype html
 html(lang=language)
-  include ../../partials/head
-  body
-    .container
-      include ../../partials/navbar
+    include /partials/head
+    body
+        .container
+            include /partials/navbar
 
-      .jumbotron
-        include ../../partials/alerts
+            .jumbotron
+                include /partials/alerts
 
-        form.form-login(name='login' method='post' action=url)
-          h2.form-login-heading=lang.pleaseLogin
-          input(type='text' name="username" class='form-control' placeholder=lang.username required autofocus)
-          input(type='password' name="password" class='form-control' placeholder=lang.password required)
-          !=csrf
-          label.checkbox
-            input(type='checkbox' name="rememberMe") 
-            =lang.rememberMe
-          button(class='btn btn-lg btn-primary btn-block' type='submit')=lang.login
+                form.form-login(name='login' method='post' action=url)
+                    h2.form-login-heading=lang.pleaseLogin
+                    input.form-control(type='text' name='username' placeholder=lang.username required autofocus)
+                    input.form-control(type='password' name='password' placeholder=lang.password required)
+                    label.checkbox
+                        input(type='checkbox' name="rememberMe")
+                        =lang.rememberMe
+                    !=csrf
+                    button.btn.btn-lg.btn-primary.btn-block(type='submit')=lang.login
 
-        if site.registration
-          form.form-register(name='register' method='get' action='/register')=lang.or
-            button.btn(type='submit' class='btn-default')=lang.registerNow
+                if site.registration
+                    form.form-login.register(name='register' method='get' action='/register')=lang.or
+                                    button.btn.btn-default(type='submit')=lang.registerNow
+
+                .form-login.recover
+                    a.small(href='/recover')=lang.recover
+

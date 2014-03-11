@@ -5,28 +5,34 @@
 
 var template = null,
     _ = require('underscore'),
-    config = null;
+    site = null,
+    model = null;
 
  /**
  * @private
  */
-function _getIndex(){
-    var model = require('./indexModel'),
-        site = {name: config.site.name};
-    
-    return function(req, res){
-        res.locals.site = site;
-        
-        model.buildIndex(_getIndexCallback(req, res));
-    };
+function _getIndex(req, res){
+     res.locals.site = site;
+     if(!_.isEmpty(req.query)){ // user wants to perform some action
+         model.handleRequestQueries(req.query,
+             req.session.user,
+             function(alert){
+                 req.session.alert = alert;
+                 res.redirect('/index');
+             }
+         );
+     }
+     else{
+         model.buildIndex(_getIndexCallback(req, res));
+     }
 }
 
 function _getIndexCallback(req, res){
+    return function(err, result){
+        _.forEach(result, function(news){
+            news.created = new Date(news.created).toLocaleDateString();
+        });
 
-    return function(alert, result){
-        if(_.isObject(alert)){
-            res.locals[alert.type] = alert.message;
-        }
         res.locals.index = result;
         res.send(template(res.locals));
     };
@@ -39,88 +45,37 @@ function _getRoot(req, res){
     res.redirect('/index');
 }
 
+function _postIndex(req, res){
+    model.addNews({title: req.body.title, text: req.body.text},
+        req.session.user,
+        function(alert){
+            req.session.alert = alert;
+            res.redirect('/index');
+        }
+    );
+}
 
 /**
  * Handles routing for / and /index
  * @param app the app to install routing to
+ * @param jadeCompiler a compiler from jade to html
  * @returns {boolean} successful routing
  */
 function setup(app, jadeCompiler){
     template = jadeCompiler('index');
-    config = app.config;
-    app.get('/index', _getIndex());
+    site = {name: app.config.site.name};
+    model = require('./indexModel')(app.config);
+    app.get('/index', _getIndex);
     app.get('/', _getRoot);
+    app.post('/index', _postIndex);
 
     if(app.config.site.private){
         return app.config.site.ranks.MEMBER;
     }
     else{
-        return app.config.site.ranks.ANY;
+        return app.config.site.ranks.PUBLIC;
     }
 }
 
 module.exports.setup = setup;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

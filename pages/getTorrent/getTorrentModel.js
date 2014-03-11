@@ -14,9 +14,10 @@ var queries = null,
  * @param callback function(err, bencode) handles the produced bencoded torrent metafile buffer
  */
 function getTorrent(req, callback){
-    var limit = 1;
+    var sort = {},
+        limit = 1;
     
-    queries.getDocument({ident: req.id}, queries.TORRENTMODEL, limit,
+    queries.getDocument({ident: req.id}, queries.TORRENTMODEL, sort, limit,
                         wantedFields, _getTorrentCallback(req.passkey, callback));
 }
 
