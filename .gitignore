@@ -7,3 +7,4 @@ pids/
 sslcert/
 *~
 startmongo
+.DS_Store
