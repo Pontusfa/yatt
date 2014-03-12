@@ -16,18 +16,18 @@ html(lang='en')
                     .panel-heading.panel-title=lang.news
 
                     .panel-body
-                        if !admin
+                        if userRank >= ranks.MODERATOR
                             label(for='news-toggle')
                                 span.glyphicon.glyphicon-plus
-                            input.news-toggle(id='news-toggle' type='checkbox')
+                            input.news-toggle(id='news-toggle', type='checkbox')
 
-                            form.add-news(name='addNews' method='post' action=url)
+                            form.add-news(name='addNews', method='post', action=url)
                                 panel.panel-primary
                                     .panel-heading
                                         .panel-title
-                                            input.form-control(type='text' name='title' placeholder=lang.newTitle required)
+                                            input.form-control(type='text', name='title', placeholder=lang.newTitle, required)
 
-                                    textarea.panel-body.form-control(rows='5' name='text' required)
+                                    textarea.panel-body.form-control(rows='5' name='text', required)
 
                                 !=csrf
                                 button.btn.btn-default(type='submit')=lang.submit
@@ -43,7 +43,7 @@ html(lang='en')
                                         small=lang.posted + ' ' + news.created
 
                                     .news-footer
-                                        if !admin
+                                        if userRank >= ranks.MODERATOR
                                             a(href=url + '?removenews=' + news._id)
                                                 small=lang.remove
                                         a(href='/')

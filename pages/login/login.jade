@@ -8,18 +8,18 @@ html(lang=language)
             .jumbotron
                 include /partials/alerts
 
-                form.form-login(name='login' method='post' action=url)
+                form.form-login(name='login', method='post', action=url)
                     h2.form-login-heading=lang.pleaseLogin
-                    input.form-control(type='text' name='username' placeholder=lang.username required autofocus)
-                    input.form-control(type='password' name='password' placeholder=lang.password required)
+                    input.form-control(type='text', name='username', placeholder=lang.username, required, autofocus)
+                    input.form-control(type='password', name='password', placeholder=lang.password, required)
                     label.checkbox
-                        input(type='checkbox' name="rememberMe")
+                        input(type='checkbox', name="rememberMe")
                         =lang.rememberMe
                     !=csrf
                     button.btn.btn-lg.btn-primary.btn-block(type='submit')=lang.login
 
                 if site.registration
-                    form.form-login.register(name='register' method='get' action='/register')=lang.or
+                    form.form-login.register(name='register', method='get', action='/register')=lang.or
                                     button.btn.btn-default(type='submit')=lang.registerNow
 
                 .form-login.recover

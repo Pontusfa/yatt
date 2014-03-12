@@ -4,15 +4,17 @@
  */
 
 var template = null,
-    _ = require('underscore'),
     site = null,
-    model = null;
+    ranks = null,
+    model = null,
+    _ = require('underscore');
 
- /**
+/**
  * @private
  */
 function _getIndex(req, res){
      res.locals.site = site;
+
      if(!_.isEmpty(req.query)){ // user wants to perform some action
          model.handleRequestQueries(req.query,
              req.session.user,
@@ -27,10 +29,13 @@ function _getIndex(req, res){
      }
 }
 
+/**
+ * @private
+ */
 function _getIndexCallback(req, res){
     return function(err, result){
         _.forEach(result, function(news){
-            news.created = new Date(news.created).toLocaleDateString();
+            news.created = new Date(news.created).toLocaleDateString(); // transform to readable date
         });
 
         res.locals.index = result;
@@ -45,6 +50,10 @@ function _getRoot(req, res){
     res.redirect('/index');
 }
 
+/**
+ * Handles all news article postings.
+ * @private
+ */
 function _postIndex(req, res){
     model.addNews({title: req.body.title, text: req.body.text},
         req.session.user,
@@ -64,6 +73,7 @@ function _postIndex(req, res){
 function setup(app, jadeCompiler){
     template = jadeCompiler('index');
     site = {name: app.config.site.name};
+    ranks = app.config.site.ranks;
     model = require('./indexModel')(app.config);
     app.get('/index', _getIndex);
     app.get('/', _getRoot);

@@ -5,6 +5,10 @@
 
 .form-login .form-login-heading,
 .form-login .checkbox {
+    margin-bottom: 10px;
+}
+
+.form-login .form-login-heading {
     margin-bottom: 20px;
 }
 

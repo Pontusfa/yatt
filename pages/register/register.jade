@@ -10,34 +10,34 @@ html(lang=language)
         include /partials/alerts
 
         if site.registration
-          form.form-register(name='register' method='post' action=url)
+          form.form-register(name='register', method='post' action=url)
             h2.form-register-heading=lang.RegisterAccount
             p.form-register-heading=lang.pleaseFillOut
 
             .on-focus
-              input(type='text' name="username" class='form-control' placeholder=lang.username required autofocus)
+              input.form-control(type='text', name='username', placeholder=lang.username, required, autofocus)
               .tool-tip=usernameTooltip
               p
 
             .on-focus
-              input(type='password' name="password" class='form-control' placeholder=lang.password required)
+              input.form-control(type='password', name='password',  placeholder=lang.password, required)
               .tool-tip=passwordTooltip
 
             .on-focus
-              input(type='password' name='passwordAgain' class='form-control' placeholder=lang.passwordAgain required)
+              input.form-control(type='password', name='passwordAgain', placeholder=lang.passwordAgain, required)
               .tool-tip=samePasswordTooltip
             p
 
             .on-focus
-              input(type='email' name='email' class='form-control' placeholder=lang.mail required)
+              input.form-control(type='email', name='email', placeholder=lang.mail, required)
               .tool-tip=validMailTooltip
             
             !=csrf
 
             label.checkbox
-              input(type='checkbox' name='vow' required)
+              input(type='checkbox', name='vow', required)
               =lang.promise
-            button(class='btn btn-lg btn-primary btn-block' type='submit')=lang.register
+            button.btn.btn-lg.btn-primary.btn-block(type='submit')=lang.register
        
          else
           p=lang.registerClosed

@@ -29,7 +29,7 @@
 
 .tool-tip{
     color: black;
-    background-color: rgb(240, 240,240);
+    background-color: transparent;
     font-size: 14;
     font-weight: bold;
     border-radius: 7px;
