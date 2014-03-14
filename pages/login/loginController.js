@@ -30,7 +30,7 @@ function _postLoginCallback(req, res){
     var oneYear = 365*24*60*60*1000;
     
     return function(alert, user){
-        if(_.isNull(alert) && _.isObject(user)) {
+        if(!_.isObject(alert) && _.isObject(user)) {
             req.session.user = {username: user.username,
                                 rank: user.rank,
                                 passkey: user.passkey};
@@ -42,9 +42,8 @@ function _postLoginCallback(req, res){
             res.redirect(req.query.redirect || '/');
         }
         else{
-            res.locals[alert.type] = alert.message;
-            res.locals.site = site;
-            res.send(getTemplate(res.locals));
+            req.session.alert = alert;
+            res.redirect(req.originalUrl);
         }
     };
 }

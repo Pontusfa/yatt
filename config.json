@@ -27,7 +27,7 @@
     },
     "site": {
         "name": "Yatt",
-        "private": true,
+         "private": true,
         "ratio": false,
         "registration": true,
         "defaultLanguage": "en",
@@ -51,7 +51,7 @@
         },
         "navbarOrder": {
             "middle": [
-	            "/torrents",
+                "/torrents",
                 "/uploadtorrent",
                 "/forums"
             ],

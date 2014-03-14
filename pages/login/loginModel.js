@@ -11,6 +11,8 @@ var queries = null,
                     passkey: 1,
                     active: 1,
                     banned: 1},
+    sort = {},
+    limit = 1,
     _ = require('underscore');
 
 /**
@@ -19,9 +21,7 @@ var queries = null,
  * @private
  */
 function _validateUser(user, callback){
-    var criteria = {username: user.username},
-        sort = {},
-        limit = 1;
+    var criteria = {username: user.username};
     
     queries.getDocument(criteria,
                         queries.USERMODEL,

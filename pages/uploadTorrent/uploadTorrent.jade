@@ -1,0 +1,21 @@
+doctype html
+html(lang=language)
+  include /partials/head
+  body
+      .container
+        include /partials/navbar
+
+        .jumbotron
+          include /partials/alerts
+          
+          if userRank >= ranks.UPLOADER
+            .row
+              .panel.panel-default
+                .panel-heading.panel-title=lang.uploadTitle
+                
+                .panel-body
+                  form.upload-torrent(name="upload", action=url, method="post", enctype="multipart/form-data")
+                    input(name="torrentFile", type="file", required=true)
+                    button.btn.btn-default(type='submit')=lang.uploadSubmit
+
+                    !=csrf

@@ -8,16 +8,7 @@
         "login": "Login",
         "or": "or",
         "registerNow": " Register Now",
-        "recover": "Recover Account",
-        "errors": {
-            "wrongUserPass": "Wrong username or password.",
-            "notActive": "The account has not yet been activated.",
-            "banned": "The account has been banned.",
-            "noUserPass": "No username or password given."
-        },
-        "successes": {
-            "successfulRegistration": "Registration successful."
-        }
+        "recover": "Recover Account"
     },
     "register": {
         "title": "Register",
@@ -35,17 +26,7 @@
         "inputLength": "Must be between",
         "and": "and",
         "characters": "characters.",
-        "beginCharacter": "Must begin with a letter.",
-        "errors": {
-            "noUserPass": "No username or password given.",
-            "userFail": "That username is not valid.",
-            "noVow": "Please take the vow.",
-            "userTaken": "That username is already in use.",
-            "emailTaken": "That email is already in use. ",
-            "passLengthFail": "That password was too short or long.",
-            "passMissmatch": "The passwords do not match.",
-            "generic": "Something went wrong."
-        }
+        "beginCharacter": "Must begin with a letter."
     },
     "index": {
         "title": "index",
@@ -56,29 +37,47 @@
         "statistics": "Statistics",
         "updated": "Last Updated",
         "remove": "Remove",
-        "comment": "Comment",
-        "errors": {
-            "errorRemoveNews": "News article could not be removed.",
-            "errorAddNews": "News article could not be added.",
-            "emptyNews": "No text to add to a news article.",
-            "notAllowed": "You are not allowed to perform that action.",
-            "noSuchQuery": "Invalid query."
-        },
-        "successes": {
-            "successRemoveNews": "News article removed.",
-            "successAddNews": "News article added."
-        }
+        "comment": "Comment"
     },
     "": {
         "title": "index"
     },
     "uploadtorrent": {
-        "title": "Upload Torrent"
+        "title": "Upload Torrent",
+        "uploadTitle": "Upload Torrent",
+        "uploadSubmit": "Upload"
     },
     "gettorrent": {
         "title": "Get Torrent"
     },
     "logout": {
         "title": "Log Out"
+    },
+    "error": {
+        "uploadFail": "Torrent could not be uploaded.",
+        "errorRemoveNews": "News article could not be removed.",
+        "errorAddNews": "News article could not be added.",
+        "emptyNews": "No text to add to a news article.",
+        "notAllowed": "You are not allowed to perform that action.",
+        "noUserPass": "No username or password given.",
+        "userFail": "That username is not valid.",
+        "noVow": "Please take the vow.",
+        "userTaken": "That username is already in use.",
+        "emailTaken": "That email is already in use. ",
+        "passLengthFail": "That password was too short or long.",
+        "passMissmatch": "The passwords do not match.",
+        "generic": "Something went wrong.",
+        "wrongUserPass": "Wrong username or password.",
+        "notActive": "The account has not yet been activated.",
+        "banned": "The account has been banned.",
+        "noSuchPage": "Invalid page link.",
+        "noSuchQuery": "Invalid query."
+
+    },
+    "success": {
+        "uploadSuccess": "Torrent uploaded.",
+        "successRemoveNews": "News article removed.",
+        "successfulRegistration": "Registration successful.",
+        "successAddNews": "News article added."
     }
 }

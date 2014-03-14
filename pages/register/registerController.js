@@ -75,7 +75,7 @@ function _setupTooltips(res){
         site.passwordLength.max + ' ' + res.locals.lang.characters;
 
     res.locals.samePasswordTooltip = res.locals.lang.samePassword;
-    res.locals.validMailTooltip = res.locals.lang.validMail
+    res.locals.validMailTooltip = res.locals.lang.validMail;
 }
 /**
  * Sets up the routing for registering

@@ -1,9 +1,0 @@
-doctype html
-head
-	title="upload torrent"
-body
-	#uploadTorrent
-		form(name="upload", action=url, method="post", enctype="multipart/form-data")
-			input(name="torrentFile", type="file", required=true)
-			input(type="submit", value="upload")
-			!=csrf
