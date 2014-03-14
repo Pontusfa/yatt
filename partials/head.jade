@@ -2,7 +2,7 @@ head
   title=lang.title + ' - ' + site.name
   meta(charset='utf-8')
   if dev
-    - var link = 'stylesheets/' + lang.title.toLowerCase() + '.css'
+    - var link = 'stylesheets' + path + '.css'
         link(rel='stylesheet' href='stylesheets/bootstrap.min.css')
         link(rel='stylesheet' href='stylesheets/general.css')
         link(rel='stylesheet' href='stylesheets/navbar.css')

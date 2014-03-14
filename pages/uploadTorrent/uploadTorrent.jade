@@ -1,21 +1,64 @@
 doctype html
 html(lang=language)
-  include /partials/head
-  body
-      .container
-        include /partials/navbar
+    include /partials/head
+    body
+        .container
+            include /partials/navbar
 
-        .jumbotron
-          include /partials/alerts
-          
-          if userRank >= ranks.UPLOADER
-            .row
-              .panel.panel-default
-                .panel-heading.panel-title=lang.uploadTitle
-                
-                .panel-body
-                  form.upload-torrent(name="upload", action=url, method="post", enctype="multipart/form-data")
-                    input(name="torrentFile", type="file", required=true)
-                    button.btn.btn-default(type='submit')=lang.uploadSubmit
+            .jumbotron
+                include /partials/alerts
 
-                    !=csrf
+                if userRank >= ranks.UPLOADER
+                    .row
+                        .panel.panel-default
+                            .panel-heading.panel-title=lang.uploadTitle
+
+                            .panel-body
+                                form.upload-torrent(name="upload", action=url, method="post", enctype="multipart/form-data")
+                                    .form-group
+                                        label(for='torrent-file')=lang.chooseFile
+                                        input(name="torrentFile", id='torrent-file', type="file", required)
+                                        p.help-block
+                                            .small=lang.includeTrackerUrl + ': ' + site.trackerUrl
+                                            if site.privateTracker
+                                                .small=lang.privateTracker
+
+                                    .form-group
+                                        label(for='torrent-title')=lang.torrentTitle
+                                        input.form-control(type='text', id='torrent-title', name='torrentTitle', required)
+
+                                    .form-group
+                                        label(for='torrent-text')=lang.torrentText
+
+                                        textarea.form-control(id='torrent-text', rows=10, name='torrentText', required)
+
+                                    .form-group
+                                        label(for='torrent-tags')=lang.torrentTags
+                                        input.form-control(type='text', id='torrent-tags', name='torrentTags')
+                                        p.help-block
+                                            .small=lang.torrentTagsInfo
+
+                                    .form-group
+                                        label(for='torrent-info-link')=lang.torrentInfoLink
+                                        input.form-control(type='url', id='torrent-info-link', name='torrentInfoLink')
+                                        p.help-block
+                                            .small=lang.torrentInfoExample
+
+                                    .form-group
+                                        label(for='torrent-categories')=lang.category
+                                            #torrent-categories
+                                                each category in site.categories
+                                                    label.torrent-category
+                                                        input(id='torrent-category', type='radio', name='torrentCategory', value=category, required)
+                                                        =category
+
+                                    .form-group
+                                        label.vow
+                                            input(type='checkbox', name='vow', required)
+                                            =lang.vow + ' '
+                                                a(href='/rules')=lang.rules
+
+                                    .form-group
+                                        button.btn.btn-default(type='submit')=lang.uploadSubmit
+
+                                    !=csrf

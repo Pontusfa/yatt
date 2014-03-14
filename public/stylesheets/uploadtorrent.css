@@ -1,0 +1,10 @@
+label.torrent-category {
+    margin: 10px;
+}
+label.torrent-category > input {
+    margin-right: 5px;
+}
+
+label.vow > input {
+    margin-right: 5px;
+}

@@ -45,7 +45,19 @@
     "uploadtorrent": {
         "title": "Upload Torrent",
         "uploadTitle": "Upload Torrent",
-        "uploadSubmit": "Upload"
+        "uploadSubmit": "Upload",
+        "chooseFile": "Torrent File",
+        "includeTrackerUrl": "Remember to include the tracker url",
+        "privateTracker": "Remember to create the torrent as private.",
+        "torrentTitle": "Title",
+        "torrentInfoLink": "Link to Information Site (Optional)",
+        "torrentInfoExample": "For example www.imdb.com/title/tt0343788/",
+        "torrentTags": "Tags (Optional)",
+        "torrentTagsInfo": "Separate by spaces. For example: action horror Hitchcock 1958",
+        "torrentText": "Description",
+        "category": "Category",
+        "vow": "I have read and understood the",
+        "rules": "rules for uploading."
     },
     "gettorrent": {
         "title": "Get Torrent"
@@ -71,8 +83,12 @@
         "notActive": "The account has not yet been activated.",
         "banned": "The account has been banned.",
         "noSuchPage": "Invalid page link.",
-        "noSuchQuery": "Invalid query."
-
+        "noSuchQuery": "Invalid query.",
+        "noTitle": "Fill out the title.",
+        "noText": "Fill out the description.",
+        "noCategory": "Choose a category.",
+        "noSpecifiedTorrent": "No torrent ID specified.",
+        "noTorrent": "No torrent with that ID found."
     },
     "success": {
         "uploadSuccess": "Torrent uploaded.",

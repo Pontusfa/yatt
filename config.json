@@ -27,9 +27,10 @@
     },
     "site": {
         "name": "Yatt",
-         "private": true,
+        "private": true,
         "ratio": false,
         "registration": true,
+        "trackerUrl": "yatt.com:27015",
         "defaultLanguage": "en",
         "favicon": "",
         "ranks": {
@@ -49,6 +50,14 @@
             "min": 4,
             "max": 16
         },
+        "categories": [
+            "Games",
+            "Music",
+            "Movies",
+            "TV",
+            "Dox",
+            "Misc"
+        ],
         "navbarOrder": {
             "middle": [
                 "/torrents",

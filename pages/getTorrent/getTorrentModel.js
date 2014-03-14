@@ -6,52 +6,52 @@
 var queries = null,
     _ = require('underscore'),
     bencode = require('bencode'),
-    wantedFields = {'name': 1, 'meta.announce': 1, 'meta.info': 1};
-
-/**
- * Produces a bencoded metafile buffer for the id torrent.
- * @param req the whole request object, containing at least req.id and req.passkey
- * @param callback function(err, bencode) handles the produced bencoded torrent metafile buffer
- */
-function getTorrent(req, callback){
-    var sort = {},
-        limit = 1;
-    
-    queries.getDocument({ident: req.id}, queries.TORRENTMODEL, sort, limit,
-                        wantedFields, _getTorrentCallback(req.passkey, callback));
-}
+    wantedFields = {'title': 1, 'meta': 1};
 
 /**
  * @private
  */
 function _getTorrentCallback(passkey, callback){
-    return function(err, foundTorrent){
-        if(_.isNull(err) && _.isObject(foundTorrent)){
-            var formattedTorrent = _formatTorrent(foundTorrent, passkey);
-            callback(null, {name: foundTorrent.name + '.torrent', bencode: bencode.encode(formattedTorrent)});
+    return function(err, torrent){
+        var alert = null,
+            result = null;
+
+        if(!_.isObject(err) && _.isObject(torrent)){
+            torrent = _formatTorrent(torrent, passkey);
+            result = {title: torrent.info.name,
+                bencode: bencode.encode(torrent)};
         }
         else{
-            callback(err || new Error('Error: no such torrent.'), null);
+            alert = {type: 'error', message: 'noTorrent'};
         }
+        callback(alert, result);
     };
 }
 
 /**
  * @private
  */
-function _formatTorrent(foundTorrent, passkey){
-    var newTorrent = {};
-
-    newTorrent.info = {};
-    newTorrent.announce = foundTorrent.meta.announce.buffer;
-    newTorrent.info.pieces = foundTorrent.meta.info.pieces.buffer;
-    newTorrent.info['piece length'] = foundTorrent.meta.info['piece length'];
-    newTorrent.info.name = foundTorrent.meta.info.name.buffer;
-    newTorrent.info.length = foundTorrent.meta.info.length;
-    if(_.isString(passkey)){
-        newTorrent.announce = newTorrent.announce + '?passkey=' + passkey;
+function _formatTorrent(torrent, passkey){
+    torrent = torrent.meta;
+    torrent.info.pieces = torrent.info.pieces.buffer;
+    if(_.isString(passkey && !_.isEmpty(passkey))){
+        torrent.announce = torrent.announce + '?passkey=' + passkey;
     }
-    return newTorrent;
+    return torrent;
+}
+
+/**
+ * Produces a bencoded metafile buffer for the id torrent.
+ * @param req the whole request object, containing at least req._id and req.passkey
+ * @param callback function(err, bencode) handles the produced bencoded torrent metafile buffer
+ */
+function getTorrent(req, callback){
+    var sort = {},
+        limit = 1;
+
+    queries.getDocument({_id: req.id}, queries.TORRENTMODEL,
+        sort, limit, wantedFields,
+        _getTorrentCallback(req.passkey, callback));
 }
 
 module.exports = function(queriesObject){
