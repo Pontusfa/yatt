@@ -4,7 +4,7 @@
         "pleaseLogin": "Please Login",
         "username": "Username",
         "password": "Password",
-        "rememberMe": "Remember me",
+        "rememberMe": "Remember me.",
         "login": "Login",
         "or": "or",
         "registerNow": " Register Now",
@@ -51,13 +51,13 @@
         "privateTracker": "Remember to create the torrent as private.",
         "torrentTitle": "Title",
         "torrentInfoLink": "Link to Information Site (Optional)",
-        "torrentInfoExample": "For example www.imdb.com/title/tt0343788/",
+        "torrentInfoExample": "For example: www.imdb.com/title/tt0343788/",
         "torrentTags": "Tags (Optional)",
         "torrentTagsInfo": "Separate by spaces. For example: action horror Hitchcock 1958",
         "torrentText": "Description",
         "category": "Category",
-        "vow": "I have read and understood the",
-        "rules": "rules for uploading."
+        "vow1": "I have read and understood the",
+        "vow2": "rules for uploading."
     },
     "gettorrent": {
         "title": "Get Torrent"
@@ -88,7 +88,9 @@
         "noText": "Fill out the description.",
         "noCategory": "Choose a category.",
         "noSpecifiedTorrent": "No torrent ID specified.",
-        "noTorrent": "No torrent with that ID found."
+        "noTorrent": "No torrent with that ID found.",
+        "tooHighRank": "Your account's rank is invalid.",
+        "failFetchRank": "Could not fetch your account's rank."
     },
     "success": {
         "uploadSuccess": "Torrent uploaded.",

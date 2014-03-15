@@ -18,6 +18,7 @@ html(lang=language)
                                     .form-group
                                         label(for='torrent-file')=lang.chooseFile
                                         input(name="torrentFile", id='torrent-file', type="file", required)
+                                        //- not needed, but promotes good behavior :)
                                         p.help-block
                                             .small=lang.includeTrackerUrl + ': ' + site.trackerUrl
                                             if site.privateTracker
@@ -55,8 +56,8 @@ html(lang=language)
                                     .form-group
                                         label.vow
                                             input(type='checkbox', name='vow', required)
-                                            =lang.vow + ' '
-                                                a(href='/rules')=lang.rules
+                                            =lang.vow1 + ' '
+                                                a(href='/rules')=lang.vow2
 
                                     .form-group
                                         button.btn.btn-default(type='submit')=lang.uploadSubmit

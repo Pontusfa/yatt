@@ -46,7 +46,7 @@ function _formatTorrent(torrent, passkey){
  * @param callback function(err, bencode) handles the produced bencoded torrent metafile buffer
  */
 function getTorrent(req, callback){
-    var sort = {},
+    var sort = null,
         limit = 1;
 
     queries.getDocument({_id: req.id}, queries.TORRENTMODEL,
