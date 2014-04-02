@@ -1,0 +1,88 @@
+doctype html
+html(lang=language)
+    include /partials/head
+    body
+        .container
+            include /partials/navbar
+            include /partials/alerts
+
+            .jumbotron.search.row
+                h3=lang.searchTorrents
+                form(method='get', name='torrent-search', action=path)
+                    .form-group.col-lg-10
+                        label(for='torrent-title')=lang.torrentTitle
+                        input#torrent-title.form-control(type='text', name='title', value=query.criteria.title)
+                        help-block
+                            .small=lang.torrentTitleHelp
+
+                    .form-group.col-lg-8
+                        label(for='torrent-tags')=lang.torrentTags
+                        input.form-control(type='text', id='torrent-tags', name='tags', value=query.criteria.tags)
+                        help-block
+                            .small=lang.torrentTagsHelp
+
+                    .form-group
+                        label(for='torrent-categories')=lang.categories.categories
+                            #torrent-categories
+                                each category in site.categories
+                                    -var active = query.criteria.categories && query.criteria.categories.indexOf(category) != -1
+                                    label.torrent-categories
+                                        input(type='checkbox', name='categories', value=category, checked=active)
+                                        =lang.categories[category]
+
+                    .form-group
+                        button.btn.btn-primary=lang.searchButton
+
+                a.small(href='torrents')=lang.showAll
+
+
+
+
+            h3=lang.torrents
+            .row
+                table.table.table-hover.table-condensed
+                    thead
+                        th.col-lg-1
+                        th.col-lg-6
+                            a(href=links.title)=lang.torrentTitle
+                        th.col-lg-1
+                            a(href=links.size)=lang.torrentSize
+                        th.col-lg-1
+                            a(href=links.leechers)=lang.torrentLeechers
+                            | /
+                            a(href=links.seeders)=lang.torrentSeeders
+                        th.col-lg-2
+                            a(href=links.created)=lang.torrentUploaded
+                        th.col-lg-1=lang.torrentUploader
+                    tbody
+                        each torrent in torrents
+                            tr
+                                td.small=torrent.category
+                                td
+                                    .row
+                                        .col-lg-5
+                                            a.title(href='/torrent?id=' + torrent._id)
+                                                p=torrent.title
+                                        .col-lg-1.col-lg-offset-5
+                                            if torrent.new
+                                                =lang.new
+                                        .col-lg-1
+                                            a(href='gettorrent?id=' + torrent._id)
+                                                span.glyphicon.glyphicon-download-alt
+
+                                    if torrent.tags
+                                        each tag in torrent.tags
+                                            a.tag.btn.btn-sm.btn-default(href='?tags=' + tag)=tag
+
+                                td=torrent.size
+                                td=torrent.leechers + '/' + torrent.seeders
+                                td=torrent.created
+                                td
+                                    a(href='/user?id=' + torrent.uploader)=torrent.uploader
+
+            .row
+                ul.pager
+                    li(class=links.previous.class)
+                        a(href=links.previous.link)=lang.previous
+                    li(class=links.next.class)
+                        a(href=links.next.link)=lang.next

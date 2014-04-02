@@ -1,13 +1,12 @@
 /**
  * Handles a user's logout.
- * @author Pontus Falk
  */
 
 /**
  * a simple setter and redirect
  * @private
  */
-function _logout(req, res){
+function _getLogout(req, res){
     req.session.user = null;
     req.session.destroy();
     res.redirect('/');
@@ -18,8 +17,7 @@ function _logout(req, res){
  * @param app the app to route
  */
 function setup(app){
-    app.get('/logout', _logout);
-    app.post('/logout', _logout);
+    app.get('/logout', _getLogout);
     return app.config.site.ranks.MEMBER;
 }
 

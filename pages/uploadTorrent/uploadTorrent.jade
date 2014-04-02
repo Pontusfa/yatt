@@ -4,62 +4,55 @@ html(lang=language)
     body
         .container
             include /partials/navbar
-
+            include /partials/alerts
             .jumbotron
-                include /partials/alerts
+                h3=lang.uploadTitle
+                form.upload-torrent(name="upload", action=url, method="post", enctype="multipart/form-data")
+                    .form-group
+                        label(for='torrent-file')=lang.chooseFile
+                        input(name="torrentFile", id='torrent-file', type="file", required)
+                        //- not needed, but promotes good behavior :)
+                        help-block
+                            .small=lang.includeTrackerUrl + ': ' + site.trackerUrl
+                            if site.privateTracker
+                                .small=lang.privateTracker
 
-                if userRank >= ranks.UPLOADER
-                    .row
-                        .panel.panel-default
-                            .panel-heading.panel-title=lang.uploadTitle
+                    .form-group
+                        label(for='torrent-title')=lang.torrentTitle
+                        input.form-control(type='text', id='torrent-title', name='torrentTitle', required)
 
-                            .panel-body
-                                form.upload-torrent(name="upload", action=url, method="post", enctype="multipart/form-data")
-                                    .form-group
-                                        label(for='torrent-file')=lang.chooseFile
-                                        input(name="torrentFile", id='torrent-file', type="file", required)
-                                        //- not needed, but promotes good behavior :)
-                                        p.help-block
-                                            .small=lang.includeTrackerUrl + ': ' + site.trackerUrl
-                                            if site.privateTracker
-                                                .small=lang.privateTracker
+                    .form-group
+                        label(for='torrent-text')=lang.torrentText
 
-                                    .form-group
-                                        label(for='torrent-title')=lang.torrentTitle
-                                        input.form-control(type='text', id='torrent-title', name='torrentTitle', required)
+                        textarea.form-control(id='torrent-text', rows=10, name='torrentText', required)
 
-                                    .form-group
-                                        label(for='torrent-text')=lang.torrentText
+                    .form-group
+                        label(for='torrent-tags')=lang.torrentTags
+                        input.form-control(type='text', id='torrent-tags', name='torrentTags')
+                        .help-block
+                            .small=lang.torrentTagsInfo
 
-                                        textarea.form-control(id='torrent-text', rows=10, name='torrentText', required)
+                    .form-group
+                        label(for='torrent-info-link')=lang.torrentInfoLink
+                        input.form-control(type='url', id='torrent-info-link', name='torrentInfoLink')
+                        .help-block
+                            .small=lang.torrentInfoExample
 
-                                    .form-group
-                                        label(for='torrent-tags')=lang.torrentTags
-                                        input.form-control(type='text', id='torrent-tags', name='torrentTags')
-                                        p.help-block
-                                            .small=lang.torrentTagsInfo
+                    .form-group
+                        label(for='torrent-categories')=lang.categories.category
+                            #torrent-categories
+                                each category in site.categories
+                                    label.torrent-category
+                                        input(type='radio', name='torrentCategory', value=category, required)
+                                        =lang.categories[category]
 
-                                    .form-group
-                                        label(for='torrent-info-link')=lang.torrentInfoLink
-                                        input.form-control(type='url', id='torrent-info-link', name='torrentInfoLink')
-                                        p.help-block
-                                            .small=lang.torrentInfoExample
+                    .form-group
+                        label.vow
+                            input(type='checkbox', name='vow', required)
+                            =lang.vow1 + ' '
+                                a(href='/rules')=lang.vow2
 
-                                    .form-group
-                                        label(for='torrent-categories')=lang.category
-                                            #torrent-categories
-                                                each category in site.categories
-                                                    label.torrent-category
-                                                        input(id='torrent-category', type='radio', name='torrentCategory', value=category, required)
-                                                        =category
+                    .form-group
+                        button.btn.btn-primary(type='submit')=lang.uploadSubmit
 
-                                    .form-group
-                                        label.vow
-                                            input(type='checkbox', name='vow', required)
-                                            =lang.vow1 + ' '
-                                                a(href='/rules')=lang.vow2
-
-                                    .form-group
-                                        button.btn.btn-default(type='submit')=lang.uploadSubmit
-
-                                    !=csrf
+                    !=csrf

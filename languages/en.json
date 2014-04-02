@@ -40,7 +40,26 @@
         "comment": "Comment"
     },
     "": {
-        "title": "index"
+        "title": "Index"
+    },
+    "torrents": {
+        "title": "Torrents",
+        "searchTorrents": "Search Torrents",
+        "searchButton": "Search",
+        "showAll": "Show All",
+        "torrentTitle": "Title",
+        "torrentTitleHelp": "A complete or partial title. For example: secret life walter",
+        "torrentTagsHelp": "Separate by spaces. For example: romance comedy Arnold",
+        "torrentTags": "Tags",
+        "torrents": "Torrents",
+        "torrentSize": "Size",
+        "torrentUploader": "Uploader",
+        "torrentUploaded": "Uploaded",
+        "new": "New!",
+        "torrentSeeders": "S",
+        "torrentLeechers": "L",
+        "previous": "Previous",
+        "next": "Next"
     },
     "uploadtorrent": {
         "title": "Upload Torrent",
@@ -51,11 +70,10 @@
         "privateTracker": "Remember to create the torrent as private.",
         "torrentTitle": "Title",
         "torrentInfoLink": "Link to Information Site (Optional)",
-        "torrentInfoExample": "For example: www.imdb.com/title/tt0343788/",
+        "torrentInfoExample": "For example: http://www.imdb.com/title/tt0343788/",
         "torrentTags": "Tags (Optional)",
         "torrentTagsInfo": "Separate by spaces. For example: action horror Hitchcock 1958",
         "torrentText": "Description",
-        "category": "Category",
         "vow1": "I have read and understood the",
         "vow2": "rules for uploading."
     },
@@ -65,7 +83,19 @@
     "logout": {
         "title": "Log Out"
     },
+
+    "torrentCategories": {
+        "category": "Category",
+        "categories": "Categories",
+        "games": "Games",
+        "music": "Music",
+        "movies": "Movies",
+        "tv": "TV",
+        "apps": "Apps",
+        "misc": "Miscellaneous"
+    },
     "error": {
+        "generic": "Something went wrong.",
         "uploadFail": "Torrent could not be uploaded.",
         "errorRemoveNews": "News article could not be removed.",
         "errorAddNews": "News article could not be added.",
@@ -78,10 +108,9 @@
         "emailTaken": "That email is already in use. ",
         "passLengthFail": "That password was too short or long.",
         "passMissmatch": "The passwords do not match.",
-        "generic": "Something went wrong.",
         "wrongUserPass": "Wrong username or password.",
-        "notActive": "The account has not yet been activated.",
-        "banned": "The account has been banned.",
+        "notActive": "This account has not yet been activated.",
+        "banned": "This account has been banned.",
         "noSuchPage": "Invalid page link.",
         "noSuchQuery": "Invalid query.",
         "noTitle": "Fill out the title.",
@@ -89,8 +118,14 @@
         "noCategory": "Choose a category.",
         "noSpecifiedTorrent": "No torrent ID specified.",
         "noTorrent": "No torrent with that ID found.",
-        "tooHighRank": "Your account's rank is invalid.",
-        "failFetchRank": "Could not fetch your account's rank."
+        "tooHighRank": "This account's rank is invalid.",
+        "failFetchRank": "Could not fetch your account's rank.",
+        "noPost": "Nothing to post here, move along.",
+        "noUploader": "No information on uploader.",
+        "noUsername": "No on uploader username.",
+        "notUploader": "This account is not allowed to upload torrents.",
+        "failedSearch": "The search could not be processed.",
+        "databaseFail": "Could not query the database."
     },
     "success": {
         "uploadSuccess": "Torrent uploaded.",

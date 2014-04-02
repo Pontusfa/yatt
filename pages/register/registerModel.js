@@ -11,6 +11,22 @@ var queries = null,
     _ = require('underscore');
 
 /**
+ * Registers a new user.
+ * @param user all relevant info about the user
+ * @param callback function(err, result) where result is a boolean representing successful registration.
+ */
+function registerUser(user, callback){
+    _checkRequirements(user, function(error){
+        if(_.isObject(error)){
+            callback(error);
+        }
+        else{
+            queries.addUser(user, _registerCallback(user, callback));
+        }
+    });
+}
+
+/**
  * @private
  */
 function _checkRequirements(user, callback) {
@@ -43,19 +59,21 @@ function _checkRequirements(user, callback) {
  * Makes sure neither username nor email is already in use.
  * @private
  */
-function _checkUniques(user, callback){
-    var criteria = {$or: [{username: user.username}, {email: user.email}]},
-        sort = {},
-        wantedFields = {username: 1, email: 1},
-        limit = 1;
-    
-    queries.getDocument(
-        criteria,
-        queries.USERMODEL, sort, limit,
-        wantedFields,
-        _checkUniquesCallback(user, callback)
-    );
-}
+var _checkUniques = function(){
+    var sort = {},
+        offset = 0,
+        limit = 1,
+        wantedFields = {username: 1, email: 1};
+
+    return function(user, callback){
+        var criteria = {$or: [{username: user.username}, {email: user.email}]};
+
+        queries.getDocuments(
+            criteria, queries.USERMODEL, sort, offset,limit, wantedFields,
+            _checkUniquesCallback(user, callback)
+        );
+    };
+}();
 
 /**
  * Returns if either username or mail is in use, otherwise
@@ -94,22 +112,6 @@ function _registerCallback(user, callback){
             
         }
     };
-}
-
-/**
- * Registers a new user.
- * @param user all relevant info about the user
- * @param callback function(err, result) where result is a boolean representing successful registration.
- */
-function registerUser(user, callback){
-    _checkRequirements(user, function(error){
-        if(_.isObject(error)){
-            callback(error);
-        }
-        else{
-            queries.addUser(user, _registerCallback(user, callback));
-        }
-    });
 }
 
 module.exports = function(queriesObject, modifyUserObject, config){

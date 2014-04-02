@@ -82,7 +82,6 @@ function setup(app){
     if(app.config.site.private){
         app.get('/gettorrent', _getTorrentPrivate);
         return app.config.site.ranks.MEMBER;
-
     }
     else{
         app.get('/gettorrent', _getTorrent);

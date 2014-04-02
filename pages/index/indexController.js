@@ -13,26 +13,29 @@ var template = null,
  * @private
  */
 function _getIndex(req, res){
-     res.locals.site = site;
+    res.locals.canRemove = req.session.user.rank >= ranks.MODERATOR;//TODO: -> model
+    res.locals.canAdd = req.session.user.rank >= ranks.MODERATOR;
+    res.locals.site = site;
 
-     if(!_.isEmpty(req.query)){ // user wants to perform some action
-         model.handleRequestQueries(req.query,
-             req.session.user,
-             function(alert){
-                 req.session.alert = alert;
-                 res.redirect('/index');
-             }
-         );
-     }
-     else{
-         model.buildIndex(_getIndexCallback(req, res));
-     }
+    if(_.isEmpty(req.query)){
+        model.buildIndex(_getIndexCallback(res));
+    }
+    else{
+        // user wants to perform some action
+        model.handleRequestQueries(req.query,
+            req.session.user,
+            function(alert){
+                req.session.alert = alert;
+                res.redirect('/index');
+            }
+        );
+    }
 }
 
 /**
  * @private
  */
-function _getIndexCallback(req, res){
+function _getIndexCallback(res){
     return function(err, result){
         _.forEach(result, function(news){
             news.created = new Date(news.created).toLocaleDateString(); // transform to readable date
@@ -41,13 +44,6 @@ function _getIndexCallback(req, res){
         res.locals.index = result;
         res.send(template(res.locals));
     };
- }
-
-/**
- * @private
- */
-function _getRoot(req, res){
-    res.redirect('/index');
 }
 
 /**
@@ -65,7 +61,7 @@ function _postIndex(req, res){
 }
 
 /**
- * Handles routing for / and /index
+ * Handles routing for /index
  * @param app the app to install routing to
  * @param jadeCompiler a compiler from jade to html
  * @returns {boolean} successful routing
@@ -76,7 +72,6 @@ function setup(app, jadeCompiler){
     ranks = app.config.site.ranks;
     model = require('./indexModel')(app.config);
     app.get('/index', _getIndex);
-    app.get('/', _getRoot);
     app.post('/index', _postIndex);
 
     if(app.config.site.private){

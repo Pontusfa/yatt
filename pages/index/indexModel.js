@@ -2,24 +2,34 @@ var queries = require('../../lib/queries'),
     ranks = null,
     _ = require('underscore');
 
-function _getNews(callback){
-    var criteria = {},
-        sort = {created: -1},
-        limit = 3,
-        wantedFields= {};
-
-    queries.getDocument(
-        criteria,
-        queries.NEWSMODEL,
-        sort,
-        limit,
-        wantedFields,
-        callback);
-}
-
+/**
+ * @param callback
+ */
 function buildIndex(callback){
     _getNews(callback);
 }
+
+/**
+ * @private
+ */
+var _getNews = function(){
+    var criteria = {},
+        sort = {created: -1},
+        offset = 0,
+        limit = 3,
+        wantedFields= {};
+
+    return function(callback){
+        queries.getDocuments(
+            criteria,
+            queries.NEWSMODEL,
+            sort,
+            offset,
+            limit,
+            wantedFields,
+            callback);
+    };
+}();
 
 /**
  * Handles queries received from the user
@@ -29,6 +39,7 @@ function buildIndex(callback){
  */
 function handleRequestQueries(requestQueries, user, callback){
     var alert;
+
     if(user.rank < ranks.MODERATOR){
         alert = {type: 'error', message: 'notAllowed'};
         callback(alert);
@@ -73,7 +84,7 @@ function addNews(news, user, callback){
     }
     else{
         queries.addDocument(news, queries.NEWSMODEL,
-            function(err, result){
+            function(err){
                 if(_.isObject(err)){
                     alert = {type: 'error', message: 'errorAddNews'};
                 }
@@ -93,5 +104,5 @@ module.exports = function(config){
     module.exports.addNews = addNews;
 
     return module.exports;
-}
+};
 

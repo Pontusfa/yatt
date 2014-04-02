@@ -1,37 +1,30 @@
 /**
  * Handling the register system.
- * @author Pontus Falk
  */
 
 var _ = require('underscore'),
     registerModel = null,
     template = null,
     ranks = null,
-    site,
+    site = null,
     logger = null;
 
 /**
  * @private
  */
-function _getRegister(){
-    return function(req, res){
-        if(req.session.user.rank >= ranks.MEMBER){
-            res.redirect('/');
-        }
-        else{
-            _setupTooltips(res);
-            res.locals.site = site;
-            res.send(template(res.locals));
-        }
-    };
+function _getRegister(req, res){
+    _setupTooltips(res);
+
+    res.locals.site = site;
+    res.send(template(res.locals));
 }
 
 /**
  * @private
  */
 function _postRegister(req, res){
-    if(req.session.user.rank >= ranks.MEMBER){
-        res.redirect('/');
+    if(!site.registration){
+        res.redirect('/register');
     }
     else{
         registerModel.registerUser(req.body, _postRegisterCallback(req, res));
@@ -61,6 +54,7 @@ function _postRegisterCallback(req, res){
 /**
  * Creates the text ouput used to explain to the user
  * the requirements for registering to the site.
+ * TODO: precalculate
  * @param res
  * @private
  */
@@ -88,15 +82,15 @@ function setup(app, jadeCompiler){
 
     ranks = app.config.site.ranks;
     site = {name: app.config.site.name,
-            registration: app.config.site.registration,
-            usernameLength: app.config.site.usernameLength,
-            passwordLength: app.config.site.passwordLength};
-
+        registration: app.config.site.registration,
+        usernameLength: app.config.site.usernameLength,
+        passwordLength: app.config.site.passwordLength};
     template = jadeCompiler('register');
     registerModel = require('./registerModel')(app.queries, app.modifyUser, app.config);
-    app.get('/register', _getRegister(app.config));
+
+    app.get('/register', _getRegister);
     app.post('/register', _postRegister);
-    
+
     return app.config.site.ranks.PUBLIC_ONLY;
 
 }

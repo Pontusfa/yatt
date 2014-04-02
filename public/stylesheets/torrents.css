@@ -1,0 +1,27 @@
+thead a,
+tbody td a {
+    color: #000;
+    text-decoration: none;
+}
+
+.jumbotron.search {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    margin-bottom: 10px;
+}
+
+a.tag.btn.btn-sm.btn-default {
+    padding-bottom: 3px;
+    padding-top: 1px;
+    margin-right: 3px;
+}
+.glyphicon.glyphicon-download-alt {
+    color: rgb(66, 139, 202);
+}
+
+label.torrent-categories {
+    margin: 10px;
+}
+label.torrent-categories > input {
+    margin-right: 5px;
+}

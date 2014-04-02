@@ -9,58 +9,49 @@ html(lang='en')
             h1 Image placeholder.
             h1 Acquire artist, extract art.
 
-        .jumbotron
-            include /partials/alerts
-            .row
-                .panel.panel-default
-                    .panel-heading.panel-title=lang.news
+        include /partials/alerts
+        h3=lang.news
+        if canAdd
+            label(for='news-toggle')
+                span.glyphicon.glyphicon-plus
+            input.news-toggle(id='news-toggle', type='checkbox')
 
-                    .panel-body
-                        if userRank >= ranks.MODERATOR
-                            label(for='news-toggle')
-                                span.glyphicon.glyphicon-plus
-                            input.news-toggle(id='news-toggle', type='checkbox')
-
-                            form.add-news(name='addNews', method='post', action=url)
-                                panel.panel-primary
-                                    .panel-heading
-                                        .panel-title
-                                            input.form-control(type='text', name='title', placeholder=lang.newTitle, required)
-
-                                    textarea.panel-body.form-control(rows='5', name='text', required)
-
-                                !=csrf
-                                button.btn.btn-default(type='submit')=lang.submit
-
-                        each news in index
-                            .panel.panel-primary
-                                .panel-heading
-                                    .panel-title=news.title
-                                .panel-body=news.text
-
-                                .panel-footer
-                                    .pull-left
-                                        small=lang.posted + ' ' + news.created
-
-                                    .news-footer
-                                        if userRank >= ranks.MODERATOR
-                                            a(href=url + '?removenews=' + news._id)
-                                                small=lang.remove
-                                        a(href='/')
-                                            small=lang.comment
-
-            .row
-                .panel.panel-default
+            form.add-news(name='addNews', method='post', action=url)
+                .panel.panel-primary
                     .panel-heading
-                        .panel-title=lang.statistics
+                        .panel-title
+                            input.form-control(type='text', name='title', placeholder=lang.newTitle, required)
                     .panel-body
-                        .list-group.pull-left
-                            .list-group-item  users online
-                            .list-group-item registered users
-                            .list-group-item something
-                        .list-group.pull-right
-                            .list-group-item  torrents uploaded
-                            .list-group-item leechers
-                            .list-group-item seeders
-                            .list-group-item total GiB mediated
+                        textarea.form-control(rows='5', name='text', required)
+
+                !=csrf
+                button.btn.btn-primary(type='submit')=lang.submit
+
+        each news in index
+            .panel.panel-primary
+                .panel-heading
+                    .panel-title=news.title
+                .panel-body=news.text
+
+                .panel-footer
+                    .pull-left
+                        small=lang.posted + ' ' + news.created
+
+                    .news-footer
+                        if canRemove
+                            a(href=url + '?removenews=' + news._id)
+                                small=lang.remove
+                        a(href='/')
+                            small=lang.comment
+
+        h3=lang.statistics
+        ul.list-group.col-lg-6
+            ul.list-group-item  users online
+            ul.list-group-item registered users
+            ul.list-group-item something
+        ul.list-group.col-lg-6
+            ul.list-group-item  torrents uploaded
+            ul.list-group-item leechers
+            ul.list-group-item seeders
+            ul.list-group-item total GiB mediated
 

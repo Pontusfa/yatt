@@ -27,7 +27,7 @@
     },
     "site": {
         "name": "Yatt",
-        "private": true,
+        "private": false,
         "ratio": false,
         "registration": true,
         "trackerUrl": "yatt.com:27015",
@@ -51,12 +51,12 @@
             "max": 16
         },
         "categories": [
-            "Games",
-            "Music",
-            "Movies",
-            "TV",
-            "Dox",
-            "Misc"
+            "games",
+            "music",
+            "movies",
+            "tv",
+            "apps",
+            "misc"
         ],
         "navbarOrder": {
             "middle": [
@@ -64,7 +64,7 @@
                 "/uploadtorrent",
                 "/forums"
             ],
-            "right" : [
+            "right": [
                 "/login",
                 "/register",
                 "/logout"
