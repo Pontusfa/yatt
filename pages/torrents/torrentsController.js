@@ -6,113 +6,128 @@ var site = null,
     queryWhiteList = ['title', 'tags', 'categories', 'deadTorrents'],
     _ = require('underscore');
 
+
 /**
- * Sanitizes the query request and passes it on to the model
- * to do its thing.
  * @private
  */
 function _getTorrents(req, res){
-    var query = _sanitizeQuery(req),
-        model = new TorrentsModel(query),
-        locals = res.locals,
-        callbacks = {
-            getTorrents: _getTorrentsCallback(req, res, model),
-            getPages: _buildPagesCallback(req, res)
-        };
+    var controller = new Controller(req, res);
 
-    locals.query = query;
-    locals.site = site;
-    locals.lang.categories = torrentCategories[req.session.language];
+    controller.sanitizeQuery().
+        getModel().
+        executeModel();
+}
 
-    model.
-        registerCallbacks(callbacks).
+/**
+ *
+ * @param req
+ * @param res
+ * @constructor
+ */
+var Controller = function(req, res){
+    this._req = req;
+    this._res = res;
+    this._model = null;
+    this._modelCallbacks = {
+        getTorrents: this._getTorrentsCallback.bind(this),
+        getPages: this._buildPagesCallback.bind(this)
+    };
+};
+
+/**
+ * Saves only the whitelisted query keywords
+ */
+Controller.prototype.sanitizeQuery = function (){
+    var newQuery = {},
+        orderWhiteList = ['asc', 'desc'],
+        nonAlfaNumericals = /[^\w|\s]/g,
+        query = this._req.query;
+
+    newQuery.sort = _.contains(sortWhiteList, query.sort) ?
+        query.sort :
+        null;
+
+    newQuery.order = _.contains(orderWhiteList, query.order) ?
+        query.order :
+        null;
+
+    //creates the object defining previous/next step for pager
+    newQuery.offset = parseInt(query.offset);
+    if(!_.isFinite(newQuery.offset) || newQuery.offset < 0){
+        newQuery.offset = 0;
+    }
+
+    newQuery.criteria = _.pick(query, queryWhiteList);
+
+    if(!_.isEmpty(newQuery.criteria.title)){ //remove any regex shenanigans
+        newQuery.criteria.title = newQuery.criteria.title.replace(nonAlfaNumericals, '');
+    }
+    this._query = newQuery;
+    return this;
+};
+
+/**
+ *
+ */
+Controller.prototype.getModel = function(){
+    this._model = new TorrentsModel(this._query);
+    return this;
+};
+
+/**
+ *
+ */
+Controller.prototype.executeModel = function(){
+    this._model.
+        registerCallbacks(this._modelCallbacks).
         trimCriteria().
         buildCriteria().
         buildSort().
         getTorrents();
-
-}
-
-/**
- * Saves only the whitelisted query keywords
- * @private
- */
-var _sanitizeQuery = (function(){
-    var orderWhiteList = ['asc', 'desc'],
-        nonAlfaNumericals = /[^\w|\s]/g;
-
-    return function (req){
-        var newQuery = {},
-            query = req.query;
-
-        newQuery.sort = _.contains(sortWhiteList, query.sort) ?
-            query.sort :
-            null;
-
-        newQuery.order = _.contains(orderWhiteList, query.order) ?
-            query.order :
-            null;
-
-        //creates the object defining previous/next step for pager
-        newQuery.offset = parseInt(query.offset);
-        if(!_.isFinite(newQuery.offset) || newQuery.offset < 0){
-            newQuery.offset = 0;
-        }
-
-        newQuery.criteria = _.pick(query, queryWhiteList);
-
-        if(!_.isEmpty(newQuery.criteria.title)){ //remove any regex shenanigans
-            newQuery.criteria.title = newQuery.criteria.title.replace(nonAlfaNumericals, '');
-        }
-
-        return newQuery;
-    };
-}());
+    return this;
+};
 
 /**
  * Transforms the model's returned data into format suitable for the view.
  * @private
  */
-function _getTorrentsCallback(req, res, model){
-    return function(alert, result){
-        if(_.isObject(alert)){
-            req.session.alert = alert;
-            res.redirect('/torrents');
-        }
-        else{
-            res.locals.torrents = result;
-            model.getPages();
-        }
-    };
-}
+Controller.prototype._getTorrentsCallback = function(alert, result){
+    if(_.isObject(alert)){
+        this._req.session.alert = alert;
+        this._res.redirect('/torrents');
+    }
+    else{
+        this._foundTorrents = result;
+        this._model.getPages();
+    }
+};
 
 /**
  * @private
  */
-function _buildPagesCallback(req, res){
-    return function(alert, result){
-        if(_.isObject(alert)){
-            req.session.alert = alert;
-            res.redirect('/torrents');
-        }
-        else{
-            res.locals.links = _buildLinks(res.locals.query, result);
-
-            res.send(template(res.locals));
-        }
-    };
-}
+Controller.prototype._buildPagesCallback = function(alert, result){
+    if(_.isObject(alert)){
+        this._req.session.alert = alert;
+        this._res.redirect('/torrents');
+    }
+    else{
+        this._buildLinks(result).
+            _buildLocals().
+            _res.send(template(this._res.locals));
+    }
+};
 
 /**
  * @private
  */
-function _buildLinks(query, offsets){
+Controller.prototype._buildLinks = function(offsets){
     var searchString = '?',
+        query = this._query,
         links = {};
 
     //sort part
     _.forEach(query.criteria, function(value, key){
-        searchString = searchString + key + '=' + value.replace(' ', '+') + '&';
+        searchString = searchString + key + '=' + value + '&';
     });
 
     _.forEach(sortWhiteList, function(value){
@@ -149,8 +164,9 @@ function _buildLinks(query, offsets){
             class: 'disabled'
         };
     }
-    return links;
-}
+    this._links = links;
+    return this;
+};
 
 /**
  * @private
@@ -160,6 +176,17 @@ function _getSortOrder(order){
         'asc' :
         'desc';
 }
+
+Controller.prototype._buildLocals = function(){
+    var locals = this._res.locals;
+
+    locals.query = this._query;
+    locals.site = site;
+    locals.lang.categories = torrentCategories[this._req.session.language];
+    locals.links = this._links;
+    locals.torrents = this._foundTorrents;
+    return this;
+};
 
 /**
  * Sets up the routing for torrents listing
