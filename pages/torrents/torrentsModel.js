@@ -6,7 +6,7 @@ function Model(query){
     this._query = query;
     this._offset = query.offset;
     this._sortBy = {};
-    this._criteria = {},
+    this._criteria = {};
     this._callbacks = {};
 }
 
@@ -58,7 +58,7 @@ Model.prototype.buildSort = (function(){
  * Builds the query criteria to match all query requests
  */
 Model.prototype.buildCriteria = function(){
-    var newCriteria = [],
+    var newCriteria = [{seeders: {$gt: 0}}], //Show only living torrents by default
         criteria = this._criteria,
         categories = null;
 
@@ -80,9 +80,11 @@ Model.prototype.buildCriteria = function(){
 
             newCriteria.push(categories);
         }
-        newCriteria = {$and: newCriteria};
+        if(_.isObject(criteria.deadTorrents)){
+            newCriteria[0] = {}; //removes constraint to only show living torrents
+        }
     }
-    this._criteria = newCriteria;
+    this._criteria = {$and: newCriteria};
     return this;
 };
 

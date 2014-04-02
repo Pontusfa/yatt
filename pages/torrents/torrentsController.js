@@ -3,7 +3,7 @@ var site = null,
     TorrentsModel = null,
     torrentCategories = null,
     sortWhiteList = ['title', 'seeders', 'leechers', 'size', 'created'],
-    queryWhiteList = ['title', 'tags', 'categories'],
+    queryWhiteList = ['title', 'tags', 'categories', 'deadTorrents'],
     _ = require('underscore');
 
 /**
@@ -14,14 +14,15 @@ var site = null,
 function _getTorrents(req, res){
     var query = _sanitizeQuery(req),
         model = new TorrentsModel(query),
+        locals = res.locals,
         callbacks = {
             getTorrents: _getTorrentsCallback(req, res, model),
             getPages: _buildPagesCallback(req, res)
         };
 
-    res.locals.query = query;
-    res.locals.site = site;
-    res.locals.lang.categories = torrentCategories[req.session.language];
+    locals.query = query;
+    locals.site = site;
+    locals.lang.categories = torrentCategories[req.session.language];
 
     model.
         registerCallbacks(callbacks).
@@ -41,28 +42,30 @@ var _sanitizeQuery = (function(){
         nonAlfaNumericals = /[^\w|\s]/g;
 
     return function (req){
-        var query = {};
+        var newQuery = {},
+            query = req.query;
 
-        query.sort = _.contains(sortWhiteList, req.query.sort) ?
-            req.query.sort :
+        newQuery.sort = _.contains(sortWhiteList, query.sort) ?
+            query.sort :
             null;
 
-        query.order = _.contains(orderWhiteList, req.query.order) ?
-            req.query.order :
+        newQuery.order = _.contains(orderWhiteList, query.order) ?
+            query.order :
             null;
 
         //creates the object defining previous/next step for pager
-        query.offset = parseInt(req.query.offset);
-        if(!_.isFinite(query.offset) || query.offset < 0){
-            query.offset = 0;
+        newQuery.offset = parseInt(query.offset);
+        if(!_.isFinite(newQuery.offset) || newQuery.offset < 0){
+            newQuery.offset = 0;
         }
 
-        query.criteria = _.pick(req.query, queryWhiteList);
+        newQuery.criteria = _.pick(query, queryWhiteList);
 
-        if(!_.isEmpty(query.criteria.title)){ //remove any regex shenanigans
-            query.criteria.title = query.criteria.title.replace(nonAlfaNumericals, '');
+        if(!_.isEmpty(newQuery.criteria.title)){ //remove any regex shenanigans
+            newQuery.criteria.title = newQuery.criteria.title.replace(nonAlfaNumericals, '');
         }
-        return query;
+
+        return newQuery;
     };
 }());
 

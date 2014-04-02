@@ -33,6 +33,11 @@ html(lang=language)
                     .form-group
                         button.btn.btn-primary=lang.searchButton
 
+                        -var active = query.criteria.deadTorrents
+                        label.dead-torrents
+                            input.dead-torrents(type='checkbox', name='deadTorrents', value=1, checked=active)
+                            =lang.deadTorrents
+
                 a.small(href='torrents')=lang.showAll
 
 

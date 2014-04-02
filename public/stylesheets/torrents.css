@@ -19,9 +19,12 @@ a.tag.btn.btn-sm.btn-default {
     color: rgb(66, 139, 202);
 }
 
+label.dead-torrents,
 label.torrent-categories {
     margin: 10px;
 }
+
+label.dead-torrents > input,
 label.torrent-categories > input {
     margin-right: 5px;
 }

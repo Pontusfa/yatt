@@ -50,6 +50,7 @@
         "torrentTitle": "Title",
         "torrentTitleHelp": "A complete or partial title. For example: secret life walter",
         "torrentTagsHelp": "Separate by spaces. For example: romance comedy Arnold",
+        "deadTorrents": "Show dead torrents.",
         "torrentTags": "Tags",
         "torrents": "Torrents",
         "torrentSize": "Size",
