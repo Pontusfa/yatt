@@ -1,6 +1,5 @@
 /**
  * Gives an instance for the winston logger with sane settings.
- * @author Pontus Falk
  */
 
 var winston = require('winston'),
