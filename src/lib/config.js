@@ -15,9 +15,8 @@ var fs = require('fs'),
 function _constructConfig(){
     var configFile = './config.json';
 
-    if (_.isString(configFile) && !_.isEmpty(configFile)){
-        _parseConfigFile(configFile);
-    }
+    _parseConfigFile(configFile);
+    
     if (!_.isObject(configuration) || _.isEmpty(configuration)){
         console.error('Couldn\'t create a config object. Exiting.');
         process.exit(1);
@@ -32,7 +31,7 @@ function _constructConfig(){
 function _parseConfigFile(filePath) {
     var logger = require('winston'); //temporary logger to make sure we can parse the config files properly.
 
-    if (!_.isString(filePath) || !fs.existsSync(filePath)) {
+    if (!fs.existsSync(filePath)) {
         logger.warn('Couldn\'t find config file %s', filePath);
         return;
     }
