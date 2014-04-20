@@ -109,9 +109,9 @@ function addDocument(document, model, callback){
  * @param criteria optional criteria for the model to count
  * @param callback a function(err, result) handling the results of the query
  */
-function countCollection(model, criteria, callback){
-    if(_.isFunction(criteria)){
-        callback = criteria;
+function countCollection(criteria, model, callback){
+    if(_.isFunction(model)){ // no criteria given
+        model = criteria;
         criteria = {};
     }
     models[model].count(criteria, callback);

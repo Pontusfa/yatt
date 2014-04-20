@@ -32,16 +32,11 @@ html(lang=language)
 
                     .form-group
                         button.btn.btn-primary=lang.searchButton
-
-                        -var active = query.criteria.deadTorrents
                         label.dead-torrents
-                            input.dead-torrents(type='checkbox', name='deadTorrents', value=1, checked=active)
+                            input.dead-torrents(type='checkbox', name='deadtorrents', value=1, checked=query.criteria.deadtorrents)
                             =lang.deadTorrents
 
-                a.small(href='torrents')=lang.showAll
-
-
-
+                a.small(href='?deadtorrents=1')=lang.showAll
 
             h3=lang.torrents
             .row
@@ -66,13 +61,13 @@ html(lang=language)
                                 td
                                     .row
                                         .col-lg-5
-                                            a.title(href='/torrent?id=' + torrent._id)
-                                                p=torrent.title
+                                            a.title(href=site.links.torrent + '?id=' + torrent._id)
+                                              p=torrent.title
                                         .col-lg-1.col-lg-offset-5
                                             if torrent.new
                                                 =lang.new
                                         .col-lg-1
-                                            a(href='gettorrent?id=' + torrent._id)
+                                            a(href=site.links.getTorrent + '?id=' + torrent._id)
                                                 span.glyphicon.glyphicon-download-alt
 
                                     if torrent.tags
@@ -83,11 +78,11 @@ html(lang=language)
                                 td=torrent.leechers + '/' + torrent.seeders
                                 td=torrent.created
                                 td
-                                    a(href='/user?id=' + torrent.uploader)=torrent.uploader
+                                  a(href=site.links.user + '?id=' + torrent.uploader)=torrent.uploader
 
-            .row
-                ul.pager
-                    li(class=links.previous.class)
-                        a(href=links.previous.link)=lang.previous
-                    li(class=links.next.class)
-                        a(href=links.next.link)=lang.next
+            
+            ul.pager
+              li(class=links.previous.class)
+                a(href=links.previous.link)=lang.previous
+              li(class=links.next.class)
+                a(href=links.next.link)=lang.next

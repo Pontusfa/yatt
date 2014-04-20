@@ -15,21 +15,19 @@ html(lang=language)
             p.form-register-heading=lang.pleaseFillOut
 
             .on-focus
-              input.form-control(type='text', name='username', placeholder=lang.username, required, autofocus)
+              input.form-control(type='text', name='username', placeholder=lang.username, value=form.username, required, autofocus)
               .tool-tip=usernameTooltip
-              p
 
-            .on-focus
+            .on-focus.pass
               input.form-control(type='password', name='password',  placeholder=lang.password, required)
               .tool-tip=passwordTooltip
 
-            .on-focus
+            .on-focus.pass-again
               input.form-control(type='password', name='passwordAgain', placeholder=lang.passwordAgain, required)
               .tool-tip=samePasswordTooltip
-            p
 
             .on-focus
-              input.form-control(type='email', name='email', placeholder=lang.mail, required)
+              input.form-control(type='email', name='email', placeholder=lang.email, value=form.email, required)
               .tool-tip=validMailTooltip
             
             !=csrf

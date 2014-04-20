@@ -1,4 +1,4 @@
- /**
+/**
  * Setting up routes using all the controllers found in ../controllers/
  * Requires module.exports.setup in all controller files that sets up the wanted routes.
  * @author Pontus Falk
@@ -12,11 +12,12 @@ var pageRanks = [];
  */
 function installRoutes(app){
     var pages = null,
-        _ = require('underscore'),
-        controller = null,
-        fs = require('fs'),
-        jadeCompiler = require('./jadeCompiler')(app.settings.env),
-        pagesPath = process.cwd() + '/pages/';
+    _ = require('underscore'),
+    controller = null,
+    fs = require('fs'),
+    jadeCompiler = require('./jadeCompiler')(app.settings.env),
+    
+    pagesPath = process.cwd() + '/src/pages/';
     
     try{
         pages = fs.readdirSync(pagesPath);

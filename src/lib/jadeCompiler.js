@@ -8,7 +8,7 @@ var _ = require('underscore'),
 function _justInTimeCompile(app, pagePath){
     return function(templateName){
         var fullPath = process.cwd() +
-            '/' + 'pages/' + pagePath + '/' +
+            '/' + app.config.setters.pages + '/' + pagePath + '/' +
             templateName + '.jade';
 
         return function(locals){ // TODO: why won't the old locals work? some fn in it screwing

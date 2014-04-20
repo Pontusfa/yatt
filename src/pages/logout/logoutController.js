@@ -2,6 +2,8 @@
  * Handles a user's logout.
  */
 
+var links = {};
+
 /**
  * a simple setter and redirect
  * @private
@@ -9,7 +11,7 @@
 function _getLogout(req, res){
     req.session.user = null;
     req.session.destroy();
-    res.redirect('/');
+    res.redirect(links.index);
 }
 
 /**
@@ -17,7 +19,8 @@ function _getLogout(req, res){
  * @param app the app to route
  */
 function setup(app){
-    app.get('/logout', _getLogout);
+    links = app.config.site.links;
+    app.get(links.logout, _getLogout);
     return app.config.site.ranks.MEMBER;
 }
 

@@ -1,19 +1,17 @@
 var site = null,
-    template = null,
-    TorrentsModel = null,
-    torrentCategories = null,
-    sortWhiteList = ['title', 'seeders', 'leechers', 'size', 'created'],
-    queryWhiteList = ['title', 'tags', 'categories', 'deadTorrents'],
-    _ = require('underscore');
-
+template = null,
+TorrentsModel = null,
+torrentCategories = null,
+sortWhiteList = ['title', 'seeders', 'leechers', 'size', 'created'],
+queryWhiteList = ['title', 'tags', 'categories', 'deadtorrents'],
+_ = require('underscore');
 
 /**
  * @private
  */
 function _getTorrents(req, res){
-    var controller = new Controller(req, res);
-
-    controller.sanitizeQuery().
+    new Controller(req, res).
+        sanitizeQuery().
         getModel().
         executeModel();
 }
@@ -24,7 +22,7 @@ function _getTorrents(req, res){
  * @param res
  * @constructor
  */
-var Controller = function(req, res){
+function Controller(req, res){
     this._req = req;
     this._res = res;
     this._model = null;
@@ -37,40 +35,44 @@ var Controller = function(req, res){
 /**
  * Saves only the whitelisted query keywords
  */
-Controller.prototype.sanitizeQuery = function (){
-    var newQuery = {},
-        orderWhiteList = ['asc', 'desc'],
-        nonAlfaNumericals = /[^\w|\s]/g,
+Controller.prototype.sanitizeQuery = (function(){
+    var orderWhiteList = ['asc', 'desc'],
+    nonAlfaNumericals = /[^\w|\s]/g;
+    
+    return function (){
+        var newQuery = {},
+        criteria = null,
         query = this._req.query;
+        newQuery.sort = _.contains(sortWhiteList, query.sort) ?
+            query.sort :
+            null;
 
-    newQuery.sort = _.contains(sortWhiteList, query.sort) ?
-        query.sort :
-        null;
+        newQuery.order = _.contains(orderWhiteList, query.order) ?
+            query.order :
+            null;
 
-    newQuery.order = _.contains(orderWhiteList, query.order) ?
-        query.order :
-        null;
+        //creates the object defining previous/next step for pager
+        newQuery.offset = parseInt(query.offset);
+        if(!_.isFinite(newQuery.offset) || newQuery.offset < 0){
+            newQuery.offset = 0;
+        }
 
-    //creates the object defining previous/next step for pager
-    newQuery.offset = parseInt(query.offset);
-    if(!_.isFinite(newQuery.offset) || newQuery.offset < 0){
-        newQuery.offset = 0;
-    }
-
-    newQuery.criteria = _.pick(query, queryWhiteList);
-
-    if(!_.isEmpty(newQuery.criteria.title)){ //remove any regex shenanigans
-        newQuery.criteria.title = newQuery.criteria.title.replace(nonAlfaNumericals, '');
-    }
-    this._query = newQuery;
-    return this;
-};
+        criteria = _.pick(query, queryWhiteList);
+        if(!_.isEmpty(criteria.title)){ //remove any regex shenanigans
+            criteria.title = criteria.title.replace(nonAlfaNumericals, '');
+        }
+        newQuery.criteria = criteria;
+        this._query = newQuery;
+        return this;
+    };
+}());
 
 /**
  *
  */
 Controller.prototype.getModel = function(){
-    this._model = new TorrentsModel(this._query);
+    this._model = new TorrentsModel(this._query).
+        registerCallbacks(this._modelCallbacks);
     return this;
 };
 
@@ -79,7 +81,6 @@ Controller.prototype.getModel = function(){
  */
 Controller.prototype.executeModel = function(){
     this._model.
-        registerCallbacks(this._modelCallbacks).
         trimCriteria().
         buildCriteria().
         buildSort().
@@ -94,7 +95,7 @@ Controller.prototype.executeModel = function(){
 Controller.prototype._getTorrentsCallback = function(alert, result){
     if(_.isObject(alert)){
         this._req.session.alert = alert;
-        this._res.redirect('/torrents');
+        this._res.redirect(site.links.torrents);
     }
     else{
         this._foundTorrents = result;
@@ -108,7 +109,7 @@ Controller.prototype._getTorrentsCallback = function(alert, result){
 Controller.prototype._buildPagesCallback = function(alert, result){
     if(_.isObject(alert)){
         this._req.session.alert = alert;
-        this._res.redirect('/torrents');
+        this._res.redirect(site.links.torrents);
     }
     else{
         this._buildLinks(result).
@@ -122,14 +123,14 @@ Controller.prototype._buildPagesCallback = function(alert, result){
  */
 Controller.prototype._buildLinks = function(offsets){
     var searchString = '?',
-        query = this._query,
-        links = {};
-
+    query = this._query,
+    links = {};
+    
     //sort part
     _.forEach(query.criteria, function(value, key){
         searchString = searchString + key + '=' + value + '&';
     });
-
+    
     _.forEach(sortWhiteList, function(value){
         links[value] = searchString + 'sort=' + value;
     });
@@ -172,11 +173,14 @@ Controller.prototype._buildLinks = function(offsets){
  * @private
  */
 function _getSortOrder(order){
-    return (!_.isEmpty(order) && _.isEqual(order, 'desc')) ?
+    return (_.isEqual(order, 'desc')) ?
         'asc' :
         'desc';
 }
 
+/**
+  *
+ */
 Controller.prototype._buildLocals = function(){
     var locals = this._res.locals;
 
@@ -195,22 +199,19 @@ Controller.prototype._buildLocals = function(){
  * @returns {boolean}
  */
 function setup(app, jadeCompiler){
-    site = {
-        name: app.config.site.name,
-        categories: app.config.site.categories
-    };
+    site = app.config.site;
     template = jadeCompiler('torrents');
-    TorrentsModel = require('./torrentsModel');
+    TorrentsModel = require('./torrentsModel')(app.queries);
     torrentCategories = require('../../lib/internationalization')
         .getAdditionalLanguageField('torrentCategories');
+    
+    app.get(site.links.torrents, _getTorrents);
 
-    app.get('/torrents', _getTorrents);
-
-    if(app.config.site.private){
-        return app.config.site.ranks.MEMBER;
+    if(site.private){
+        return site.ranks.MEMBER;
     }
     else{
-        return app.config.site.ranks.PUBLIC;
+        return site.ranks.PUBLIC;
     }
 }
 

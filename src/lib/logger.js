@@ -31,7 +31,7 @@ function _initLogger(config){
 function _initWinston(config) {
 	var fs = require('fs'),
 		path = require('path'),
-		logPath = path.join(__dirname, '/../' + config.setters.logFile);
+		logPath = path.join(process.cwd() + '/' + config.setters.logFile);
 
     if (!fs.existsSync(logPath)) {
         fs.openSync(logPath, 'w');

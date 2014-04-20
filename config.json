@@ -6,6 +6,7 @@
         "https port": 8443,
         "certPath": "sslcert/",
         "logFile": ".logs/app.log",
+        "pages": "src/pages",
         "static": "public/",
         "cookieSecret": "OxDSOdYI5WTt5FFERSKOBveHpJcEtmyos7UtonagDieVNbkKrZO+P3kUlfQYS/1PvPGYxhSx5ROzBHFfhfV7rA==",
         "logToConsole": true,
@@ -27,7 +28,7 @@
     },
     "site": {
         "name": "Yatt",
-        "private": false,
+        "private": true,
         "ratio": false,
         "registration": true,
         "trackerUrl": "yatt.com:27015",
@@ -58,6 +59,18 @@
             "apps",
             "misc"
         ],
+        "links": {
+            "torrents": "/torrents",
+            "uploadTorrent": "/uploadtorrent",
+            "forums": "/forums",
+            "index": "/index",
+            "login": "/login",
+            "logout": "/logout",
+            "register": "/register",
+            "torrent": "/torrent",
+            "getTorrent": "/gettorrent"
+            
+        },
         "navbarOrder": {
             "middle": [
                 "/torrents",
