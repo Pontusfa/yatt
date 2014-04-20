@@ -1,5 +1,4 @@
 /**
-
  *This module sets up the config object according
  *to the file config.json
  */
