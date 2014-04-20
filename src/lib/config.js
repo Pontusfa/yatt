@@ -1,8 +1,7 @@
 /**
- * @author Pontus Falk
+
  *This module sets up the config object according
- *to the file specified via the config flag, or
- *fall backs to defaults.json.
+ *to the file config.json
  */
 
 var fs = require('fs'),
