@@ -1,6 +1,5 @@
 /**
  * Handling all queries to the persistence layer.
- * @author Pontus Falk
  */
 
 var models = null,
