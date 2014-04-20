@@ -18,9 +18,7 @@ function _initLogger(config){
     }
     else{
         console.log('Couldn\'t setup a logger. Check your configuration.');
-        _.defer(function () {
-            process.exit(1);
-        });
+        process.exit(1);
     }
 }
 
