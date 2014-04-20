@@ -1,6 +1,5 @@
 /**
  * Various functions to update a user's details.
- * @author Pontus Falk
  */
 
 var queries = null,
