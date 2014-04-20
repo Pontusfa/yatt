@@ -1,7 +1,6 @@
 /**
  * Setting up routes using all the controllers found in ../controllers/
  * Requires module.exports.setup in all controller files that sets up the wanted routes.
- * @author Pontus Falk
  */
 
 var pageRanks = [];
@@ -42,7 +41,7 @@ function installRoutes(app){
                 app.logger.info( currentPagePath + ' routing setup.');
             }
             else{
-                app.logger.warn('Couldn\'t setup route ' + currentPagePath + '.');
+                app.logger.warn('Couldn\'t setup route ' + currentPagePath + '. No page rank given. Ignoring.');
             }
         }
         catch (err){
