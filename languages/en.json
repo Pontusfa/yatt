@@ -62,6 +62,16 @@
         "previous": "Previous",
         "next": "Next"
     },
+    "torrent": {
+        "size": "Size",
+        "category": "Category",
+        "tags": "Tags",
+        "infoLink": "Info Link",
+        "leechers": "Leechers",
+        "seeders": "Seeders",
+        "created": "Created",
+        "uploader": "Uploader"
+    },
     "uploadtorrent": {
         "title": "Upload Torrent",
         "uploadTitle": "Upload Torrent",

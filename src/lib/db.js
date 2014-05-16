@@ -1,6 +1,5 @@
 /**
  * Handling the database access
- * @author Pontus Falk
  */
 
 var connection = null,
@@ -60,9 +59,9 @@ function _initModels(config, db){
     torrentSchema = db.Schema({
         title: {type: String, index: true},
         description: String,
-        tags: {type: [String], index: true},
+        tags: {type: [String], index: true, default: ['']},
         category: {type: String, index: true},
-        infoLink: String,
+        infoLink: {type: String, default: ''},
         infoHash: {type: String, index: true, unique: true},
         created: {type: Date, default: Date.now()},
         seeders: {type: Number, index: true, default: 0},

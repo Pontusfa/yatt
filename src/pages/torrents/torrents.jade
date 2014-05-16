@@ -25,6 +25,7 @@ html(lang=language)
                         label(for='torrent-categories')=lang.categories.categories
                             #torrent-categories
                                 each category in site.categories
+
                                     -var active = query.criteria.categories && query.criteria.categories.indexOf(category) != -1
                                     label.torrent-categories
                                         input(type='checkbox', name='categories', value=category, checked=active)

@@ -68,7 +68,7 @@ function setup(app){
     site = app.config.site;
     app.get(site.links.getTorrent, _getTorrent);
     
-    return site.private ? site.ranks.MEMBER : site.ranks.PUBLIC;
+    return site.private ? site.ranks.MEMBER: site.ranks.PUBLIC;
 }
 
 module.exports.setup = setup;

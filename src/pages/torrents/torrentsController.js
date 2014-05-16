@@ -25,12 +25,11 @@ function _getTorrents(req, res){
 function Controller(req, res){
     this._req = req;
     this._res = res;
-    this._model = null;
     this._modelCallbacks = {
         getTorrents: this._getTorrentsCallback.bind(this),
         getPages: this._buildPagesCallback.bind(this)
     };
-};
+}
 
 /**
  * Saves only the whitelisted query keywords
@@ -63,6 +62,7 @@ Controller.prototype.sanitizeQuery = (function(){
         }
         newQuery.criteria = criteria;
         this._query = newQuery;
+
         return this;
     };
 }());
@@ -73,6 +73,7 @@ Controller.prototype.sanitizeQuery = (function(){
 Controller.prototype.getModel = function(){
     this._model = new TorrentsModel(this._query).
         registerCallbacks(this._modelCallbacks);
+
     return this;
 };
 
@@ -85,9 +86,11 @@ Controller.prototype.executeModel = function(){
         buildCriteria().
         buildSort().
         getTorrents();
+
     return this;
 };
 
+//TODO: different callbacks, success/fail
 /**
  * Transforms the model's returned data into format suitable for the view.
  * @private
@@ -166,6 +169,7 @@ Controller.prototype._buildLinks = function(offsets){
         };
     }
     this._links = links;
+
     return this;
 };
 
@@ -179,7 +183,7 @@ function _getSortOrder(order){
 }
 
 /**
-  *
+ *
  */
 Controller.prototype._buildLocals = function(){
     var locals = this._res.locals;
@@ -189,6 +193,7 @@ Controller.prototype._buildLocals = function(){
     locals.lang.categories = torrentCategories[this._req.session.language];
     locals.links = this._links;
     locals.torrents = this._foundTorrents;
+
     return this;
 };
 
@@ -207,12 +212,9 @@ function setup(app, jadeCompiler){
     
     app.get(site.links.torrents, _getTorrents);
 
-    if(site.private){
-        return site.ranks.MEMBER;
-    }
-    else{
-        return site.ranks.PUBLIC;
-    }
+    return site.private ?
+        site.ranks.MEMBER:
+        site.ranks.PUBLIC;
 }
 
 module.exports.setup = setup;
