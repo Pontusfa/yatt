@@ -65,7 +65,7 @@ Controller.prototype._errorCallback = function(alert){
 function setup(app){
     GetTorrentModel = require('./getTorrentModel')(app.queries, app.modifyUser);
     site = app.config.site;
-    app.get(site.links.getTorrent, _getTorrent);
+    app.get(site.links.gettorrent, _getTorrent);
     
     return site.private ? site.ranks.MEMBER: site.ranks.PUBLIC;
 }

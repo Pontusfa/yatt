@@ -61,26 +61,26 @@
         ],
         "links": {
             "torrents": "/torrents",
-            "uploadTorrent": "/uploadtorrent",
+            "uploadtorrent": "/uploadtorrent",
             "forums": "/forums",
             "index": "/index",
             "login": "/login",
             "logout": "/logout",
             "register": "/register",
             "torrent": "/torrent",
-            "getTorrent": "/gettorrent"
+            "gettorrent": "/gettorrent"
             
         },
         "navbarOrder": {
             "middle": [
-                "/torrents",
-                "/uploadtorrent",
-                "/forums"
+                "torrents",
+                "uploadtorrent",
+                "forums"
             ],
             "right": [
-                "/login",
-                "/register",
-                "/logout"
+                "login",
+                "register",
+                "logout"
             ]
             
         }

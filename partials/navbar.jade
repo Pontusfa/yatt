@@ -6,9 +6,9 @@
     ul.nav.navbar-nav
       each page in navbarList.middle
        li(class=page.active)
-         a(href=page.link)=page.title
+         a(href=site.links[page.link])=page.title
     ul.nav.navbar-nav.navbar-right
       each page in navbarList.right
         li(class=page.active)
-          a(href=page.link)=page.title
+          a(href=site.links[page.link])=page.title
  

@@ -108,8 +108,8 @@ function setup(app, jadeCompiler){
     categories = require('../../lib/internationalization')
         .getAdditionalLanguageField('torrentCategories');
 
-    app.get(links.uploadTorrent, _getUploadTorrent);
-    app.post(links.uploadTorrent, _postUploadTorrent);
+    app.get(links.uploadtorrent, _getUploadTorrent);
+    app.post(links.uploadtorrent, _postUploadTorrent);
 
     return app.config.site.ranks.UPLOADER;
 }

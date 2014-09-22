@@ -40,8 +40,9 @@ Controller.prototype.sanitizeQuery = (function(){
     
     return function (){
         var newQuery = {},
-        criteria = null,
-        query = this._req.query;
+        query = this._req.query,
+        criteria = _.pick(query, queryWhiteList);
+
         newQuery.sort = _.contains(sortWhiteList, query.sort) ?
             query.sort :
             null;
@@ -56,7 +57,6 @@ Controller.prototype.sanitizeQuery = (function(){
             newQuery.offset = 0;
         }
 
-        criteria = _.pick(query, queryWhiteList);
         if(!_.isEmpty(criteria.title)){ //remove any regex shenanigans
             criteria.title = criteria.title.replace(nonAlfaNumericals, '');
         }

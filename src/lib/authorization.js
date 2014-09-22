@@ -23,7 +23,7 @@ function  installAuthorization(app) {
 
         userAllowedPages = pageRanks[req.session.user.rank];
 
-        if(_.contains(userAllowedPages, req.path))
+        if(_.contains(userAllowedPages, req.path.slice(1))) //remove the leading '/'
         {
             req.session.user.allowedPages = userAllowedPages;
             next();

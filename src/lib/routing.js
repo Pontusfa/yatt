@@ -36,7 +36,7 @@ function installRoutes(app){
 
             if(_.isNumber(pageRank)){
                 pageRanks[pageRank] = pageRanks[pageRank] || [];
-                pageRanks[pageRank].push('/' + currentPagePath.toLowerCase());
+                pageRanks[pageRank].push(currentPagePath.toLowerCase());
                 
                 app.logger.info( currentPagePath + ' routing setup.');
             }

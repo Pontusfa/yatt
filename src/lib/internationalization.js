@@ -85,9 +85,9 @@ function _createNavbarList(navbarOrder){
         _.forEach(navbarOrder,function(pages, side){
             _.forEach(pages, function(page){
                 if(_.contains(allowedPages,page)){
-                    var pageTitle = languages[req.session.language][page.slice(1)].title,
-                        location = currentPage === page ? 'location' : '';
-                    bar[side].push({link:page, title: pageTitle, active: location});
+                    var pageTitle = languages[req.session.language][page].title,
+                        location = currentPage === page ? 'location' : ''; 
+                    bar[side].push({link:page, title: pageTitle, active: location}); //used later to signal we're here
                 }
             });
         });
