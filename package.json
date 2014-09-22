@@ -11,10 +11,10 @@
         "connect-mongo": "*",
         "jade": "*",
         "stylus": "*",
-        "mongoose": "*",
+        "mongoose": "3.8.*",
         "winston": "*",
         "busboy": "*",
-        "underscore": "*",
+        "underscore": "1.6.*",
         "bencode": "*",
         "helmet": "*"
     }

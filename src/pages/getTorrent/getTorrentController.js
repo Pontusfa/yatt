@@ -3,11 +3,10 @@
  */
 
 var GetTorrentModel = null,
-site = null,
-_ = require('underscore');
+site = null;
 
 function _getTorrent(req, res){
-    if(_.isString(req.query.id) && req.query.id.length > 0){
+    if(req.query.id && req.query.id.length > 0){
         new Controller(req, res).
             sanitizeQuery().
             getModel().
@@ -27,7 +26,7 @@ function Controller(req, res){
         errorCallback: this._errorCallback.bind(this)
     };
     this._user = req.session.user;
-};
+}
 
 Controller.prototype.sanitizeQuery = function(){
     this._id = this._req.query.id;

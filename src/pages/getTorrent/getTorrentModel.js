@@ -31,24 +31,22 @@ GetTorrentModel.prototype.getTorrent = (function(){
     };
 }());
 
+/**
+ * @private
+ */
 GetTorrentModel.prototype._getTorrentCallback = (function(){
     var bencode = require('bencode');
 
     return function(err, torrent){
-                
+        
         if(_.isObject(err)){
             this._callbacks.errorCallback({type:'error', message: 'databaseFail'});
         }
+        else if(_.isEmpty(torrent)){
+            this._callbacks.errorCallback({type:'error', message: 'noTorrent'});
+        }
         else{ //TODO: move re-encoding to uploadTorrent?
             torrent = this._formatTorrent(torrent);
-            
-            var crypto = require('crypto'),
-            sha1 = crypto.createHash('sha1');
-            apa = bencode.encode(torrent.info);
-            apa = sha1.update(apa);
-            apa = apa.digest('decimal');
-            console.log(encodeURIComponent(apa));
-
         
             this._callbacks.successCallback({
                 title: torrent.info.name,

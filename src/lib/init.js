@@ -23,13 +23,12 @@ function _initApp() {
     app.queries = require('./queries')();
     app.modifyUser = require('./modifyUser')(app);
 
-    _initSetters();
+    _initSettings();
     _initMiddleware();
     _initRoutes();
 
     process.on('SIGTERM', _tearDown);
     process.on('SIGINT', _tearDown);
-    app.tearDown = _tearDown;
     app.logger.info('App setup.');
 }
 
@@ -37,14 +36,14 @@ function _initApp() {
  * Populates the app object with various important settings needed
  * @private
  */
-function _initSetters() {
+function _initSettings() {
     // Using sane values if config is being naughty.
     app.use(express.static(path.join(process.cwd(), 'public/')));
     app.set('port', app.config.setters.port || 8080);
     app.set('https port', app.config.setters['https port'] || 8443);
     app.set('env', app.config.setters.env || 'development');
     app.set('pretty', app.config.setters.pretty || 'false');
-    app.logger.info('Setters setup.');
+    app.logger.info('Settings setup.');
 }
 
 /**
@@ -73,7 +72,7 @@ function _initMiddleware() {
     });
 
     _initCsrfProtection();
-    require('helmet').defaults(app);
+    require('helmet')(app);
     require('./authorization').installAuthorization(app);
     require('./internationalization').installLanguages(app);
 
@@ -137,7 +136,8 @@ function _initHttps(){
 }
 
 /**
- * Parses a multiform post to put file into req.body.file and fields to req.body.fieldName
+ * Parses a multiform post to put file into req.body.file and fields to req.body.fieldName.
+ * TODO: Set a max limit to file size, or a user can fill up the memory.
  * @private
  */
 function _initParseMultiForm(){
@@ -149,7 +149,7 @@ function _initParseMultiForm(){
             req.body = req.body || {};
             req.file = req.file || {};
             req.file.receivedData = 0;
-            req.file.data = new Buffer(parseInt(req.headers['content-length'])); //not all content is file, slice it after
+            req.file.data = new Buffer(parseInt(req.headers['content-length'])); //not all content is file, slice after
 
             busboy.on('file', function(fieldName, file, fileName){
                 req.file.name = fileName;
@@ -181,7 +181,12 @@ function _initParseMultiForm(){
  * @private
  */
 function _initSession() {
-    var cookieSettings = null,
+    var cookieSettings = {
+        httpOnly: true,
+        signed: true,
+        secure: app.config.uses['https only'],
+        maxAge: false
+    },
         MongoStore = require('connect-mongo')(express),
         connectionConfig = app.config.uses.db,
         mongoUri = 'mongodb://' +
@@ -193,18 +198,10 @@ function _initSession() {
             '/sessions',
         mongoStore = new MongoStore({url: mongoUri, auto_reconnect: true});
 
-    app.use(express.cookieParser(app.config.setters.cookieSecret));   // We need cookieParser installed for sessions.
-
-    cookieSettings = {
-        httpOnly: true,
-        signed: true,
-        secure: app.config.uses['https only'],
-        maxAge: false         //By default, user will log in again after shutting down the browser,
-    };                       // this can be altered at /login if user wants to stick around.
-
     app.use(express.session({
         proxy: app.config.uses.proxy,
         cookie: cookieSettings,
+        secret: app.config.setters.cookieSecret,
         store: mongoStore
     }));
 
@@ -272,13 +269,13 @@ function _tearDown() {
 function startup() {
     _initApp();
 
-    // TODO 1024 backlog research
-    server = app.listen(app.get('port'), 5000, function () {
+    // TODO: 1024 backlog research
+    server = app.listen(app.get('port'), 1024, function () {
         app.logger.info('listening for HTTP on port ' + app.get('port') + '.');
     });
 
     if(app.config.uses.https){
-        httpsServer.listen(app.get('https port'), 5000, function () {
+        httpsServer.listen(app.get('https port'), 1024, function () {
             app.logger.info('listening for HTTPS on port ' +
                 app.get('https port') + '.');
         });

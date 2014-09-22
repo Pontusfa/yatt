@@ -41,10 +41,11 @@ Controller.prototype._getTorrentCallback = function(torrent) {
     var locals = this._res.locals;
 
     locals.torrent = torrent;
-    locals.site = site;
+
     locals.lang.category =
         torrentCategories[this._req.session.language][torrent.category];
     
+    locals.site = site;
     this._res.send(template(locals));
 };
 

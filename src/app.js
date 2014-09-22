@@ -7,4 +7,3 @@
 var app = require('./lib/init');
 // Let the show begin.
 app();
-

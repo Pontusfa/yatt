@@ -22,13 +22,18 @@ html(lang=language)
               td=lang.category
               td=torrent.category
 
-            tr
-              td=lang.tags
-              td=torrent.tags
+            if torrent.tags.length
+              tr
+                td=lang.tags
+                td
+                  each tag in torrent.tags
+                    a.tag.btn.btn-sm.btn-default(href='torrents?tags=' + tag)=tag
 
-            tr
-              td=lang.infoLink
-              td=torrent.infoLink
+            if torrent.infoLink
+              tr 
+                td=lang.infoLink
+                td
+                  a(href=torrent.infoLink)=torrent.infoLink
             tr
               td=lang.leechers
               td=torrent.leechers
