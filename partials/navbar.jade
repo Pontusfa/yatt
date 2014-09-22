@@ -1,7 +1,7 @@
 .navbar.navbar-default.navbar-fixed-top
   .container
     .navbar-header
-      a.navbar-brand(href='/index')=site.name
+      a.navbar-brand(href=site.links['index'])=site.name
         img(src='images/yatt.png')
     ul.nav.navbar-nav
       each page in navbarList.middle

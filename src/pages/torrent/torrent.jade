@@ -27,8 +27,7 @@ html(lang=language)
                 td=lang.tags
                 td
                   each tag in torrent.tags
-                    a.tag.btn.btn-sm.btn-default(href='torrents?tags=' + tag)=tag
-
+                    a.tag.btn.btn-sm.btn-default(href=site.links.torrents + '?tags=' + tag)=tag
             if torrent.infoLink
               tr 
                 td=lang.infoLink

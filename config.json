@@ -68,7 +68,9 @@
             "logout": "/logout",
             "register": "/register",
             "torrent": "/torrent",
-            "gettorrent": "/gettorrent"
+            "gettorrent": "/gettorrent",
+            "recover": "/recover",
+            "rules": "/rules"
             
         },
         "navbarOrder": {
