@@ -3,18 +3,18 @@
  */
 
 var _ = require('underscore'),
-RegisterModel = null,
-template = null,
-errors = null,
-site = null,
-logger = null;
+    RegisterModel = null,
+    template = null,
+    errors = null,
+    site = null,
+    logger = null;
 
 /**
  * @private
  */
-function _getRegister(req, res){
+function _getRegister(req, res) {
     _setupTooltips(res);
-    
+
     res.locals.site = site;
     res.locals.form = {};
     res.send(template(res.locals));
@@ -23,11 +23,11 @@ function _getRegister(req, res){
 /**
  * @private
  */
-function _postRegister(req, res){
-    if(!site.registration){
+function _postRegister(req, res) {
+    if(!site.registration) {
         res.redirect(site.links.register);
     }
-    else{
+    else {
         new Controller(req, res).
             sanitizeForm().
             getModel().
@@ -35,7 +35,7 @@ function _postRegister(req, res){
     }
 }
 
-function Controller(req, res){
+function Controller(req, res) {
     this._req = req;
     this._res = res;
     this._callbacks = {
@@ -43,29 +43,29 @@ function Controller(req, res){
         errorCallback: this._errorCallback.bind(this)
     };
     return this;
-};
+}
 
-Controller.prototype.sanitizeForm = (function(){
+Controller.prototype.sanitizeForm = (function() {
     var formWhitelist = ['username', 'password', 'passwordAgain', 'email', 'vow'];
 
-    return function(){
+    return function() {
         this._user = _.pick(this._req.body, formWhitelist);
         return this;
     };
 }());
 
-Controller.prototype.getModel = function(){
+Controller.prototype.getModel = function() {
     this._model = new RegisterModel(this._user).
         registerCallbacks(this._callbacks);
-    
+
     return this;
 };
 
-Controller.prototype.executeModel = function(){
+Controller.prototype.executeModel = function() {
     this._model.addUser(this._user);
 };
 
-Controller.prototype._successCallback = function(){
+Controller.prototype._successCallback = function() {
     this._req.session.alert = {type: 'success', message: 'successfulRegistration'};
     this._res.redirect(site.links.login);
 };
@@ -74,7 +74,7 @@ Controller.prototype._successCallback = function(){
  * todo: mail a registration link
  * @private
  */
-Controller.prototype._errorCallback = function(alert){
+Controller.prototype._errorCallback = function(alert) {
     var res = this._res;
 
     this._req.session.alert = alert;
@@ -92,9 +92,9 @@ Controller.prototype._errorCallback = function(alert){
  * @param res
  * @private
  */
-function _setupTooltips (res){
+function _setupTooltips (res) {
 
-    
+
     res.locals.usernameTooltip =  res.locals.lang.inputLength + ' ' +
         site.usernameLength.min + ' ' +  res.locals.lang.and + ' ' +
         site.usernameLength.max + ' ' +  res.locals.lang.characters + ' ' +
@@ -112,7 +112,7 @@ function _setupTooltips (res){
  * @param app the app to setup
  * @param jadeCompiler provide a compiler for jade templates
  */
-function setup(app, jadeCompiler){
+function setup(app, jadeCompiler) {
     logger = app.logger;
     site = app.config.site;
     template = jadeCompiler('register');

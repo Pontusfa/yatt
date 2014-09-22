@@ -3,19 +3,18 @@
  */
 
 var queries = null,
-_ = require('underscore');
+    _ = require('underscore');
 
 /**
  * Ensures that the user's password matches the one stored in the db.
  * @param user the user info, at least user.username and user.password must be present.
- * @param callback function(error, user) to handle the validation results.
  */
-function Verifier(user){
+function Verifier(user) {
     this._user = user;
     return this;
 }
 
-Verifier.prototype.registerCallbacks = function(callbacks){
+Verifier.prototype.registerCallbacks = function(callbacks) {
     this._callbacks = callbacks;
     return this;
 };
@@ -25,33 +24,33 @@ Verifier.prototype.registerCallbacks = function(callbacks){
  * user.password and sends result to _validateUserCallback
  * @private
  */
-Verifier.prototype.validateUser = (function(){
+Verifier.prototype.validateUser = (function() {
     var returnFields = {username: 1,
-                        password: 1,
-                        salt: 1,
-                        rank: 1,
-                        passkey: 1,
-                        active: 1,
-                        banned: 1},
-    sort = {},
-    limit = 1,
-    offset = 0;
+            password: 1,
+            salt: 1,
+            rank: 1,
+            passkey: 1,
+            active: 1,
+            banned: 1},
+        sort = {},
+        limit = 1,
+        offset = 0;
 
-    return function(){
+    return function() {
         var user = this._user,
-        criteria = {username: user.username};
-        
-        if(_.isEmpty(user.username) || _.isEmpty(user.password)){
+            criteria = {username: user.username};
+
+        if(_.isEmpty(user.username) || _.isEmpty(user.password)) {
             this._callbacks.errorCallback({type: 'error', message: 'noUserPass'});
         }
-        else{
+        else {
             queries.getDocuments(criteria,
-                                 queries.USERMODEL,
-                                 sort,
-                                 offset,
-                                 limit,
-                                 returnFields,
-                                 this._validateUserHelper.bind(this));
+                queries.USERMODEL,
+                sort,
+                offset,
+                limit,
+                returnFields,
+                this._validateUserHelper.bind(this));
         }
     };
 }());
@@ -59,17 +58,17 @@ Verifier.prototype.validateUser = (function(){
 /**
  * @private
  */
-Verifier.prototype._validateUserHelper = function(err, foundUser){
-    if(_.isObject(err)){
+Verifier.prototype._validateUserHelper = function(err, foundUser) {
+    if(_.isObject(err)) {
         this._callbacks.errorCallback({type: 'error', message: 'databaseFail'});
     }
-    else if(_.isObject(foundUser)){
+    else if(_.isObject(foundUser)) {
         this._foundUser = foundUser;
         queries.createHash(this._user,
-                           foundUser.salt,
-                           this._validateUserCallback.bind(this));
+            foundUser.salt,
+            this._validateUserCallback.bind(this));
     }
-    else{
+    else {
         this._callbacks.errorCallback({type: 'error', message: 'wrongUserPass'});
     }
 };
@@ -79,26 +78,26 @@ Verifier.prototype._validateUserHelper = function(err, foundUser){
  * Compares the two hashes for the passwords and callbacks
  * @private
  */
-Verifier.prototype. _validateUserCallback = function(){
+Verifier.prototype. _validateUserCallback = function() {
     var user = this._user,
-    foundUser = this._foundUser,
-    callbacks = this._callbacks;
-    
-    if(!_.isEqual(user.password, foundUser.password)){
-        callbacks.ErrorCallback({type: 'error', message: 'wrongUserPass'});
+        foundUser = this._foundUser,
+        callbacks = this._callbacks;
+
+    if(!_.isEqual(user.password, foundUser.password)) {
+        callbacks.errorCallback({type: 'error', message: 'wrongUserPass'});
     }
-    else if(foundUser.banned){
+    else if(foundUser.banned) {
         callbacks.ErrorCallback({type: 'error', message: 'banned'});
     }
-    else if(!foundUser.active){
+    else if(!foundUser.active) {
         callbacks.errorCallback({type: 'error', message: 'notActive'});
     }
-    else if(_.isEqual(user.password, foundUser.password)){
+    else if(_.isEqual(user.password, foundUser.password)) {
         callbacks.successCallback(foundUser);
     }
 };
 
-module.exports = function(queriesObject){
+module.exports = function(queriesObject) {
     queries = queriesObject;
     module.exports.Verifier = Verifier;
     return module.exports;

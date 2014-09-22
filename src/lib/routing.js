@@ -9,50 +9,50 @@ var pageRanks = [];
  * Install controllers.
  * @param app The express app to install controllers to.
  */
-function installRoutes(app){
+function installRoutes(app) {
     var pages = null,
-    _ = require('underscore'),
-    controller = null,
-    fs = require('fs'),
-    jadeCompiler = require('./jadeCompiler')(app.settings.env),
-    
-    pagesPath = process.cwd() + '/src/pages/';
-    
+        _ = require('underscore'),
+        controller = null,
+        fs = require('fs'),
+        jadeCompiler = require('./jadeCompiler')(app.settings.env),
+
+        pagesPath = process.cwd() + '/src/pages/';
+
     try{
         pages = fs.readdirSync(pagesPath);
     }
-    catch(err){
+    catch(err) {
         app.logger.error(err + '. Exiting.');
         process.exit(1);
     }
 
-    pages.forEach(function (currentPagePath){
+    pages.forEach(function (currentPagePath) {
         var pageRank = null;
-        
+
         try {
             controller = require(pagesPath + currentPagePath +
-                                 '/' + currentPagePath + 'Controller');
+                '/' + currentPagePath + 'Controller');
             pageRank = controller.setup(app, jadeCompiler(app, currentPagePath));
 
-            if(_.isNumber(pageRank)){
+            if(_.isNumber(pageRank)) {
                 pageRanks[pageRank] = pageRanks[pageRank] || [];
                 pageRanks[pageRank].push(currentPagePath.toLowerCase());
-                
+
                 app.logger.info( currentPagePath + ' routing setup.');
             }
-            else{
+            else {
                 app.logger.warn('Couldn\'t setup route ' + currentPagePath + '. No page rank given. Ignoring.');
             }
         }
-        catch (err){
+        catch (err) {
             app.logger.warn('Couldn\'t setup route in ' + currentPagePath + ' (' + err + '). Ignoring.');
         }
     });
 }
 
-module.exports = function(app){
+module.exports = function(app) {
     installRoutes(app);
-    module.exports = {pageRanks: pageRanks};
-    
+    module.exports = pageRanks;
+
     return module.exports;
 };

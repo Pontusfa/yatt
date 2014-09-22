@@ -1,5 +1,6 @@
 /**
  * Handling all queries to the persistence layer.
+ * //TODO: make model first in all functions
  */
 
 var models = null,
@@ -12,22 +13,22 @@ var models = null,
  * @param callback function(error) to run after hash has been calculated and replaced user.password
  * @private
  */
-var createHash = function(){
+var createHash = function() {
     var crypto = require('crypto'),
         iterations = 10000,
         bytesLength = 64,
         base = 'base64',
         keylength = 1024;
 
-    return function(user, salt, callback){
-    
+    return function(user, salt, callback) {
+
         user.salt = salt || crypto.randomBytes(bytesLength).toString(base);
 
         crypto.pbkdf2(user.password, user.salt, iterations, keylength,
-            function(err, hash){
+            function(err, hash) {
                 user.password = hash.toString();
                 callback(err);
-        });
+            });
     };
 }();
 
@@ -41,7 +42,7 @@ var createHash = function(){
  * @param wantedFields an object with keys wanted to be returned, using {'key': 1, ...}
  * @param callback function(err, foundDocument) to handle the results of the search
  */
-function getDocuments(criteria, model, sort, offset, limit, wantedFields, callback){
+function getDocuments(criteria, model, sort, offset, limit, wantedFields, callback) {
     models[model]
         .find(criteria)
         .sort(sort)
@@ -49,8 +50,8 @@ function getDocuments(criteria, model, sort, offset, limit, wantedFields, callba
         .limit(limit)
         .select(wantedFields)
         .lean()
-        .exec(function(err, result){
-            if(_.isObject(result) && limit === 1){ 
+        .exec(function(err, result) {
+            if(_.isObject(result) && limit === 1) {
                 result = result[0]; //unwrap the sole result
             }
             callback(err, result);
@@ -62,18 +63,18 @@ function getDocuments(criteria, model, sort, offset, limit, wantedFields, callba
  * @param user the specifics of the user to be inserted, at least user.username, user.password required
  * @param callback function(err, result) to handle the result of a succesful or failed insertion
  */
-function addUser(user, callback){
+function addUser(user, callback) {
     var salt = null; //to signal we want a new salt for this user
-    
+
     createHash(user, salt, _addUserCallback(user, callback));
 }
 
-function _addUserCallback(user, callback){
-    return function(err){
-        if(err){
+function _addUserCallback(user, callback) {
+    return function(err) {
+        if(err) {
             callback(err, false);
         }
-        else{
+        else {
             models.user.create(user, callback);
         }
     };
@@ -81,15 +82,15 @@ function _addUserCallback(user, callback){
 
 /**
  * Finds *one* document and updates it's fields.
- * @param user object with relevant information to find the user, e.g. user.username
  * @param model String declaring what model to search in
+ * @param criteria object with relevant information to find the user, e.g. user.username
  * @param updates object containing the new information to add to it's document.
  * @param callback function(err, foundUser) to handle the result
  */
-function updateDocument(user, model, updates, callback){
+function updateDocument(model, criteria, updates, callback) {
     var options = null;
 
-    models[model].findOneAndUpdate(user, updates, options, callback);
+    models[model].findOneAndUpdate(criteria, updates, options, callback);
 }
 
 /**
@@ -98,7 +99,7 @@ function updateDocument(user, model, updates, callback){
  * @param model the model/db collection to save the document to
  * @param callback function(err, result) to handle success of the addition
  */
-function addDocument(document, model, callback){
+function addDocument(document, model, callback) {
     models[model].create(document, callback);
 }
 
@@ -108,19 +109,19 @@ function addDocument(document, model, callback){
  * @param criteria optional criteria for the model to count
  * @param callback a function(err, result) handling the results of the query
  */
-function countCollection(criteria, model, callback){
-    if(_.isFunction(model)){ // no criteria given
+function countCollection(criteria, model, callback) {
+    if(_.isFunction(model)) { // no criteria given
         model = criteria;
         criteria = {};
     }
     models[model].count(criteria, callback);
 }
 
-function removeDocument(document, model, callback){
+function removeDocument(document, model, callback) {
     models[model].findOneAndRemove(document, callback);
 }
 
-module.exports = function(){
+module.exports = function() {
     models = require('./db').models;
 
     module.exports = {};
@@ -134,6 +135,6 @@ module.exports = function(){
     module.exports.TORRENTMODEL = 'torrent';
     module.exports.USERMODEL = 'user';
     module.exports.NEWSMODEL = 'news';
-    
+
     return module.exports;
 };

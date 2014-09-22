@@ -1,15 +1,15 @@
 var site = null,
-template = null,
-TorrentsModel = null,
-torrentCategories = null,
-sortWhiteList = ['title', 'seeders', 'leechers', 'size', 'created'],
-queryWhiteList = ['title', 'tags', 'categories', 'deadtorrents'],
-_ = require('underscore');
+    template = null,
+    TorrentsModel = null,
+    torrentCategories = null,
+    sortWhiteList = ['title', 'seeders', 'leechers', 'size', 'created'],
+    queryWhiteList = ['title', 'tags', 'categories', 'deadtorrents'],
+    _ = require('underscore');
 
 /**
  * @private
  */
-function _getTorrents(req, res){
+function _getTorrents(req, res) {
     new Controller(req, res).
         sanitizeQuery().
         getModel().
@@ -22,7 +22,7 @@ function _getTorrents(req, res){
  * @param res
  * @constructor
  */
-function Controller(req, res){
+function Controller(req, res) {
     this._req = req;
     this._res = res;
     this._modelCallbacks = {
@@ -34,14 +34,14 @@ function Controller(req, res){
 /**
  * Saves only the whitelisted query keywords
  */
-Controller.prototype.sanitizeQuery = (function(){
+Controller.prototype.sanitizeQuery = (function() {
     var orderWhiteList = ['asc', 'desc'],
-    nonAlfaNumericals = /[^\w|\s]/g;
-    
-    return function (){
+        nonAlfaNumericals = /[^\w|\s]/g;
+
+    return function () {
         var newQuery = {},
-        query = this._req.query,
-        criteria = _.pick(query, queryWhiteList);
+            query = this._req.query,
+            criteria = _.pick(query, queryWhiteList);
 
         newQuery.sort = _.contains(sortWhiteList, query.sort) ?
             query.sort :
@@ -53,11 +53,11 @@ Controller.prototype.sanitizeQuery = (function(){
 
         //creates the object defining previous/next step for pager
         newQuery.offset = parseInt(query.offset);
-        if(!_.isFinite(newQuery.offset) || newQuery.offset < 0){
+        if(!_.isFinite(newQuery.offset) || newQuery.offset < 0) {
             newQuery.offset = 0;
         }
 
-        if(!_.isEmpty(criteria.title)){ //remove any regex shenanigans
+        if(!_.isEmpty(criteria.title)) { //remove any regex shenanigans
             criteria.title = criteria.title.replace(nonAlfaNumericals, '');
         }
         newQuery.criteria = criteria;
@@ -70,7 +70,7 @@ Controller.prototype.sanitizeQuery = (function(){
 /**
  *
  */
-Controller.prototype.getModel = function(){
+Controller.prototype.getModel = function() {
     this._model = new TorrentsModel(this._query).
         registerCallbacks(this._modelCallbacks);
 
@@ -80,7 +80,7 @@ Controller.prototype.getModel = function(){
 /**
  *
  */
-Controller.prototype.executeModel = function(){
+Controller.prototype.executeModel = function() {
     this._model.
         trimCriteria().
         buildCriteria().
@@ -95,12 +95,12 @@ Controller.prototype.executeModel = function(){
  * Transforms the model's returned data into format suitable for the view.
  * @private
  */
-Controller.prototype._getTorrentsCallback = function(alert, result){
-    if(_.isObject(alert)){
+Controller.prototype._getTorrentsCallback = function(alert, result) {
+    if(_.isObject(alert)) {
         this._req.session.alert = alert;
         this._res.redirect(site.links.torrents);
     }
-    else{
+    else {
         this._foundTorrents = result;
         this._model.getPages();
     }
@@ -109,12 +109,12 @@ Controller.prototype._getTorrentsCallback = function(alert, result){
 /**
  * @private
  */
-Controller.prototype._buildPagesCallback = function(alert, result){
-    if(_.isObject(alert)){
+Controller.prototype._buildPagesCallback = function(alert, result) {
+    if(_.isObject(alert)) {
         this._req.session.alert = alert;
         this._res.redirect(site.links.torrents);
     }
-    else{
+    else {
         this._buildLinks(result).
             _buildLocals().
             _res.send(template(this._res.locals));
@@ -124,45 +124,45 @@ Controller.prototype._buildPagesCallback = function(alert, result){
 /**
  * @private
  */
-Controller.prototype._buildLinks = function(offsets){
+Controller.prototype._buildLinks = function(offsets) {
     var searchString = '?',
-    query = this._query,
-    links = {};
-    
+        query = this._query,
+        links = {};
+
     //sort part
-    _.forEach(query.criteria, function(value, key){
+    _.forEach(query.criteria, function(value, key) {
         searchString = searchString + key + '=' + value + '&';
     });
-    
-    _.forEach(sortWhiteList, function(value){
+
+    _.forEach(sortWhiteList, function(value) {
         links[value] = searchString + 'sort=' + value;
     });
 
-    if(!_.isEmpty(query.sort)){
+    if(!_.isEmpty(query.sort)) {
         links[query.sort] += '&order=' + _getSortOrder(query.order);
     }
 
     //offset part
-    if(_.isNumber(offsets.previous)){
+    if(_.isNumber(offsets.previous)) {
         links.previous = {
             link: searchString + 'offset=' + offsets.previous,
             class: null
         };
     }
-    else{
+    else {
         links.previous = {
             link: null,
             class: 'disabled'
         };
     }
 
-    if(_.isNumber(offsets.next)){
+    if(_.isNumber(offsets.next)) {
         links.next = {
             link: searchString + 'offset=' + offsets.next,
             class: null
         };
     }
-    else{
+    else {
         links.next = {
             link: null,
             class: 'disabled'
@@ -176,7 +176,7 @@ Controller.prototype._buildLinks = function(offsets){
 /**
  * @private
  */
-function _getSortOrder(order){
+function _getSortOrder(order) {
     return (_.isEqual(order, 'desc')) ?
         'asc' :
         'desc';
@@ -185,7 +185,7 @@ function _getSortOrder(order){
 /**
  *
  */
-Controller.prototype._buildLocals = function(){
+Controller.prototype._buildLocals = function() {
     var locals = this._res.locals;
 
     locals.query = this._query;
@@ -203,13 +203,13 @@ Controller.prototype._buildLocals = function(){
  * @param jadeCompiler provide a compiler for jade templates
  * @returns {boolean}
  */
-function setup(app, jadeCompiler){
+function setup(app, jadeCompiler) {
     site = app.config.site;
     template = jadeCompiler('torrents');
     TorrentsModel = require('./torrentsModel')(app.queries);
     torrentCategories = require('../../lib/internationalization')
         .getAdditionalLanguageField('torrentCategories');
-    
+
     app.get(site.links.torrents, _getTorrents);
 
     return site.private ?

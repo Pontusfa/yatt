@@ -3,14 +3,14 @@
  */
 
 var Verifier = null,
-getTemplate = null,
-site = null,
-_ =  require('underscore');
+    getTemplate = null,
+    site = null,
+    _ =  require('underscore');
 
 /**
  * @private
  */
-function _getLogin(req, res){
+function _getLogin(req, res) {
     res.locals.site = site;
     res.send(getTemplate(res.locals));
 }
@@ -18,14 +18,14 @@ function _getLogin(req, res){
 /**
  * @private
  */
-function _postLogin(req, res){
+function _postLogin(req, res) {
     new Controller(req, res).
         sanitizeForm().
         getModel().
         executeModel();
 }
 
-function Controller(req, res){
+function Controller(req, res) {
     this._req = req;
     this._res = res;
     this._model = null;
@@ -34,15 +34,15 @@ function Controller(req, res){
         errorCallback: this._postLoginErrorCallback.bind(this)
     };
     return this;
-};
+}
 
-Controller.prototype.sanitizeForm = (function(){
+Controller.prototype.sanitizeForm = (function() {
     var formWhiteList = ['username', 'password', 'rememberMe'],
-    nonAlfaNumericals = /[^\w|\s]/g;  
-    return function(){
+        nonAlfaNumericals = /[^\w|\s]/g;
+    return function() {
         var input = _.pick(this._req.body, formWhiteList);
 
-        if(_.isString(input.username)){
+        if(_.isString(input.username)) {
             input.username = input.username.replace(nonAlfaNumericals, '');
         }
         this._input = input;
@@ -50,31 +50,31 @@ Controller.prototype.sanitizeForm = (function(){
     };
 }());
 
-Controller.prototype.getModel = function(){
+Controller.prototype.getModel = function() {
     this._model = new Verifier(this._input).
         registerCallbacks(this._modelCallbacks);
     return this;
 };
 
-Controller.prototype.executeModel = function(){
+Controller.prototype.executeModel = function() {
     this._model.validateUser();
 };
 
 /**
  * @private
  */
-Controller.prototype._postLoginSuccessCallback = (function(){
+Controller.prototype._postLoginSuccessCallback = (function() {
     var oneYear = 365*24*60*60*1000;
 
-    return function(user){
+    return function(user) {
         var req = this._req,
-        res = this._res;
+            res = this._res;
 
         req.session.user = {username: user.username,
-                            rank: user.rank,
-                            passkey: user.passkey};
-        
-        if(_.isEqual(this._input.rememberMe,'on')){
+            rank: user.rank,
+            passkey: user.passkey};
+
+        if(_.isEqual(this._input.rememberMe,'on')) {
             req.session.cookie.maxAge = oneYear;
         }
         res.redirect(req.query.redirect || site.links.index);
@@ -84,7 +84,7 @@ Controller.prototype._postLoginSuccessCallback = (function(){
 /**
  * @private
  */
-Controller.prototype._postLoginErrorCallback = function(alert){
+Controller.prototype._postLoginErrorCallback = function(alert) {
     this._req.session.alert = alert;
     this._res.redirect(this._req.originalUrl);
 };
@@ -95,7 +95,7 @@ Controller.prototype._postLoginErrorCallback = function(alert){
  * @returns the rank constant needed to visit this page
  * @param jadeCompiler a function to render the wanted template
  */
-function setup(app, jadeCompiler){
+function setup(app, jadeCompiler) {
     Verifier = require('./loginModel')(app.queries).Verifier;
     getTemplate = jadeCompiler('login');
     site = app.config.site;

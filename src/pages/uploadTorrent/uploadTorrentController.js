@@ -3,20 +3,20 @@
  */
 
 var Model = null,
-site = null,
-ranks = null,
-links = null,
-logger = null,
-template = null,
-categories = null,
-_ = require('underscore');
+    site = null,
+    ranks = null,
+    links = null,
+    logger = null,
+    template = null,
+    categories = null,
+    _ = require('underscore');
 
 /**
  * @private
  */
 function _getUploadTorrent(req, res) {
     var locals = res.locals;
-    
+
     locals.site = site;
     locals.lang.categories = categories[req.session.language];
 
@@ -26,14 +26,14 @@ function _getUploadTorrent(req, res) {
 /**
  * @private
  */
-function _postUploadTorrent(req, res){
+function _postUploadTorrent(req, res) {
     new Controller(req, res).
         sanitizeForm().
         getModel().
         executeModel();
 }
 
-function Controller(req, res){
+function Controller(req, res) {
     this._req = req;
     this._res = res;
     this._user = req.session.user;
@@ -46,25 +46,25 @@ function Controller(req, res){
     return this;
 }
 
-Controller.prototype.sanitizeForm = (function(){
+Controller.prototype.sanitizeForm = (function() {
     var formWhiteList = ['torrentTitle', 'torrentText', 'torrentTags',
-                         'torrentInfoLink', 'torrentCategory', 'vow'];
-    return function(){
+        'torrentInfoLink', 'torrentCategory', 'vow'];
+    return function() {
         this._form = _.pick(this._req.body, formWhiteList);
         this._data = this._req.file.data;
-        
+
         return this;
     };
 }());
 
-Controller.prototype.getModel = function(){
+Controller.prototype.getModel = function() {
     this._model = new Model(this._user, this._form, this._data).
         registerCallbacks(this._callbacks);
-    
+
     return this;
 };
 
-Controller.prototype.executeModel = function(){
+Controller.prototype.executeModel = function() {
     this._model.execute();
     return this;
 };
@@ -72,14 +72,14 @@ Controller.prototype.executeModel = function(){
 /**
  * @private
  */
-Controller.prototype._successCallback = function(alert, result){
+Controller.prototype._successCallback = function(alert, result) {
     var redirect = null;
-    
-    if(_.isObject(alert)){
+
+    if(_.isObject(alert)) {
         alert = {type: 'error', message: 'uploadFail'};
         redirect = links.uploadTorrent;
     }
-    else{
+    else {
         alert = {type: 'success', message: 'uploadSuccess'};
         redirect = links.torrent + '?id=' + result._id;
     }
@@ -87,7 +87,7 @@ Controller.prototype._successCallback = function(alert, result){
     this._res.redirect(redirect);
 };
 
-Controller.prototype._errorCallback = function(alert){
+Controller.prototype._errorCallback = function(alert) {
     this._req.session.alert = alert;
     this._res.redirect(links.uploadTorrent);
 };
@@ -97,7 +97,7 @@ Controller.prototype._errorCallback = function(alert){
  * @param app the app to install routes to.
  * @param jadeCompiler a function compiling jade templates
  */
-function setup(app, jadeCompiler){
+function setup(app, jadeCompiler) {
     Model = require('./uploadTorrentModel')(app.config, app.queries);
 
     template = jadeCompiler('uploadTorrent');

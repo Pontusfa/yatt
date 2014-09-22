@@ -8,7 +8,7 @@ var links = {};
  * a simple setter and redirect
  * @private
  */
-function _getLogout(req, res){
+function _getLogout(req, res) {
     req.session.user = null;
     req.session.destroy();
     res.redirect(links.index);
@@ -18,7 +18,7 @@ function _getLogout(req, res){
  * Setups routing for /logout.
  * @param app the app to route
  */
-function setup(app){
+function setup(app) {
     links = app.config.site.links;
     app.get(links.logout, _getLogout);
     return app.config.site.ranks.MEMBER;

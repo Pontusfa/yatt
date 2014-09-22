@@ -6,7 +6,7 @@
  */
 var cluster = require('cluster');
 
-if(cluster.isMaster){
+if(cluster.isMaster) {
     var cpuCount = require('os').cpus().length;
 
     // Create a worker for each CPU
@@ -14,7 +14,7 @@ if(cluster.isMaster){
         cluster.fork();
     }
 }
-else{
+else {
     var app = require('./lib/init');
     // Let the show begin.
     app();

@@ -8,14 +8,14 @@ var winston = require('winston'),
 /**
  * Initializes a Winston logger.
  */
-function _initLogger(config){
+function _initLogger(config) {
     var _ = require('underscore');
     _initWinston(config);
 
-    if(_.isObject(logger)){
+    if(_.isObject(logger)) {
         logger.info('Logger setup.');
     }
-    else{
+    else {
         console.log('Couldn\'t setup a logger. Check your configuration.');
         process.exit(1);
     }
@@ -26,9 +26,9 @@ function _initLogger(config){
  * @private
  */
 function _initWinston(config) {
-	var fs = require('fs'),
-		path = require('path'),
-		logPath = path.join(process.cwd() + '/' + config.setters.logFile);
+    var fs = require('fs'),
+        path = require('path'),
+        logPath = path.join(process.cwd() + '/' + config.setters.logFile);
 
     if (!fs.existsSync(logPath)) {
         fs.openSync(logPath, 'w');
@@ -45,8 +45,8 @@ function _initWinston(config) {
     }
 }
 
-module.exports = function(app){
-	_initLogger(app.config);
-	module.exports = logger;
-	return logger;
+module.exports = function(app) {
+    _initLogger(app.config);
+    module.exports = logger;
+    return logger;
 };

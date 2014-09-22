@@ -1,5 +1,6 @@
 var _ = require('underscore'),
     ranks = null,
+    links = null,
     pageRanks = [];
 
 /**
@@ -8,13 +9,14 @@ var _ = require('underscore'),
  */
 function  installAuthorization(app) {
     ranks = app.config.site.ranks;
+    links = app.config.site.links;
 
     app.use(_refreshUserRank(app.queries));
 
-    app.use(function(req, res, next){
+    app.use(function(req, res, next) {
         var userAllowedPages;
-
-        if(req.session.user.rank > ranks.ROOT){  // Somehow too high rank
+        
+        if(req.session.user.rank > ranks.ROOT) {  // Somehow too high rank
             app.logger.warn('user ' + req.session.user.username +
                 ' has rank ' + req.session.user.rank);
             req.session.alert = {type: 'error', message: 'tooHighRank'};
@@ -22,13 +24,14 @@ function  installAuthorization(app) {
         }
 
         userAllowedPages = pageRanks[req.session.user.rank];
-
+        
         if(_.contains(userAllowedPages, req.path.slice(1))) //remove the leading '/'
         {
             req.session.user.allowedPages = userAllowedPages;
+            
             next();
         }
-        else{
+        else {
             _redirectFailedVerify(req, res);
         }
     });
@@ -37,33 +40,35 @@ function  installAuthorization(app) {
 
 /**
  * Continuously updates user's rank.
+ * TODO: Is this really good? Possible flood attack.
  * @private
  */
-function _refreshUserRank(queries){
+function _refreshUserRank(queries) {
     var sort = null,
         limit = 1,
         offset = 0,
         wantedFields = {rank: 1};
 
-    return function(req, res, next){
-        req.session.user = req.session.user || {username: null, rank: ranks.PUBLIC};
+    return function(req, res, next) {
+            req.session.user = req.session.user || {username: null, rank: ranks.PUBLIC};
 
-        if(req.session.user.rank > ranks.PUBLIC){
+        if(req.session.user.rank > ranks.PUBLIC) {
             queries.getDocuments(
                 {username: req.session.user.username},
                 queries.USERMODEL, sort, offset, limit, wantedFields,
-                function(err, user){
-                    if(_.isObject(err) || !_.isObject(user)){
-                        req.session.alert = {type: 'error', message: 'failFetchRank'};
+                function(err, foundUser) {
+                    if(_.isObject(err) || !_.isObject(foundUser)) {
+                        req.session.session.alert = {type: 'error', message: 'failFetchRank'};
                         req.session.user.rank = ranks.PUBLIC;
                     }
-                    else{
-                        req.session.user.rank = user.rank;
+                    else {
+                        req.session.user.rank = foundUser.rank;
                     }
+
                     next();
                 });
         }
-        else{
+        else {
             next();
         }
 
@@ -75,35 +80,37 @@ function _refreshUserRank(queries){
  * TODO handle 404/breach attempt better
  * @private
  */
-function _redirectFailedVerify(req, res){
-    if(_.isEqual(req.session.user.rank, ranks.PUBLIC)){ // user is visiting without being logged in
-        res.redirect('/login?redirect=' + req.originalUrl);
+function _redirectFailedVerify(req, res) {
+    if(_.isEqual(req.session.user.rank, ranks.PUBLIC)) { // user is visiting without being logged in
+        res.redirect(links.login + '?redirect=' + req.originalUrl);
     }
-    else{ // user is not allowed here, or page does not exist
+    else { // user is not allowed here, or page does not exist
         req.session.alert = {type:'error', message: 'noSuchPage'};
-        res.redirect('/index');
+        res.redirect(links.index);
     }
 }
 
 /**
  * Installs page ranks.
+ * TODO: Beautify?
  * @param newRanks an object containing all the new ranks.
  */
-function setPageRanks(newRanks){
+function setPageRanks(newRanks) {
     pageRanks = [];
 
     //first add each new ranks
-    _.forEach(newRanks, function(val, key){
+    _.forEach(newRanks, function(val, key) {
         pageRanks[key] = pageRanks[key] || [];
         pageRanks[key].push.apply(pageRanks[key], val);
     });
+    
     //then add all the lower ranked pages to the higher ranked,
     //except for PUBLIC_ONLY. So ADMIN can access USER etc
-    _.forEach(ranks, function(rank){
-        pageRanks[rank] = _.flatten(_.first(pageRanks, rank+1));
+    _.forEach(ranks, function(rank) {
+        pageRanks[rank] = _.flatten(_.first(pageRanks, rank + 1));
         pageRanks[rank] = _.uniq(pageRanks[rank]);
 
-        if(rank > ranks.PUBLIC){
+        if(rank > ranks.PUBLIC) {
             pageRanks[rank] = _.difference(pageRanks[rank], pageRanks[ranks.PUBLIC_ONLY]);
         }
     });
