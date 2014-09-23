@@ -12,7 +12,9 @@ var _ = require('underscore'),
 /**
  * @private
  */
-function _getRegister(req, res) {
+function _getRegister(parameters) {
+    var res = parameters.res;
+    
     _setupTooltips(res);
 
     res.locals.site = site;

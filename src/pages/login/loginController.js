@@ -10,7 +10,9 @@ var Verifier = null,
 /**
  * @private
  */
-function _getLogin(req, res) {
+function _getLogin(parameters) {
+    var res = parameters.res;
+    
     res.locals.site = site;
     res.send(getTemplate(res.locals));
 }
