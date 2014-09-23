@@ -1,51 +1,61 @@
 doctype html
 html(lang=language)
-  include /partials/head
-  body
-    .container
-      include /partials/navbar
+    include /partials/head
+    body
+        .container
+            include /partials/navbar
 
-      include /partials/alerts
+            include /partials/alerts
 
-      .panel.panel-primary
-        .panel-heading
-          .panel-title=torrent.title
+            .panel.panel-primary
+                .panel-heading
+                    .panel-title=torrent.title
 
-        .panel-body
-          table.table
+                .panel-body
+                    table.table
 
-            tr
-              td=lang.size
-              td=torrent.size
+                        tr
+                            td.col-lg-1=lang.size
+                            td=torrent.size
 
-            tr
-              td=lang.category
-              td=torrent.category
+                        tr
+                            td.col-lg-1=lang.category
+                            td 
+                                a(href=site.links.torrents + '?category=' + torrent.category)=torrent.category
 
-            if torrent.tags.length
-              tr
-                td=lang.tags
-                td
-                  each tag in torrent.tags
-                    a.tag.btn.btn-sm.btn-default(href=site.links.torrents + '?tags=' + tag)=tag
-            if torrent.infoLink
-              tr 
-                td=lang.infoLink
-                td
-                  a(href=torrent.infoLink)=torrent.infoLink
-            tr
-              td=lang.leechers
-              td=torrent.leechers
-            
-            tr
-              td=lang.seeders
-              td=torrent.seeders
+                        if torrent.tags.length
+                            tr
+                                td.col-lg-1=lang.tags
+                                td
+                                    each tag in torrent.tags
+                                        a.tag.btn.btn-sm.btn-default(href=site.links.torrents + '?tags=' + tag)=tag
+                        if torrent.infoLink
+                            
+                            tr
+                                td.col-lg-1=lang.infoLink
+                                td
+                                    a(href=torrent.infoLink)=torrent.infoLink
+                        
+                        tr
+                            td.col-lg-1=lang.leechers
+                            td=torrent.leechers
 
-            tr
-              td=lang.created
-              td=torrent.created
-              
-            tr
-              td=lang.uploader
-              td=torrent.uploader
+                        tr
+                            td.col-lg-1=lang.seeders
+                            td=torrent.seeders
+
+                        tr
+                            td.col-lg-1=lang.created
+                            td=torrent.created
+
+                        tr
+                            td.col-lg-1=lang.uploader
+                            td
+                                a(href=site.links.user + '?id=' + torrent.uploader)=torrent.uploader
+                        
+                        tr
+                            td.col-lg-1=lang.description
+                            td
+                                .panel.panel-default
+                                    .panel-body=torrent.description
               

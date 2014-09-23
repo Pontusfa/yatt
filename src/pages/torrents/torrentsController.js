@@ -34,7 +34,7 @@ function Controller(req, res) {
 /**
  * Saves only the whitelisted query keywords
  */
-Controller.prototype.sanitizeQuery = (function() {
+Controller.prototype.sanitizeQuery = (function () {
     var orderWhiteList = ['asc', 'desc'],
         nonAlfaNumericals = /[^\w|\s]/g;
 
@@ -53,11 +53,11 @@ Controller.prototype.sanitizeQuery = (function() {
 
         //creates the object defining previous/next step for pager
         newQuery.offset = parseInt(query.offset);
-        if(!_.isFinite(newQuery.offset) || newQuery.offset < 0) {
+        if (!_.isFinite(newQuery.offset) || newQuery.offset < 0) {
             newQuery.offset = 0;
         }
 
-        if(!_.isEmpty(criteria.title)) { //remove any regex shenanigans
+        if (!_.isEmpty(criteria.title)) { //remove any regex shenanigans
             criteria.title = criteria.title.replace(nonAlfaNumericals, '');
         }
         newQuery.criteria = criteria;
@@ -70,7 +70,7 @@ Controller.prototype.sanitizeQuery = (function() {
 /**
  *
  */
-Controller.prototype.getModel = function() {
+Controller.prototype.getModel = function () {
     this._model = new TorrentsModel(this._query).
         registerCallbacks(this._modelCallbacks);
 
@@ -80,7 +80,7 @@ Controller.prototype.getModel = function() {
 /**
  *
  */
-Controller.prototype.executeModel = function() {
+Controller.prototype.executeModel = function () {
     this._model.
         trimCriteria().
         buildCriteria().
@@ -95,8 +95,8 @@ Controller.prototype.executeModel = function() {
  * Transforms the model's returned data into format suitable for the view.
  * @private
  */
-Controller.prototype._getTorrentsCallback = function(alert, result) {
-    if(_.isObject(alert)) {
+Controller.prototype._getTorrentsCallback = function (alert, result) {
+    if (_.isObject(alert)) {
         this._req.session.alert = alert;
         this._res.redirect(site.links.torrents);
     }
@@ -109,8 +109,8 @@ Controller.prototype._getTorrentsCallback = function(alert, result) {
 /**
  * @private
  */
-Controller.prototype._buildPagesCallback = function(alert, result) {
-    if(_.isObject(alert)) {
+Controller.prototype._buildPagesCallback = function (alert, result) {
+    if (_.isObject(alert)) {
         this._req.session.alert = alert;
         this._res.redirect(site.links.torrents);
     }
@@ -124,26 +124,26 @@ Controller.prototype._buildPagesCallback = function(alert, result) {
 /**
  * @private
  */
-Controller.prototype._buildLinks = function(offsets) {
+Controller.prototype._buildLinks = function (offsets) {
     var searchString = '?',
         query = this._query,
         links = {};
 
     //sort part
-    _.forEach(query.criteria, function(value, key) {
+    _.forEach(query.criteria, function (value, key) {
         searchString = searchString + key + '=' + value + '&';
     });
 
-    _.forEach(sortWhiteList, function(value) {
+    _.forEach(sortWhiteList, function (value) {
         links[value] = searchString + 'sort=' + value;
     });
 
-    if(!_.isEmpty(query.sort)) {
+    if (!_.isEmpty(query.sort)) {
         links[query.sort] += '&order=' + _getSortOrder(query.order);
     }
 
     //offset part
-    if(_.isNumber(offsets.previous)) {
+    if (_.isNumber(offsets.previous)) {
         links.previous = {
             link: searchString + 'offset=' + offsets.previous,
             class: null
@@ -156,7 +156,7 @@ Controller.prototype._buildLinks = function(offsets) {
         };
     }
 
-    if(_.isNumber(offsets.next)) {
+    if (_.isNumber(offsets.next)) {
         links.next = {
             link: searchString + 'offset=' + offsets.next,
             class: null
@@ -185,7 +185,7 @@ function _getSortOrder(order) {
 /**
  *
  */
-Controller.prototype._buildLocals = function() {
+Controller.prototype._buildLocals = function () {
     var locals = this._res.locals;
 
     locals.query = this._query;
@@ -213,7 +213,7 @@ function setup(app, jadeCompiler) {
     app.get(site.links.torrents, _getTorrents);
 
     return site.private ?
-        site.ranks.MEMBER:
+        site.ranks.MEMBER :
         site.ranks.PUBLIC;
 }
 

@@ -7,13 +7,13 @@ function Model(id) {
     return this;
 }
 
-Model.prototype.registerCallbacks = function(callbacks) {
+Model.prototype.registerCallbacks = function (callbacks) {
     this._callbacks = callbacks;
 
     return this;
 };
 
-Model.prototype.execute = function() {
+Model.prototype.execute = function () {
     var criterium = {_id: this._id},
         wantedFields = null,
         sortBy = null,
@@ -32,21 +32,22 @@ Model.prototype.execute = function() {
     return this;
 };
 
-Model.prototype._getTorrentCallback = function(err, result) {
+Model.prototype._getTorrentCallback = function (err, result) {
     var alert = null;
 
-    if(_.isObject(err) || _.isEmpty(result)) {
+    if (_.isObject(err) || _.isEmpty(result)) {
         alert = {type: 'error', message: 'noTorrent'};
         this._callbacks.errorCallback(alert);
     }
     else {
+        result.created = new Date(result.created).toLocaleDateString();
         this._callbacks.getTorrentCallback(result);
     }
 
     return this;
 };
 
-module.exports = function(queriesObj) {
+module.exports = function (queriesObj) {
     queries = queriesObj;
     module.exports = Model;
 

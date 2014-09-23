@@ -12,7 +12,7 @@ function _initLogger(config) {
     var _ = require('underscore');
     _initWinston(config);
 
-    if(_.isObject(logger)) {
+    if (_.isObject(logger)) {
         logger.info('Logger setup.');
     }
     else {
@@ -45,7 +45,7 @@ function _initWinston(config) {
     }
 }
 
-module.exports = function(app) {
+module.exports = function (app) {
     _initLogger(app.config);
     module.exports = logger;
     return logger;

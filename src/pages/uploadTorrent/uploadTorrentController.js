@@ -46,10 +46,10 @@ function Controller(req, res) {
     return this;
 }
 
-Controller.prototype.sanitizeForm = (function() {
+Controller.prototype.sanitizeForm = (function () {
     var formWhiteList = ['torrentTitle', 'torrentText', 'torrentTags',
         'torrentInfoLink', 'torrentCategory', 'vow'];
-    return function() {
+    return function () {
         this._form = _.pick(this._req.body, formWhiteList);
         this._data = this._req.file.data;
 
@@ -57,14 +57,14 @@ Controller.prototype.sanitizeForm = (function() {
     };
 }());
 
-Controller.prototype.getModel = function() {
+Controller.prototype.getModel = function () {
     this._model = new Model(this._user, this._form, this._data).
         registerCallbacks(this._callbacks);
 
     return this;
 };
 
-Controller.prototype.executeModel = function() {
+Controller.prototype.executeModel = function () {
     this._model.execute();
     return this;
 };
@@ -72,12 +72,12 @@ Controller.prototype.executeModel = function() {
 /**
  * @private
  */
-Controller.prototype._successCallback = function(alert, result) {
+Controller.prototype._successCallback = function (alert, result) {
     var redirect = null;
 
-    if(_.isObject(alert)) {
+    if (_.isObject(alert)) {
         alert = {type: 'error', message: 'uploadFail'};
-        redirect = links.uploadTorrent;
+        redirect = links.uploadtorrent;
     }
     else {
         alert = {type: 'success', message: 'uploadSuccess'};
@@ -87,9 +87,9 @@ Controller.prototype._successCallback = function(alert, result) {
     this._res.redirect(redirect);
 };
 
-Controller.prototype._errorCallback = function(alert) {
+Controller.prototype._errorCallback = function (alert) {
     this._req.session.alert = alert;
-    this._res.redirect(links.uploadTorrent);
+    this._res.redirect(links.uploadtorrent);
 };
 
 /**

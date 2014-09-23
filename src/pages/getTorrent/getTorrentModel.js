@@ -6,23 +6,23 @@ var queries = null,
     modifyUser = null,
     _ = require('underscore');
 
-var GetTorrentModel = function(id, user) {
+var GetTorrentModel = function (id, user) {
     this._id = id;
     this._user = user || null;
 };
 
-GetTorrentModel.prototype.registerCallbacks = function(callbacks) {
+GetTorrentModel.prototype.registerCallbacks = function (callbacks) {
     this._callbacks = callbacks;
     return this;
 };
 
-GetTorrentModel.prototype.getTorrent = (function() {
+GetTorrentModel.prototype.getTorrent = (function () {
     var wantedFields = {title: 1, meta: 1},
         sort = null,
         offset = 0,
         limit = 1;
 
-    return function() {
+    return function () {
         var criteria = {_id: this._id};
 
         queries.getDocuments(criteria, queries.TORRENTMODEL,
@@ -34,23 +34,24 @@ GetTorrentModel.prototype.getTorrent = (function() {
 /**
  * @private
  */
-GetTorrentModel.prototype._getTorrentCallback = (function() {
+GetTorrentModel.prototype._getTorrentCallback = (function () {
     var bencode = require('bencode');
 
-    return function(err, torrent) {
+    return function (err, torrent) {
 
-        if(_.isObject(err)) {
-            this._callbacks.errorCallback({type:'error', message: 'databaseFail'});
+        if (_.isObject(err)) {
+            this._callbacks.errorCallback({type: 'error', message: 'databaseFail'});
         }
-        else if(_.isEmpty(torrent)) {
-            this._callbacks.errorCallback({type:'error', message: 'noTorrent'});
+        else if (_.isEmpty(torrent)) {
+            this._callbacks.errorCallback({type: 'error', message: 'noTorrent'});
         }
         else { //TODO: move re-encoding to uploadTorrent?
             torrent = this._formatTorrent(torrent);
 
             this._callbacks.successCallback({
                 title: torrent.info.name,
-                bencode: bencode.encode(torrent)});
+                bencode: bencode.encode(torrent)
+            });
         }
     };
 }());
@@ -58,18 +59,18 @@ GetTorrentModel.prototype._getTorrentCallback = (function() {
 /**
  * @private
  */
-GetTorrentModel.prototype._formatTorrent = function(torrent) {
+GetTorrentModel.prototype._formatTorrent = function (torrent) {
     var passkey = this._user.passkey;
 
     torrent = torrent.meta;
     torrent.info.pieces = torrent.info.pieces.buffer;
-    if(_.isString(passkey && !_.isEmpty(passkey))) {
+    if (_.isString(passkey && !_.isEmpty(passkey))) {
         torrent.announce = torrent.announce + '?passkey=' + passkey;
     }
     return torrent;
 };
 
-module.exports = function(queriesObject, modifyUserObject) {
+module.exports = function (queriesObject, modifyUserObject) {
     modifyUser = modifyUserObject;
     queries = queriesObject;
     module.exports = GetTorrentModel;

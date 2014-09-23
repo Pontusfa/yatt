@@ -14,11 +14,11 @@ var languages = {},
 function installLanguages(app) {
     _parseLanguages(app);
 
-    app.use(function(req,res, next) {
+    app.use(function (req, res, next) {
         req.session.language = req.session.language || app.config.site.defaultLanguage;
         res.locals.language = req.session.language;
 
-        if(_.isObject(languages[res.locals.language])) {
+        if (_.isObject(languages[res.locals.language])) {
             res.locals.lang = languages[res.locals.language][req.path.slice(1)]; //remove prefix /
             next();
         }
@@ -44,30 +44,30 @@ function installLanguages(app) {
  */
 function _parseLanguages(app) {
     var fs = require('fs'),
-        languagesPath =  process.cwd() + '/languages/',
+        languagesPath = process.cwd() + '/languages/',
         languagesFiles = null;
 
-    try{
+    try {
         languagesFiles = fs.readdirSync(languagesPath);
     }
-    catch(err) {
-        app.logger.warn(err.message  + '. Fix language directory. Exiting.');
+    catch (err) {
+        app.logger.warn(err.message + '. Fix language directory. Exiting.');
         process.exit(1);
     }
 
-    languagesFiles =  _.filter(languagesFiles, function(obj) {
+    languagesFiles = _.filter(languagesFiles, function (obj) {
         return  _.isString(obj) &&
-            obj.length >= 6  &&
+            obj.length >= 6 &&
             obj.slice(-5) === '.json';
     });
 
-    languagesFiles.forEach(function(language) {
-        try{
-            languages[language.substring(0,2)] =         //only interested in 'en', 'se' et cetera
+    languagesFiles.forEach(function (language) {
+        try {
+            languages[language.substring(0, 2)] =         //only interested in 'en', 'se' et cetera
                 JSON.parse(fs.readFileSync(languagesPath + '/' + language, 'utf8'));
             navbars[language.substring(0, 2)] = navbars[language.substring(0, 2)] || {};
         }
-        catch(err) {
+        catch (err) {
             app.logger.warn(err.message + '. Language ' + language + ' not installed');
         }
     });
@@ -81,7 +81,7 @@ function _navBarList(req, res, next) {
     var session = req.session,
         user = session.user;
 
-    if(!navbars[session.language] || !navbars[session.language][user.rank]) {
+    if (!navbars[session.language] || !navbars[session.language][user.rank]) {
         _createNavbarLists(session.language, user.rank, user.allowedPages);
     }
     res.locals.navbarList = navbars[session.language][session.user.rank];
@@ -96,11 +96,11 @@ function _createNavbarLists(language, rank, allowedPages) {
     navbars[language] = navbars[language] || [];
     navbars[language][rank] = navbars[language][rank] || {middle: [], right: []};
 
-    _.forEach(navBarOrder, function(pages, side) {
-        _.forEach(pages, function(page) {
-            if(_.contains(allowedPages, page)) {
+    _.forEach(navBarOrder, function (pages, side) {
+        _.forEach(pages, function (page) {
+            if (_.contains(allowedPages, page)) {
                 var pageTitle = languages[language][page].title;
-                
+
                 navbars[language][rank][side].push({link: page, title: pageTitle});
             }
         });
@@ -112,7 +112,7 @@ function _createNavbarLists(language, rank, allowedPages) {
  * @private
  */
 function _alert(req, res, next) {
-    if(req.session.alert) {
+    if (req.session.alert) {
         var alert = req.session.alert;
         res.locals[alert.type] =
             languages[req.session.language][alert.type][alert.message];
@@ -129,7 +129,7 @@ function _alert(req, res, next) {
 function getAdditionalLanguageField(field) {
     var result = {};
 
-    _.forEach(languages, function(language, languageName) {
+    _.forEach(languages, function (language, languageName) {
         result[languageName] = language[field];
     });
     return result;

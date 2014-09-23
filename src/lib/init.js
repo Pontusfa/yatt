@@ -62,10 +62,10 @@ function _initMiddleware() {
     _initParseMultiForm();
     _initSession();
 
-    app.use(function(req, res, next) {
+    app.use(function (req, res, next) {
         res.locals = res.locals || {};
         res.locals.url = req.originalUrl;  // used in templating, action=url
-        res.locals.path = req.path; //used for css fetching in dev environments
+        res.locals.path = req.path.slice(1); //used for css fetching in dev environments
 
         next();
     });
@@ -82,7 +82,7 @@ function _initMiddleware() {
         app.use(express.errorHandler());
     }
     else {
-        app.use(function(err, req, res) {
+        app.use(function (err, req, res) {
             res.send(err.message + ', how awkward.');
         });
     }
@@ -96,18 +96,18 @@ function _initMiddleware() {
  * @private
  */
 function _initHttps() {
-    if(!app.config.uses.https) {
+    if (!app.config.uses.https) {
         return;
     }
-    
+
     var fs = require('fs'),
         https = require('https'),
         privateKey = null,
         certificate = null,
         credentials = null;
 
-    try{
-        privateKey  =
+    try {
+        privateKey =
             fs.readFileSync(app.config.setters.certPath + 'server.key', 'utf8');
         certificate =
             fs.readFileSync(app.config.setters.certPath + 'server.crt', 'utf8');
@@ -116,16 +116,16 @@ function _initHttps() {
         httpsServer =
             https.createServer(credentials, app).listen(app.get('https port'));
     }
-    catch(err) {
-        if(err) {
+    catch (err) {
+        if (err) {
             app.logger.error(err + '. No https. Exiting.');
             process.exit(1);
         }
     }
 
-    if(app.config.uses['https only']) {
-        app.use(function(req, res, next) {
-            if(_.isEqual(req.protocol, 'http')) {
+    if (app.config.uses['https only']) {
+        app.use(function (req, res, next) {
+            if (_.isEqual(req.protocol, 'http')) {
                 res.redirect('https://' + req.host + ':' + (app.get('https port')) + req.originalUrl);
             }
             else {
@@ -141,30 +141,30 @@ function _initHttps() {
  * @private
  */
 function _initParseMultiForm() {
-    app.use(function(req, res, next) {
+    app.use(function (req, res, next) {
         var busboy = null;
 
-        if(req.is('multipart/form-data')) {
+        if (req.is('multipart/form-data')) {
             busboy = new Busboy({immediate: true, headers: req.headers});
             req.body = req.body || {};
             req.file = req.file || {};
             req.file.receivedData = 0;
             req.file.data = new Buffer(parseInt(req.headers['content-length'])); //not all content is file, slice after
 
-            busboy.on('file', function(fieldName, file, fileName) {
+            busboy.on('file', function (fieldName, file, fileName) {
                 req.file.name = fileName;
 
-                file.on('data', function(data) {
+                file.on('data', function (data) {
                     data.copy(req.file.data, req.file.receivedData);
                     req.file.receivedData += data.length;
                 });
             });
 
-            busboy.on('field', function(fieldName, value) {
+            busboy.on('field', function (fieldName, value) {
                 req.body[fieldName] = value;
             });
 
-            busboy.on('finish', function() {
+            busboy.on('finish', function () {
                 req.file.data = req.file.data.slice(0, req.file.receivedData);
                 next();
             });
@@ -215,7 +215,7 @@ function _initSession() {
 function _initCsrfProtection() {
     app.use(express.csrf());
 
-    app.use(function(req, res, next) {
+    app.use(function (req, res, next) {
         res.locals = res.locals || {};
         res.locals.token = req.csrfToken();
         res.locals.csrf = ' <input name="_csrf" type="hidden" value="' + res.locals.token + '" />';
@@ -240,18 +240,18 @@ function _initRoutes() {
 function _tearDown() {
     app.logger.info('Terminate/interrupt/exit received, shutting down.');
 
-    if(!_.isNull(require('./db').connection)) {
+    if (!_.isNull(require('./db').connection)) {
         require('./db').connection.close();
         app.logger.info('Database connection shutdown.');
     }
 
-    if(!_.isNull(server)) {
+    if (!_.isNull(server)) {
         server.close();
         server = null;
         app.logger.info('HTTP Server shutdown.');
     }
 
-    if(!_.isNull(httpsServer)) {
+    if (!_.isNull(httpsServer)) {
         httpsServer.close();
         httpsServer = null;
         app.logger.info('HTTPS server shutdown.');
@@ -273,7 +273,7 @@ function startup() {
         app.logger.info('listening for HTTP on port ' + app.get('port') + '.');
     });
 
-    if(app.config.uses.https) {
+    if (app.config.uses.https) {
         httpsServer.listen(app.get('https port'), 1024, function () {
             app.logger.info('listening for HTTPS on port ' +
                 app.get('https port') + '.');

@@ -5,7 +5,7 @@
 var Verifier = null,
     getTemplate = null,
     site = null,
-    _ =  require('underscore');
+    _ = require('underscore');
 
 /**
  * @private
@@ -36,13 +36,13 @@ function Controller(req, res) {
     return this;
 }
 
-Controller.prototype.sanitizeForm = (function() {
+Controller.prototype.sanitizeForm = (function () {
     var formWhiteList = ['username', 'password', 'rememberMe'],
         nonAlfaNumericals = /[^\w|\s]/g;
-    return function() {
+    return function () {
         var input = _.pick(this._req.body, formWhiteList);
 
-        if(_.isString(input.username)) {
+        if (_.isString(input.username)) {
             input.username = input.username.replace(nonAlfaNumericals, '');
         }
         this._input = input;
@@ -50,23 +50,23 @@ Controller.prototype.sanitizeForm = (function() {
     };
 }());
 
-Controller.prototype.getModel = function() {
+Controller.prototype.getModel = function () {
     this._model = new Verifier(this._input).
         registerCallbacks(this._modelCallbacks);
     return this;
 };
 
-Controller.prototype.executeModel = function() {
+Controller.prototype.executeModel = function () {
     this._model.validateUser();
 };
 
 /**
  * @private
  */
-Controller.prototype._postLoginSuccessCallback = (function() {
-    var oneYear = 365*24*60*60*1000;
+Controller.prototype._postLoginSuccessCallback = (function () {
+    var oneYear = 365 * 24 * 60 * 60 * 1000;
 
-    return function(user) {
+    return function (user) {
         var req = this._req,
             res = this._res;
 
@@ -74,7 +74,7 @@ Controller.prototype._postLoginSuccessCallback = (function() {
             rank: user.rank,
             passkey: user.passkey};
 
-        if(_.isEqual(this._input.rememberMe,'on')) {
+        if (_.isEqual(this._input.rememberMe, 'on')) {
             req.session.cookie.maxAge = oneYear;
         }
         res.redirect(req.query.redirect || site.links.index);
@@ -84,7 +84,7 @@ Controller.prototype._postLoginSuccessCallback = (function() {
 /**
  * @private
  */
-Controller.prototype._postLoginErrorCallback = function(alert) {
+Controller.prototype._postLoginErrorCallback = function (alert) {
     this._req.session.alert = alert;
     this._res.redirect(this._req.originalUrl);
 };

@@ -13,19 +13,19 @@ var models = null,
  * @param callback function(error) to run after hash has been calculated and replaced user.password
  * @private
  */
-var createHash = function() {
+var createHash = function () {
     var crypto = require('crypto'),
         iterations = 10000,
         bytesLength = 64,
         base = 'base64',
         keylength = 1024;
 
-    return function(user, salt, callback) {
+    return function (user, salt, callback) {
 
         user.salt = salt || crypto.randomBytes(bytesLength).toString(base);
 
         crypto.pbkdf2(user.password, user.salt, iterations, keylength,
-            function(err, hash) {
+            function (err, hash) {
                 user.password = hash.toString();
                 callback(err);
             });
@@ -50,8 +50,8 @@ function getDocuments(criteria, model, sort, offset, limit, wantedFields, callba
         .limit(limit)
         .select(wantedFields)
         .lean()
-        .exec(function(err, result) {
-            if(_.isObject(result) && limit === 1) {
+        .exec(function (err, result) {
+            if (_.isObject(result) && limit === 1) {
                 result = result[0]; //unwrap the sole result
             }
             callback(err, result);
@@ -70,8 +70,8 @@ function addUser(user, callback) {
 }
 
 function _addUserCallback(user, callback) {
-    return function(err) {
-        if(err) {
+    return function (err) {
+        if (err) {
             callback(err, false);
         }
         else {
@@ -110,7 +110,7 @@ function addDocument(document, model, callback) {
  * @param callback a function(err, result) handling the results of the query
  */
 function countCollection(criteria, model, callback) {
-    if(_.isFunction(model)) { // no criteria given
+    if (_.isFunction(model)) { // no criteria given
         model = criteria;
         criteria = {};
     }
@@ -121,7 +121,7 @@ function removeDocument(document, model, callback) {
     models[model].findOneAndRemove(document, callback);
 }
 
-module.exports = function() {
+module.exports = function () {
     models = require('./db').models;
 
     module.exports = {};

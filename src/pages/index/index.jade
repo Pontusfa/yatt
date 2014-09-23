@@ -16,16 +16,16 @@ html(lang='en')
                 span.glyphicon.glyphicon-plus
             input.news-toggle(id='news-toggle', type='checkbox')
 
-            form.add-news(name='addNews', method='post', action=url)
-                .panel.panel-primary
-                    .panel-heading
-                        .panel-title
-                            input.form-control(type='text', name='title', placeholder=lang.newTitle, required)
-                    .panel-body
-                        textarea.form-control(rows='5', name='text', required)
+            form.add-news.jumbotron(name='addNews', method='post', action=url)
 
-                !=csrf
-                button.btn.btn-primary(type='submit')=lang.submit
+                    h4=lang.addNews
+                    .form-group
+                        input.form-control(type='text', name='title', placeholder=lang.newTitle, required)
+                    .form-group
+                        textarea.form-control(rows='5', name='text', required)
+                    !=csrf
+                    .form-group
+                        button.btn.btn-primary.col-lg-2(type='submit')=lang.submit
 
         each news in index
             .panel.panel-primary
@@ -35,14 +35,17 @@ html(lang='en')
 
                 .panel-footer
                     .pull-left
-                        small=lang.posted + ' ' + news.created
+                        small
+                            =lang.posted + ' ' + news.created + ' ' + lang.by + ' '
+                            a(href=site.links.user + '?id=' + news.author)=news.author + '.'
 
                     .news-footer
                         if canRemove
                             a(href=url + '?removenews=' + news._id)
                                 small=lang.remove
 
-        h3=lang.statistics
+        h3=lang.statistics 
+        //- TODO: actual statistics please
         ul.list-group.col-lg-6
             ul.list-group-item  users online
             ul.list-group-item registered users

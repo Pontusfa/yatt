@@ -1,41 +1,41 @@
 doctype html
 html(lang=language)
-  include /partials/head
-  body
-    .container
-      include /partials/navbar
+    include /partials/head
+    body
+        .container
+            include /partials/navbar
 
-      .jumbotron
+            .jumbotron
 
-        include /partials/alerts
+                include /partials/alerts
 
-        if site.registration
-          form.form-register(name='register', method='post' action=url)
-            h2.form-register-heading=lang.RegisterAccount
-            p.form-register-heading=lang.pleaseFillOut
+                if site.registration
+                    form.form-register(name='register', method='post' action=url)
+                        h2.form-register-heading=lang.RegisterAccount
+                        p.form-register-heading=lang.pleaseFillOut
 
-            .on-focus
-              input.form-control(type='text', name='username', placeholder=lang.username, value=form.username, required, autofocus)
-              .tool-tip=usernameTooltip
+                        .on-focus
+                            input.form-control(type='text', name='username', placeholder=lang.username, value=form.username, required, autofocus)
+                            .tool-tip=usernameTooltip
 
-            .on-focus.pass
-              input.form-control(type='password', name='password',  placeholder=lang.password, required)
-              .tool-tip=passwordTooltip
+                        .on-focus.pass
+                            input.form-control(type='password', name='password',  placeholder=lang.password, required)
+                            .tool-tip=passwordTooltip
 
-            .on-focus.pass-again
-              input.form-control(type='password', name='passwordAgain', placeholder=lang.passwordAgain, required)
-              .tool-tip=samePasswordTooltip
+                        .on-focus.pass-again
+                            input.form-control(type='password', name='passwordAgain', placeholder=lang.passwordAgain, required)
+                            .tool-tip=samePasswordTooltip
 
-            .on-focus
-              input.form-control(type='email', name='email', placeholder=lang.email, value=form.email, required)
-              .tool-tip=validMailTooltip
-            
-            !=csrf
+                        .on-focus
+                            input.form-control(type='email', name='email', placeholder=lang.email, value=form.email, required)
+                            .tool-tip=validMailTooltip
 
-            label.checkbox
-              input(type='checkbox', name='vow', required)
-              =lang.promise
-            button.btn.btn-lg.btn-primary.btn-block(type='submit')=lang.register
-       
-         else
-          p=lang.registerClosed
+                        !=csrf
+
+                        label.checkbox
+                            input(type='checkbox', name='vow', required)
+                            =lang.promise
+                        button.btn.btn-lg.btn-primary.btn-block(type='submit')=lang.register
+
+                else
+                    p=lang.registerClosed

@@ -39,11 +39,11 @@ function updatePasskey(user, callback) {
  * @private
  */
 function _updatePasskeyCallback(user, newPasskey, callback) {
-    return function(err, foundUser) {
-        if(_.isObject(err)) {
+    return function (err, foundUser) {
+        if (_.isObject(err)) {
             callback(err, null);
         }
-        else if(!_.isObject(foundUser)) {
+        else if (!_.isObject(foundUser)) {
             queries.updateDocument(queries.USERMODEL, {username: user.username}, {passkey: newPasskey}, callback);
         }
         else { // a user with that passkey exists, try another
@@ -52,7 +52,7 @@ function _updatePasskeyCallback(user, newPasskey, callback) {
     };
 }
 
-module.exports = function(app) {
+module.exports = function (app) {
     queries = app.queries;
 
     module.exports = {};

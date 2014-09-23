@@ -17,18 +17,18 @@ function Model(user, form, data) {
     return this;
 }
 
-Model.prototype.registerCallbacks = function(callbacks) {
+Model.prototype.registerCallbacks = function (callbacks) {
     this._callbacks = callbacks;
     return this;
 };
 
-Model.prototype.execute = function() {
+Model.prototype.execute = function () {
     var form = this._form;
 
     this._verifyTorrent(); // this order gives user error
     this._verifyUser();    // higher priority, counter-intuitive :)
 
-    if(_.isObject(this._alert)) {
+    if (_.isObject(this._alert)) {
         this._callbacks.errorCallback(this._alert);
         return;
     }
@@ -61,20 +61,20 @@ Model.prototype.execute = function() {
 /**
  * @private
  */
-Model.prototype._verifyTorrent = function() {
+Model.prototype._verifyTorrent = function () {
     var alert = null,
         form = this._form;
 
-    if(_.isEmpty(form.torrentTitle)) {
+    if (_.isEmpty(form.torrentTitle)) {
         alert = {type: 'error', message: 'noTitle'};
     }
-    else if(_.isEmpty(form.torrentText)) {
+    else if (_.isEmpty(form.torrentText)) {
         alert = {type: 'error', message: 'noText'};
     }
-    else if(_.isEmpty(form.torrentCategory)) {
+    else if (_.isEmpty(form.torrentCategory)) {
         alert = {type: 'error', message: 'noCategory'};
     }
-    else if(!_.isEqual(form.vow, 'on')) {
+    else if (!_.isEqual(form.vow, 'on')) {
         alert = {type: 'error', message: 'noVow'};
     }
     this._alert = alert;
@@ -85,17 +85,17 @@ Model.prototype._verifyTorrent = function() {
 /**
  * @private
  */
-Model.prototype._verifyUser = function() {
+Model.prototype._verifyUser = function () {
     var alert = null,
         user = this._user;
 
-    if(!_.isObject(user)) {
+    if (!_.isObject(user)) {
         alert = {type: 'error', message: 'noUploader'};
     }
-    else if(!_.isString(user.username)) {
+    else if (!_.isString(user.username)) {
         alert = {type: 'error', message: 'noUploaderName'};
     }
-    else if(user.rank < ranks.UPLOADER) {
+    else if (user.rank < ranks.UPLOADER) {
         alert = {type: 'error', message: 'notUploader'};
     }
     this._alert = alert;
@@ -106,13 +106,13 @@ Model.prototype._verifyUser = function() {
 /**
  * @private
  */
-Model.prototype._modifyTorrent = function() {
+Model.prototype._modifyTorrent = function () {
     var torrentMeta = bencode.decode(this._data, 'utf8');
 
     torrentMeta.info.pieces =
         bencode.decode(this._data).info.pieces; //todo: double decoding
 
-    if(privateTracker) {
+    if (privateTracker) {
         torrentMeta.announce = announceUrl;
         torrentMeta.info.private = 1;
         delete torrentMeta['announce-list'];
@@ -132,7 +132,7 @@ Model.prototype._modifyTorrent = function() {
     return this;
 };
 
-Model.prototype._createHash = function() {
+Model.prototype._createHash = function () {
     var shasum = crypto.createHash('sha1'),
         bencodedInfo = bencode.encode(this._torrentMeta.info);
 
@@ -142,23 +142,23 @@ Model.prototype._createHash = function() {
     return this;
 };
 
-Model.prototype._escapeHash = (function() {
+Model.prototype._escapeHash = (function () {
     var unreserved = 'A B C D E F G H I J S O N K L M N O P' +
             ' Q R S T U V W X Y Za b c d e f g h i j s o n k l m' +
             ' n o p q r s t u v w x y z + 1 2 3 4 5 6 7 8 9 0 - _ . ~'.split(' '),
         delimiter = '%',
         step = 2;
 
-    return function() {
+    return function () {
         var index = 0,
             end = this._hexSum.length,
             result = '',
             tmp = '';
 
-        while(index < end) {
+        while (index < end) {
             tmp = this._hexSum.slice(index, index + step);
 
-            if(_.contains(unreserved, String.fromCharCode('0x' + tmp))) {
+            if (_.contains(unreserved, String.fromCharCode('0x' + tmp))) {
                 result = result + String.fromCharCode('0x' + tmp);
             }
             else {
@@ -180,7 +180,7 @@ Model.prototype._escapeHash = (function() {
  * Thanks to http://stackoverflow.com/a/18650828/1131050
  * @private
  */
-Model.prototype._bytesToSize = function() {
+Model.prototype._bytesToSize = function () {
     var k = 1024,
         bytes = parseInt(this._torrentMeta.info.length),
         sizes = ['B', 'KiB', 'MiB', 'GiB', 'TiB'],
@@ -188,10 +188,10 @@ Model.prototype._bytesToSize = function() {
         result = null;
 
     if (bytes === 0 || _.isNaN(bytes)) {
-        result =  '0 B';
+        result = '0 B';
     }
     else {
-        i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)),10);
+        i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
         result = (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
     }
     this._size = result;
@@ -199,7 +199,7 @@ Model.prototype._bytesToSize = function() {
     return this;
 };
 
-module.exports = function(config, queriesObject) {
+module.exports = function (config, queriesObject) {
     var site = config.site;
 
     ranks = site.ranks;

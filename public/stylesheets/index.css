@@ -23,3 +23,7 @@ button.btn.btn-default {
 .news-footer > a {
     padding-left: 10px;
 }
+
+div.panel-body {
+    white-space: pre;
+}

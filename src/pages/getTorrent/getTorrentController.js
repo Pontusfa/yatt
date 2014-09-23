@@ -6,7 +6,7 @@ var GetTorrentModel = null,
     site = null;
 
 function _getTorrent(req, res) {
-    if(req.query.id && req.query.id.length > 0) {
+    if (req.query.id && req.query.id.length > 0) {
         new Controller(req, res).
             sanitizeQuery().
             getModel().
@@ -28,23 +28,23 @@ function Controller(req, res) {
     this._user = req.session.user;
 }
 
-Controller.prototype.sanitizeQuery = function() {
+Controller.prototype.sanitizeQuery = function () {
     this._id = this._req.query.id;
     return this;
 };
 
-Controller.prototype.getModel = function() {
+Controller.prototype.getModel = function () {
     this._model = new GetTorrentModel(this._id, this._user).
         registerCallbacks(this._callbacks);
     return this;
 };
 
-Controller.prototype.executeModel = function() {
+Controller.prototype.executeModel = function () {
     this._model.getTorrent();
     return this;
 };
 
-Controller.prototype._successCallback = function(torrent) {
+Controller.prototype._successCallback = function (torrent) {
     var filename = (torrent.title.replace(' ', '') + '.torrent'),
         res = this._res;
 
@@ -53,7 +53,7 @@ Controller.prototype._successCallback = function(torrent) {
     res.send(torrent.bencode);
 };
 
-Controller.prototype._errorCallback = function(alert) {
+Controller.prototype._errorCallback = function (alert) {
     this._req.session.alert = alert;
     this._res.redirect(site.links.index);
 };
@@ -67,7 +67,7 @@ function setup(app) {
     site = app.config.site;
     app.get(site.links.gettorrent, _getTorrent);
 
-    return site.private ? site.ranks.MEMBER: site.ranks.PUBLIC;
+    return site.private ? site.ranks.MEMBER : site.ranks.PUBLIC;
 }
 
 module.exports.setup = setup;

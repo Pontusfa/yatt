@@ -24,7 +24,7 @@ function _getRegister(req, res) {
  * @private
  */
 function _postRegister(req, res) {
-    if(!site.registration) {
+    if (!site.registration) {
         res.redirect(site.links.register);
     }
     else {
@@ -45,27 +45,27 @@ function Controller(req, res) {
     return this;
 }
 
-Controller.prototype.sanitizeForm = (function() {
+Controller.prototype.sanitizeForm = (function () {
     var formWhitelist = ['username', 'password', 'passwordAgain', 'email', 'vow'];
 
-    return function() {
+    return function () {
         this._user = _.pick(this._req.body, formWhitelist);
         return this;
     };
 }());
 
-Controller.prototype.getModel = function() {
+Controller.prototype.getModel = function () {
     this._model = new RegisterModel(this._user).
         registerCallbacks(this._callbacks);
 
     return this;
 };
 
-Controller.prototype.executeModel = function() {
+Controller.prototype.executeModel = function () {
     this._model.addUser(this._user);
 };
 
-Controller.prototype._successCallback = function() {
+Controller.prototype._successCallback = function () {
     this._req.session.alert = {type: 'success', message: 'successfulRegistration'};
     this._res.redirect(site.links.login);
 };
@@ -74,7 +74,7 @@ Controller.prototype._successCallback = function() {
  * todo: mail a registration link
  * @private
  */
-Controller.prototype._errorCallback = function(alert) {
+Controller.prototype._errorCallback = function (alert) {
     var res = this._res;
 
     this._req.session.alert = alert;
@@ -92,12 +92,12 @@ Controller.prototype._errorCallback = function(alert) {
  * @param res
  * @private
  */
-function _setupTooltips (res) {
+function _setupTooltips(res) {
 
 
-    res.locals.usernameTooltip =  res.locals.lang.inputLength + ' ' +
-        site.usernameLength.min + ' ' +  res.locals.lang.and + ' ' +
-        site.usernameLength.max + ' ' +  res.locals.lang.characters + ' ' +
+    res.locals.usernameTooltip = res.locals.lang.inputLength + ' ' +
+        site.usernameLength.min + ' ' + res.locals.lang.and + ' ' +
+        site.usernameLength.max + ' ' + res.locals.lang.characters + ' ' +
         res.locals.lang.beginCharacter;
 
     res.locals.passwordTooltip = res.locals.lang.inputLength + ' ' +

@@ -9,14 +9,14 @@ function Super() {
     return this;
 }
 
-Super.prototype.registerCallbacks = function(callbacks) {
+Super.prototype.registerCallbacks = function (callbacks) {
     this._callbacks = callbacks;
 };
 
-Super.prototype._redirectCallback = function(err) {
+Super.prototype._redirectCallback = function (err) {
     var alert = null;
 
-    if(_.isEmpty(err)) {
+    if (_.isEmpty(err)) {
         alert = this._successAlert;
     }
     else {
@@ -26,12 +26,12 @@ Super.prototype._redirectCallback = function(err) {
     this._callbacks.redirectCallback(alert);
 };
 
-Super.prototype._validateRequest = function(minRank) {
-    if(this._rank < minRank) {
+Super.prototype._validateRequest = function (minRank) {
+    if (this._rank < minRank) {
         this._callbacks.redirectCallback(this._notAllowedAlert);
         return false;
     }
-    else if(_.isEmpty(this._action)) {
+    else if (_.isEmpty(this._action)) {
         this._callbacks.redirectCallback(this._emptyAlert);
         return false;
     }
@@ -44,14 +44,14 @@ function RemoveNews(rank, query) {
     this._rank = rank;
     this._action = query;
     this._successAlert = {type: 'success', message: 'successRemoveNews'};
-    this._failAlert = {type: 'error', message : 'errorRemoveNews'};
+    this._failAlert = {type: 'error', message: 'errorRemoveNews'};
     //TODO: prototype dat shyt?
 }
 
 RemoveNews.prototype = new Super();
 
-RemoveNews.prototype.execute = function() {
-    if(this._validateRequest(ranks.MODERATOR)) {
+RemoveNews.prototype.execute = function () {
+    if (this._validateRequest(ranks.MODERATOR)) {
         queries.removeDocument(
             {_id: this._action},
             queries.NEWSMODEL,
@@ -66,7 +66,7 @@ function Build(rank) {
 
 Build.prototype = new Super();
 
-Build.prototype.execute = function() {
+Build.prototype.execute = function () {
     var criteria = {},
         sort = {created: -1},
         offset = 0,
@@ -83,14 +83,14 @@ Build.prototype.execute = function() {
         this._buildCallback.bind(this));
 };
 
-Build.prototype._buildCallback = function(err, news) {
+Build.prototype._buildCallback = function (err, news) {
     var result = {};
 
-    if(_.isObject(err)) {
+    if (_.isObject(err)) {
         this._redirectCallback(err);
     }
     else {
-        _.forEach(news, function(newsItem) {
+        _.forEach(news, function (newsItem) {
             newsItem.created = new Date(newsItem.created).toLocaleDateString();
         });
 
@@ -103,23 +103,24 @@ Build.prototype._buildCallback = function(err, news) {
 };
 
 function AddNews(user, news) {
+    news.author = user.username;
     this._user = user;
     this._action = news;
     this._successAlert = {type: 'success', message: 'successAddNews'};
-    this._failAlert = {type: 'error', message : 'errorAddNews'};
+    this._failAlert = {type: 'error', message: 'errorAddNews'};
 }
 
 AddNews.prototype = new Super();
 
-AddNews.prototype.execute = function() {
-    if(this._validateRequest(ranks.MODERATOR)) {
+AddNews.prototype.execute = function () {
+    if (this._validateRequest(ranks.MODERATOR)) {
         queries.addDocument(this._action,
             queries.NEWSMODEL,
             this._redirectCallback.bind(this));
     }
 };
 
-module.exports = function(config) {
+module.exports = function (config) {
     ranks = config.site.ranks;
     module.exports = {
         Build: Build,

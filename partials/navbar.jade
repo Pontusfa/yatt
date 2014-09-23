@@ -1,14 +1,16 @@
 .navbar.navbar-default.navbar-fixed-top
-  .container
-    .navbar-header
-      a.navbar-brand(href=site.links['index'])=site.name
-        img(src='images/yatt.png')
-    ul.nav.navbar-nav
-      each page in navbarList.middle
-       li(class=page.active)
-         a(href=site.links[page.link])=page.title
-    ul.nav.navbar-nav.navbar-right
-      each page in navbarList.right
-        li(class=page.active)
-          a(href=site.links[page.link])=page.title
+    .container
+        .navbar-header
+            a.navbar-brand(href=site.links['index'])=site.name
+                img(src='images/yatt.png')
+        ul.nav.navbar-nav
+            each page in navbarList.middle
+                - var location = path === page.link ? 'location' : ''
+                li(class=location)
+                    a(href=site.links[page.link])=page.title
+        ul.nav.navbar-nav.navbar-right
+            each page in navbarList.right
+                - var location = path === page.link ? 'location' : ''
+                li(class=location)
+                    a(href=site.links[page.link])=page.title
  

@@ -7,16 +7,16 @@ var _ = require('underscore'),
  * Install the middleware that authorizes the user.
  * Sets up what pages the user may visit.
  */
-function  installAuthorization(app) {
+function installAuthorization(app) {
     ranks = app.config.site.ranks;
     links = app.config.site.links;
 
     app.use(_refreshUserRank(app.queries));
 
-    app.use(function(req, res, next) {
+    app.use(function (req, res, next) {
         var userAllowedPages;
-        
-        if(req.session.user.rank > ranks.ROOT) {  // Somehow too high rank
+
+        if (req.session.user.rank > ranks.ROOT) {  // Somehow too high rank
             app.logger.warn('user ' + req.session.user.username +
                 ' has rank ' + req.session.user.rank);
             req.session.alert = {type: 'error', message: 'tooHighRank'};
@@ -24,8 +24,8 @@ function  installAuthorization(app) {
         }
 
         userAllowedPages = pageRanks[req.session.user.rank];
-        
-        if(_.contains(userAllowedPages, req.path.slice(1))) //remove the leading '/'
+
+        if (_.contains(userAllowedPages, req.path.slice(1))) //remove the leading '/'
         {
             req.session.user.allowedPages = userAllowedPages;
             
@@ -49,15 +49,15 @@ function _refreshUserRank(queries) {
         offset = 0,
         wantedFields = {rank: 1};
 
-    return function(req, res, next) {
-            req.session.user = req.session.user || {username: null, rank: ranks.PUBLIC};
+    return function (req, res, next) {
+        req.session.user = req.session.user || {username: null, rank: ranks.PUBLIC};
 
-        if(req.session.user.rank > ranks.PUBLIC) {
+        if (req.session.user.rank > ranks.PUBLIC) {
             queries.getDocuments(
                 {username: req.session.user.username},
                 queries.USERMODEL, sort, offset, limit, wantedFields,
-                function(err, foundUser) {
-                    if(_.isObject(err) || !_.isObject(foundUser)) {
+                function (err, foundUser) {
+                    if (_.isObject(err) || !_.isObject(foundUser)) {
                         req.session.session.alert = {type: 'error', message: 'failFetchRank'};
                         req.session.user.rank = ranks.PUBLIC;
                     }
@@ -81,11 +81,11 @@ function _refreshUserRank(queries) {
  * @private
  */
 function _redirectFailedVerify(req, res) {
-    if(_.isEqual(req.session.user.rank, ranks.PUBLIC)) { // user is visiting without being logged in
+    if (_.isEqual(req.session.user.rank, ranks.PUBLIC)) { // user is visiting without being logged in
         res.redirect(links.login + '?redirect=' + req.originalUrl);
     }
     else { // user is not allowed here, or page does not exist
-        req.session.alert = {type:'error', message: 'noSuchPage'};
+        req.session.alert = {type: 'error', message: 'noSuchPage'};
         res.redirect(links.index);
     }
 }
@@ -99,18 +99,18 @@ function setPageRanks(newRanks) {
     pageRanks = [];
 
     //first add each new ranks
-    _.forEach(newRanks, function(val, key) {
+    _.forEach(newRanks, function (val, key) {
         pageRanks[key] = pageRanks[key] || [];
         pageRanks[key].push.apply(pageRanks[key], val);
     });
-    
+
     //then add all the lower ranked pages to the higher ranked,
     //except for PUBLIC_ONLY. So ADMIN can access USER etc
-    _.forEach(ranks, function(rank) {
+    _.forEach(ranks, function (rank) {
         pageRanks[rank] = _.flatten(_.first(pageRanks, rank + 1));
         pageRanks[rank] = _.uniq(pageRanks[rank]);
 
-        if(rank > ranks.PUBLIC) {
+        if (rank > ranks.PUBLIC) {
             pageRanks[rank] = _.difference(pageRanks[rank], pageRanks[ranks.PUBLIC_ONLY]);
         }
     });

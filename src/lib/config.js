@@ -22,13 +22,13 @@ function _constructConfig() {
     try {
         configuration = JSON.parse(fs.readFileSync(configFile, 'utf8'));
     }
-    catch(err) {
+    catch (err) {
         logger.error('Couldn\'t parse config file ' + configFile + ' : ' + err.message + '. Exiting.');
         process.exit(1);
     }
 }
 
-module.exports = function() {
+module.exports = function () {
     _constructConfig();
     module.exports = configuration;
     return module.exports;

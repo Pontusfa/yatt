@@ -63,7 +63,7 @@ html(lang=language)
                                     .row
                                         .col-lg-5
                                             a.title(href=site.links.torrent + '?id=' + torrent._id)
-                                              p=torrent.title
+                                                p=torrent.title
                                         .col-lg-1.col-lg-offset-5
                                             if torrent.new
                                                 =lang.new
@@ -79,11 +79,11 @@ html(lang=language)
                                 td=torrent.leechers + '/' + torrent.seeders
                                 td=torrent.created
                                 td
-                                  a(href=site.links.user + '?id=' + torrent.uploader)=torrent.uploader
+                                    a(href=site.links.user + '?id=' + torrent.uploader)=torrent.uploader
 
-            
+
             ul.pager
-              li(class=links.previous.class)
-                a(href=links.previous.link)=lang.previous
-              li(class=links.next.class)
-                a(href=links.next.link)=lang.next
+                li(class=links.previous.class)
+                    a(href=links.previous.link)=lang.previous
+                li(class=links.next.class)
+                    a(href=links.next.link)=lang.next

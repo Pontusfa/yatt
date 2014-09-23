@@ -70,7 +70,8 @@
             "torrent": "/torrent",
             "gettorrent": "/gettorrent",
             "recover": "/recover",
-            "rules": "/rules"
+            "rules": "/rules",
+            "user": "/user"
             
         },
         "navbarOrder": {

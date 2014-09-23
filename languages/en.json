@@ -37,7 +37,8 @@
         "statistics": "Statistics",
         "updated": "Last Updated",
         "remove": "Remove",
-        "comment": "Comment"
+        "addNews": "Add News",
+        "by": "by"
     },
     "": {
         "title": "Index"
@@ -70,7 +71,8 @@
         "leechers": "Leechers",
         "seeders": "Seeders",
         "created": "Created",
-        "uploader": "Uploader"
+        "uploader": "Uploader",
+        "description": "Description"
     },
     "uploadtorrent": {
         "title": "Upload Torrent",

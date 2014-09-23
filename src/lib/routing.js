@@ -18,10 +18,10 @@ function installRoutes(app) {
 
         pagesPath = process.cwd() + '/src/pages/';
 
-    try{
+    try {
         pages = fs.readdirSync(pagesPath);
     }
-    catch(err) {
+    catch (err) {
         app.logger.error(err + '. Exiting.');
         process.exit(1);
     }
@@ -34,11 +34,11 @@ function installRoutes(app) {
                 '/' + currentPagePath + 'Controller');
             pageRank = controller.setup(app, jadeCompiler(app, currentPagePath));
 
-            if(_.isNumber(pageRank)) {
+            if (_.isNumber(pageRank)) {
                 pageRanks[pageRank] = pageRanks[pageRank] || [];
                 pageRanks[pageRank].push(currentPagePath.toLowerCase());
 
-                app.logger.info( currentPagePath + ' routing setup.');
+                app.logger.info(currentPagePath + ' routing setup.');
             }
             else {
                 app.logger.warn('Couldn\'t setup route ' + currentPagePath + '. No page rank given. Ignoring.');
@@ -50,7 +50,7 @@ function installRoutes(app) {
     });
 }
 
-module.exports = function(app) {
+module.exports = function (app) {
     installRoutes(app);
     module.exports = pageRanks;
 

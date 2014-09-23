@@ -28,27 +28,27 @@ function Controller(req, res) {
     return this;
 }
 
-Controller.prototype.sanitizeQuery = function() {
+Controller.prototype.sanitizeQuery = function () {
     var req = this._req;
     this._query = !_.isEmpty(req.query) ? req.query.removenews : null;
-    this._body =  !_.isEmpty(req.body) ?
-    {title:  req.body.title,
+    this._body = !_.isEmpty(req.body) ?
+    {
+        title: req.body.title,
         text: req.body.text
-    } :
-        null;
+    } : null;
 
 
     return this;
 };
 
-Controller.prototype.getModel = function() {
+Controller.prototype.getModel = function () {
     var model,
         user = this._user;
 
-    if(!_.isEmpty(this._query)) {
+    if (!_.isEmpty(this._query)) { //TODO: make sure query actually is removeNews :)
         model = new models.RemoveNews(user.rank, this._query);
     }
-    else if(!_.isEmpty(this._body)) {
+    else if (!_.isEmpty(this._body)) {
         model = new models.AddNews(user, this._body);
     }
     else {
@@ -61,13 +61,13 @@ Controller.prototype.getModel = function() {
     return this;
 };
 
-Controller.prototype.executeModel = function() {
+Controller.prototype.executeModel = function () {
     this._model.execute();
 
     return this;
 };
 
-Controller.prototype._successBuildCallback = function(result) {
+Controller.prototype._successBuildCallback = function (result) {
     var res = this._res;
 
     res.locals.canRemove = result.canRemove;
@@ -78,11 +78,10 @@ Controller.prototype._successBuildCallback = function(result) {
     res.send(template(res.locals));
 };
 
-Controller.prototype._redirectCallback = function(alert) {
+Controller.prototype._redirectCallback = function (alert) {
     this._req.session.alert = alert;
     this._res.redirect(indexLink);
 };
-
 
 
 /**

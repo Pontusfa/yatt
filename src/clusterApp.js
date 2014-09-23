@@ -6,11 +6,11 @@
  */
 var cluster = require('cluster');
 
-if(cluster.isMaster) {
+if (cluster.isMaster) {
     var cpuCount = require('os').cpus().length;
 
     // Create a worker for each CPU
-    for(var i = 0; i < cpuCount; i += 1) {
+    for (var i = 0; i < cpuCount; i += 1) {
         cluster.fork();
     }
 }

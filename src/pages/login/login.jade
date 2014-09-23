@@ -20,7 +20,7 @@ html(lang=language)
 
                 if site.registration
                     form.form-login.register(name='register', method='get', action='/register')=lang.or
-                                    button.btn.btn-default(type='submit')=lang.registerNow
+                        button.btn.btn-default(type='submit')=lang.registerNow
 
                 .form-login.recover
                     a.small(href=site.links.recover)=lang.recover

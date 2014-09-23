@@ -81,6 +81,7 @@ function _initModels(config, db) {
         newsSchema = db.Schema({
             title: String,
             text: String,
+            author: {type: String, default: 'Unknown'},
             created: {type: Date, default: Date.now}
         });
 
@@ -90,7 +91,7 @@ function _initModels(config, db) {
     models.request = db.model('request', requestSchema);
 }
 
-module.exports = function(app) {
+module.exports = function (app) {
     var logger = app.logger,
         config = app.config,
         connection = null;

@@ -14,7 +14,7 @@ function Verifier(user) {
     return this;
 }
 
-Verifier.prototype.registerCallbacks = function(callbacks) {
+Verifier.prototype.registerCallbacks = function (callbacks) {
     this._callbacks = callbacks;
     return this;
 };
@@ -24,7 +24,7 @@ Verifier.prototype.registerCallbacks = function(callbacks) {
  * user.password and sends result to _validateUserCallback
  * @private
  */
-Verifier.prototype.validateUser = (function() {
+Verifier.prototype.validateUser = (function () {
     var returnFields = {username: 1,
             password: 1,
             salt: 1,
@@ -36,11 +36,11 @@ Verifier.prototype.validateUser = (function() {
         limit = 1,
         offset = 0;
 
-    return function() {
+    return function () {
         var user = this._user,
             criteria = {username: user.username};
 
-        if(_.isEmpty(user.username) || _.isEmpty(user.password)) {
+        if (_.isEmpty(user.username) || _.isEmpty(user.password)) {
             this._callbacks.errorCallback({type: 'error', message: 'noUserPass'});
         }
         else {
@@ -58,11 +58,11 @@ Verifier.prototype.validateUser = (function() {
 /**
  * @private
  */
-Verifier.prototype._validateUserHelper = function(err, foundUser) {
-    if(_.isObject(err)) {
+Verifier.prototype._validateUserHelper = function (err, foundUser) {
+    if (_.isObject(err)) {
         this._callbacks.errorCallback({type: 'error', message: 'databaseFail'});
     }
-    else if(_.isObject(foundUser)) {
+    else if (_.isObject(foundUser)) {
         this._foundUser = foundUser;
         queries.createHash(this._user,
             foundUser.salt,
@@ -78,26 +78,26 @@ Verifier.prototype._validateUserHelper = function(err, foundUser) {
  * Compares the two hashes for the passwords and callbacks
  * @private
  */
-Verifier.prototype. _validateUserCallback = function() {
+Verifier.prototype._validateUserCallback = function () {
     var user = this._user,
         foundUser = this._foundUser,
         callbacks = this._callbacks;
 
-    if(!_.isEqual(user.password, foundUser.password)) {
+    if (!_.isEqual(user.password, foundUser.password)) {
         callbacks.errorCallback({type: 'error', message: 'wrongUserPass'});
     }
-    else if(foundUser.banned) {
+    else if (foundUser.banned) {
         callbacks.ErrorCallback({type: 'error', message: 'banned'});
     }
-    else if(!foundUser.active) {
+    else if (!foundUser.active) {
         callbacks.errorCallback({type: 'error', message: 'notActive'});
     }
-    else if(_.isEqual(user.password, foundUser.password)) {
+    else if (_.isEqual(user.password, foundUser.password)) {
         callbacks.successCallback(foundUser);
     }
 };
 
-module.exports = function(queriesObject) {
+module.exports = function (queriesObject) {
     queries = queriesObject;
     module.exports.Verifier = Verifier;
     return module.exports;

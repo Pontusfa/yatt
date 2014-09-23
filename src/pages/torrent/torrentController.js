@@ -23,32 +23,30 @@ function Controller(req, res) {
     return this;
 }
 
-Controller.prototype._getModel = function() {
+Controller.prototype._getModel = function () {
     this._model = new Model(this._req.query.id).
         registerCallbacks(this._callbacks);
 
     return this;
 };
 
-Controller.prototype._executeModel = function() {
+Controller.prototype._executeModel = function () {
     this._model.execute();
 
     return this;
 };
 
-Controller.prototype._getTorrentCallback = function(torrent) {
+Controller.prototype._getTorrentCallback = function (torrent) {
     var locals = this._res.locals;
 
     locals.torrent = torrent;
-
-    locals.lang.category =
-        torrentCategories[this._req.session.language][torrent.category];
-
     locals.site = site;
+    locals.lang.title = locals.torrent.title;
+    
     this._res.send(template(locals));
 };
 
-Controller.prototype._errorCallback = function(alert) {
+Controller.prototype._errorCallback = function (alert) {
     this._req.session.alert = alert;
     this._res.redirect(site.links.index);
 };
@@ -65,7 +63,7 @@ function setup(app, jadeCompiler) {
     app.get(links.torrent, _getTorrent);
 
     return config.site.private ?
-        site.ranks.MEMBER:
+        site.ranks.MEMBER :
         site.ranks.PUBLIC;
 }
 
