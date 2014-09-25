@@ -1,8 +1,8 @@
-div.panel-body {
+div.panel.panel-default.panel-body {
     white-space: pre;
 }
 
-a {
-    color: #000;
-    text-decoration: none;
+.torrent-footer {
+    text-align: right;
+    font-weight: bold;
 }

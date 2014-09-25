@@ -34,12 +34,11 @@ html(lang='en')
                 .panel-body=news.text
 
                 .panel-footer
-                    .pull-left
-                        small
-                            =lang.posted + ' ' + news.created + ' ' + lang.by + ' '
-                            a(href=site.links.user + '?id=' + news.author)=news.author + '.'
+                   small
+                       =lang.posted + ' ' + news.created + ' ' + lang.by + ' '
+                       a(href=site.links.user + '?id=' + news.author)=news.author + '.'
 
-                    .news-footer
+                    .news-footer.pull-right
                         if canRemove
                             a(href=url + '?removenews=' + news._id)
                                 small=lang.remove

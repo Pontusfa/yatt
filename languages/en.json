@@ -33,7 +33,7 @@
         "newTitle": "Title",
         "submit": "Submit",
         "news": "News",
-        "posted": "posted",
+        "posted": "Posted",
         "statistics": "Statistics",
         "updated": "Last Updated",
         "remove": "Remove",
@@ -64,6 +64,7 @@
         "next": "Next"
     },
     "torrent": {
+        "download": " Download",
         "size": "Size",
         "category": "Category",
         "tags": "Tags",
@@ -72,7 +73,10 @@
         "seeders": "Seeders",
         "created": "Created",
         "uploader": "Uploader",
-        "description": "Description"
+        "description": "Description",
+        "by": "by",
+        "uploaded": "Uploaded",
+        "remove": "Remove"
     },
     "uploadtorrent": {
         "title": "Upload Torrent",
@@ -146,6 +150,7 @@
         "uploadSuccess": "Torrent uploaded.",
         "successRemoveNews": "News article removed.",
         "successfulRegistration": "Registration successful.",
-        "successAddNews": "News article added."
+        "successAddNews": "News article added.",
+        "successRemoveTorrent": "Torrent removed."
     }
 }

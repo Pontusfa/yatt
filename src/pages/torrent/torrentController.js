@@ -1,5 +1,5 @@
 var links = null,
-    Model = null,
+    models = null,
     template = null,
     torrentCategories = null,
     config = null,
@@ -17,6 +17,7 @@ function Controller(req, res) {
     this._model = null;
     this._callbacks = {
         getTorrentCallback: this._getTorrentCallback.bind(this),
+        removeTorrentCallback: this._removeTorrentCallback.bind(this),
         errorCallback: this._errorCallback.bind(this)
     };
 
@@ -24,8 +25,15 @@ function Controller(req, res) {
 }
 
 Controller.prototype._getModel = function () {
-    this._model = new Model(this._req.query.id).
-        registerCallbacks(this._callbacks);
+    var req = this._req;
+    
+    if(req.query.remove === 1 || req.query.remove === '1') { //TODO: one of 'em
+        this._model = new models.removeModel(req.query.id, req.session.user.rank);
+    }
+    else {
+        this._model = new models.TorrentModel(req.query.id, req.session.user.rank);
+    }
+    this._model.registerCallbacks(this._callbacks);
 
     return this;
 };
@@ -36,14 +44,20 @@ Controller.prototype._executeModel = function () {
     return this;
 };
 
-Controller.prototype._getTorrentCallback = function (torrent) {
+Controller.prototype._getTorrentCallback = function (result) {
     var locals = this._res.locals;
 
-    locals.torrent = torrent;
+    locals.torrent = result.torrent;
     locals.site = site;
     locals.lang.title = locals.torrent.title;
+    locals.canRemove = result.canRemove;
     
     this._res.send(template(locals));
+};
+
+Controller.prototype._removeTorrentCallback = function(alert) {
+    this._req.session.alert = alert;
+    this._res.redirect(links.index);
 };
 
 Controller.prototype._errorCallback = function (alert) {
@@ -55,7 +69,7 @@ function setup(app, jadeCompiler) {
     config = app.config;
     site = config.site;
     links = config.site.links;
-    Model = require('./torrentModel')(app.queries);
+    models = require('./torrentModel')(app.queries, app.config.site.ranks);
     template = jadeCompiler('torrent');
     torrentCategories = require('../../lib/internationalization')
         .getAdditionalLanguageField('torrentCategories');

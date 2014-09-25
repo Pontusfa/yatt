@@ -1,61 +1,65 @@
 doctype html
 html(lang=language)
     include /partials/head
-    body
-        .container
-            include /partials/navbar
+    body.container
 
-            include /partials/alerts
+        include /partials/navbar
+        include /partials/alerts
 
-            .panel.panel-primary
-                .panel-heading
-                    .panel-title=torrent.title
+        .panel.panel-primary
+            .panel-heading
+                .panel-title=torrent.title
 
-                .panel-body
-                    table.table
+            .panel-body
 
+                a(href=site.links.gettorrent + '?id=' + torrent._id)
+                    span.glyphicon.glyphicon-download-alt=lang.download
+                
+                table.table
+
+                    tr
+                        td.col-lg-1=lang.size
+                        td=torrent.size
+
+                    tr
+                        td.col-lg-1=lang.category
+                        td
+                            a(href=site.links.torrents + '?category=' + torrent.category)=torrent.category
+
+                    if torrent.tags.length
                         tr
-                            td.col-lg-1=lang.size
-                            td=torrent.size
-
-                        tr
-                            td.col-lg-1=lang.category
-                            td 
-                                a(href=site.links.torrents + '?category=' + torrent.category)=torrent.category
-
-                        if torrent.tags.length
-                            tr
-                                td.col-lg-1=lang.tags
-                                td
-                                    each tag in torrent.tags
-                                        a.tag.btn.btn-sm.btn-default(href=site.links.torrents + '?tags=' + tag)=tag
-                        if torrent.infoLink
-                            
-                            tr
-                                td.col-lg-1=lang.infoLink
-                                td
-                                    a(href=torrent.infoLink)=torrent.infoLink
-                        
-                        tr
-                            td.col-lg-1=lang.leechers
-                            td=torrent.leechers
-
-                        tr
-                            td.col-lg-1=lang.seeders
-                            td=torrent.seeders
-
-                        tr
-                            td.col-lg-1=lang.created
-                            td=torrent.created
-
-                        tr
-                            td.col-lg-1=lang.uploader
+                            td.col-lg-1=lang.tags
                             td
-                                a(href=site.links.user + '?id=' + torrent.uploader)=torrent.uploader
-                        
+                                each tag in torrent.tags
+                                    a.tag.btn.btn-sm.btn-default(href=site.links.torrents + '?tags=' + tag)=tag
+                    if torrent.infoLink
+
                         tr
-                            td.col-lg-1=lang.description
+                            td.col-lg-1=lang.infoLink
                             td
-                                .panel.panel-default
-                                    .panel-body=torrent.description
-              
+                                a(href=torrent.infoLink)=torrent.infoLink
+
+                    tr
+                        td.col-lg-1=lang.leechers
+                        td=torrent.leechers
+
+                    tr
+                        td.col-lg-1=lang.seeders
+                        td=torrent.seeders
+
+                    tr
+                        td.col-lg-1=lang.description
+                        td
+                            .panel.panel-default.panel-body=torrent.description
+                a(href=site.links.gettorrent + '?id=' + torrent._id)
+                    span.glyphicon.glyphicon-download-alt=lang.download
+
+            .panel-footer
+                small
+                    =lang.uploaded + ' ' + torrent.created + ' ' + lang.by + ' '
+                    a(href=site.links.user + '?id=' + torrent.uploader)=torrent.uploader + '.'
+
+                    .pull-right.torrent-footer
+                        if canRemove
+                            a(href=url + '&remove=1')
+                                =lang.remove
