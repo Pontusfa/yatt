@@ -1,4 +1,4 @@
 yatt
 ====
 
-A half-mediocre bittorrent tracker webapp.
+A half-mediocre bittorrent tracker.
