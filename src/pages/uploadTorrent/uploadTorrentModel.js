@@ -55,7 +55,16 @@ Model.prototype.execute = function () {
             meta: this._torrentMeta
         },
         queries.TORRENTMODEL,
-        this._callbacks.successCallback.bind(this));
+        this._queryCallback.bind(this));
+};
+
+Model.prototype._queryCallback = function(err, result){
+    if (_.isObject(err)) {
+        this._callbacks.errorCallback({type: 'error', message: 'uploadFail'});
+    }
+    else{
+        this._callbacks.successCallback(result);
+    }
 };
 
 /**

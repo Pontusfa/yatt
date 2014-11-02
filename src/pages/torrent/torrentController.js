@@ -7,8 +7,8 @@ var links = null,
 
 function _getTorrent(req, res) {
     new Controller(req, res).
-        _getModel().
-        _executeModel();
+        getModel().
+        executeModel();
 }
 
 function Controller(req, res) {
@@ -24,7 +24,7 @@ function Controller(req, res) {
     return this;
 }
 
-Controller.prototype._getModel = function () {
+Controller.prototype.getModel = function () {
     var req = this._req;
     
     if(req.query.remove === 1 || req.query.remove === '1') { //TODO: one of 'em
@@ -38,7 +38,7 @@ Controller.prototype._getModel = function () {
     return this;
 };
 
-Controller.prototype._executeModel = function () {
+Controller.prototype.executeModel = function () {
     this._model.execute();
 
     return this;

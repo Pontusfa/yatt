@@ -48,12 +48,14 @@ function _initModels(config, db) {
             salt: String,
             email: {type: String, unique: true},
             active: {type: Boolean, default: true}, //TODO: false + send mail
-            banned: {type: Boolean, default: false},
+            banned: {type: Boolean, default: false}, //TODO: merge into status field: {"inactive", "active", "banned"}
             passkey: {type: String, index: true, default: -1},
             rank: {type: Number, default: config.site.ranks.MEMBER},
             created: {type: Date, default: Date.now},
             downloaded: {type: Number, default: 0},
-            uploaded: {type: Number, default: 0}
+            uploaded: {type: Number, default: 0},
+            online: {type: Boolean, default: false},
+            notes: {type: String, default: ''}
         }),
 
         torrentSchema = db.Schema({

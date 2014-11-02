@@ -195,7 +195,7 @@ function _initSession() {
             connectionConfig.host + ':' +
             connectionConfig.port + '/' +
             connectionConfig.database + '/sessions',
-        mongoStore = new MongoStore({url: mongoUri, auto_reconnect: true});
+        mongoStore = new MongoStore({url: mongoUri, auto_reconnect: true}); // jshint ignore:line
 
     app.use(express.session({
         proxy: app.config.uses.proxy,
