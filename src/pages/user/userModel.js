@@ -1,6 +1,8 @@
 var _ = require('underscore'),
     ranks = null,
-    queries = null;
+    queries = null,
+    sort = null,
+    offset = 0;
 
 function GetUserModel(soughtUser, userRank){
     this._soughtUser = soughtUser;
@@ -16,9 +18,7 @@ GetUserModel.prototype.registerCallbacks = function(callbacks){
 };
 
 GetUserModel.prototype.execute = function(){
-    var sort = null,
-        offset = 0,
-        limit = 1;
+    var limit = 1;
 
     if(_.isEmpty(this._soughtUser)){
         this._callbacks.errorCallback({type: 'error', message: 'noID'});
@@ -69,7 +69,10 @@ GetUserModel.prototype._createWantedFields = function(){
 };
 
 GetUserModel.prototype._queryCallback = function(err, result){
-    var callbacks = this._callbacks;
+    var callbacks = this._callbacks,
+        limit = 1,
+        wantedFields = {_id: 1};
+
     if(_.isObject(err)) {
         callbacks.errorCallback({type: 'error', message: 'failedSearch'});
     }
@@ -89,7 +92,24 @@ GetUserModel.prototype._queryCallback = function(err, result){
 
         result.rank = _.invert(ranks)[result.rank].toLowerCase(); // get rank string from rank int
 
-        callbacks.successCallback(result);
+        // Is the user online?
+        queries.getDocuments(
+            {username: result.username},
+            queries.ONLINEMODEL,
+            sort,
+            offset,
+            limit,
+            wantedFields,
+            function(err, online) {
+                if(_.isObject(err)){
+                    callbacks.errorCallback({type: 'error', message: 'failedSearch'});
+                    return;
+                }
+                result.online = !_.isEmpty(online); // If it's not empty, the user is in the online list
+                callbacks.successCallback(result);
+            });
+
+
     }
 };
 
@@ -153,7 +173,7 @@ ModifyUserModel.prototype._findUserCallback = function(err, result) {
         return;
     }
 
-    queries.updateDocument(queries.USERMODEL, {username: result.username}, update, this._updateUserCallback.bind(this));
+    queries.updateDocument({username: result.username}, queries.USERMODEL, update, this._updateUserCallback.bind(this));
 };
 
 ModifyUserModel.prototype._updateUserCallback = function(err, result) {

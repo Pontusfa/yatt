@@ -54,7 +54,6 @@ function _initModels(config, db) {
             created: {type: Date, default: Date.now},
             downloaded: {type: Number, default: 0},
             uploaded: {type: Number, default: 0},
-            online: {type: Boolean, default: false},
             notes: {type: String, default: ''}
         }),
 
@@ -85,12 +84,18 @@ function _initModels(config, db) {
             text: String,
             author: {type: String, default: 'Unknown'},
             created: {type: Date, default: Date.now}
+        }),
+
+        onlineSchema = db.Schema({
+            username: {type: String, index: true},
+            createdAt: { type: Date, expires: 60, default: Date.now }
         });
 
     models.user = db.model('user', UserSchema);
     models.torrent = db.model('torrent', torrentSchema);
     models.news = db.model('news', newsSchema);
     models.request = db.model('request', requestSchema);
+    models.online = db.model('online', onlineSchema);
 }
 
 module.exports = function (app) {

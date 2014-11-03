@@ -66,6 +66,7 @@ Controller.prototype._successCallback = function (result) {
     locals.lang = locals.lang || {};
     locals.lang.ranks = ranksLanguage[this._req.session.language];
     locals.site = site;
+    locals.lang.title = locals.lang.title + ' ' + result.username
     res.send(template(res.locals));
 };
 

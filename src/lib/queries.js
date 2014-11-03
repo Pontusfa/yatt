@@ -13,7 +13,7 @@ var models = null,
  * @param callback function(error) to run after hash has been calculated and replaced user.password
  * @private
  */
-var createHash = function () {
+var createHash = (function () {
     var crypto = require('crypto'),
         iterations = 10000,
         bytesLength = 64,
@@ -30,7 +30,7 @@ var createHash = function () {
                 callback(err);
             });
     };
-}();
+}());
 
 /**
  * Gets db document(s) for the wanted document.
@@ -82,13 +82,13 @@ function _addUserCallback(user, callback) {
 
 /**
  * Finds *one* document and updates it's fields.
- * @param model String declaring what model to search in
  * @param criteria object with relevant information to find the user, e.g. user.username
+ * @param model String declaring what model to search in
  * @param updates object containing the new information to add to it's document.
  * @param callback function(err, foundUser) to handle the result
  */
-function updateDocument(model, criteria, updates, callback) {
-    var options = null;
+function updateDocument(criteria, model, updates, callback) {
+    var options = {upsert: true};
 
     models[model].findOneAndUpdate(criteria, updates, options, callback);
 }
@@ -111,6 +111,7 @@ function addDocument(document, model, callback) {
  */
 function countCollection(criteria, model, callback) {
     if (_.isFunction(model)) { // no criteria given
+        callback = model;
         model = criteria;
         criteria = {};
     }
@@ -121,20 +122,27 @@ function removeDocument(document, model, callback) {
     models[model].findOneAndRemove(document, callback);
 }
 
+function mapReduce(o, model, callback) {
+    models[model].mapReduce(o, callback);
+}
+
 module.exports = function () {
     models = require('./db').models;
 
-    module.exports = {};
-    module.exports.createHash = createHash;
-    module.exports.getDocuments = getDocuments;
-    module.exports.addUser = addUser;
-    module.exports.updateDocument = updateDocument;
-    module.exports.addDocument = addDocument;
-    module.exports.countCollection = countCollection;
-    module.exports.removeDocument = removeDocument;
-    module.exports.TORRENTMODEL = 'torrent';
-    module.exports.USERMODEL = 'user';
-    module.exports.NEWSMODEL = 'news';
+    module.exports = {
+        createHash: createHash,
+        getDocuments: getDocuments,
+        addUser: addUser,
+        updateDocument: updateDocument,
+        addDocument: addDocument,
+        countCollection: countCollection,
+        removeDocument: removeDocument,
+        mapReduce: mapReduce,
+        TORRENTMODEL: 'torrent',
+        USERMODEL: 'user',
+        NEWSMODEL: 'news',
+        ONLINEMODEL: 'online'
+    };
 
     return module.exports;
 };

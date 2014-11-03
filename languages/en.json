@@ -38,7 +38,13 @@
         "updated": "Last Updated",
         "remove": "Remove",
         "addNews": "Add News",
-        "by": "by"
+        "by": "by",
+        "usersOnline": "Users Online",
+        "registeredUsers": "Registered Users",
+        "leechers": "Leechers",
+        "seeders": "Seeders",
+        "uploadedTorrents": "Uploaded Torrents",
+        "newestMember": "Newest Member"
     },
     "": {
         "title": "Index"

@@ -43,15 +43,26 @@ html(lang='en')
                             a(href=url + '?removenews=' + news._id)
                                 small=lang.remove
 
-        h3=lang.statistics 
-        //- TODO: actual statistics please
+        h3=lang.statistics
         ul.list-group.col-lg-6
-            ul.list-group-item  users online
-            ul.list-group-item registered users
-            ul.list-group-item something
+            li.list-group-item
+                span.pull-right=onlineUsers
+                =lang.usersOnline
+            li.list-group-item
+                span.pull-right=registeredUsers
+                =lang.registeredUsers
+            li.list-group-item
+                span.pull-right=newestMember
+                =lang.newestMember
+
         ul.list-group.col-lg-6
-            ul.list-group-item  torrents uploaded
-            ul.list-group-item leechers
-            ul.list-group-item seeders
-            ul.list-group-item total GiB mediated
+            li.list-group-item
+                span.pull-right=uploadedTorrents
+                =lang.uploadedTorrents
+            li.list-group-item
+                span.pull-right=leechers
+                =lang.leechers
+            li.list-group-item
+                span.pull-right=seeders
+                =lang.seeders
 
