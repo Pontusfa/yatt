@@ -66,22 +66,24 @@ function Build(rank) {
 
 Build.prototype = new Super();
 
-Build.prototype.execute = function () {
+Build.prototype.execute = (function () {
     var criteria = {},
         sort = {created: -1},
         offset = 0,
         limit = 3,
         wantedFields = {};
 
-    queries.getDocuments(
-        criteria,
-        queries.NEWSMODEL,
-        sort,
-        offset,
-        limit,
-        wantedFields,
-        this._buildCallback.bind(this));
-};
+    return function() {
+        queries.getDocuments(
+            criteria,
+            queries.NEWSMODEL,
+            sort,
+            offset,
+            limit,
+            wantedFields,
+            this._buildCallback.bind(this));
+    };
+}());
 
 Build.prototype._buildCallback = function (err, news) {
     var result = {};
@@ -98,9 +100,105 @@ Build.prototype._buildCallback = function (err, news) {
         result.canAdd = this._rank >= ranks.MODERATOR;
         result.canRemove = result.canAdd;
 
-        this._callbacks.successBuildCallback(result);
+        this._result = result;
+
+        this._getUserStatistics();
     }
 };
+
+/**
+ * This is so ugly it makes me cry. Callback hell is real and it wants your soul.
+ * @private
+ */
+Build.prototype._getUserStatistics = function() {
+    var criteria = {},
+        sort = {created: -1},
+        offset = 0,
+        limit = 1,
+        wantedFields = {},
+        result = this._result,
+        that = this,
+        returnError = function() {
+            this._callbacks.errorCallback({type: 'error', message: 'failedSearch'});
+        };
+
+    queries.countCollection(queries.ONLINEMODEL, function(err, online){
+        if(err) {
+            returnError();
+        }
+        else {
+            result.onlineUsers = online;
+            queries.countCollection(queries.USERMODEL, function(err, users) {
+                if(err) {
+                    returnError();
+                }
+                else{
+                    result.registeredUsers = users;
+                    queries.getDocuments(criteria, queries.USERMODEL, sort, offset, limit, wantedFields,
+                        function(err, user){
+                            if(err) {
+                                returnError();
+                            }
+                            else{
+                                result.newestMember = user.username;
+                                that._getTorrentsStatistics();
+                            }
+                    });
+                }
+            });
+        }
+    });
+};
+
+/**
+ * Here we go again!
+ * @private
+ */
+Build.prototype._getTorrentsStatistics = (function() {
+    var o = {};
+
+    o.map = function() {
+        emit('seeders', this.seeders);
+        emit('leechers', this.leechers);
+    };
+    o.reduce = function(key, values) {
+        return values.reduce(function(p, c) { return p + c; }, 0);
+    };
+
+    return function() {
+        var result = this._result,
+            that = this,
+            returnError = function () {
+                that._callbacks.errorCallback({type: 'error', message: 'failedSearch'});
+            };
+
+        queries.countCollection(queries.TORRENTMODEL, function (err, torrents) {
+            if (err) {
+                returnError();
+            }
+            else {
+                result.uploadedTorrents = torrents;
+                queries.mapReduce(o, queries.TORRENTMODEL, function(err, values){
+                    if (err) {
+                        returnError();
+                    }
+                    else {
+                        _.forEach(values, function(item){
+                            if(item._id === 'seeders'){
+                                result.seeders = item.value;
+                            }
+                            else if(item._id === 'leechers'){
+                                result.leechers = item.value;
+                            }
+                        });
+
+                        that._callbacks.successBuildCallback(result);
+                    }
+                });
+            }
+        });
+    };
+}());
 
 function AddNews(user, news) {
     news.author = user.username;

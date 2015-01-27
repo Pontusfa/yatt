@@ -2,15 +2,23 @@
  * Handles a user's logout.
  */
 
-var links = {};
+var links = null,
+    queries = null;
 
 /**
  * a simple setter and redirect
  * @private
  */
 function _getLogout(req, res) {
-    req.session.user = null;
-    req.session.destroy();
+    var session = req.session;
+
+    if(session) {
+        if(session.user && session.user.username) {
+            queries.removeDocument({username: session.user.username}, queries.ONLINEMODEL);
+        }
+        session.destroy();
+        req.session = null;
+    }
     res.redirect(links.index);
 }
 
@@ -21,6 +29,7 @@ function _getLogout(req, res) {
 function setup(app) {
     links = app.config.site.links;
     app.get(links.logout, _getLogout);
+    queries = app.queries;
     return app.config.site.ranks.MEMBER;
 }
 

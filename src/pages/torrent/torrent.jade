@@ -24,7 +24,7 @@ html(lang=language)
                     tr
                         td.col-lg-1=lang.category
                         td
-                            a(href=site.links.torrents + '?category=' + torrent.category)=torrent.category
+                            a(href=site.links.torrents + '?categories=' + torrent.category)=torrent.category
 
                     if torrent.tags.length
                         tr

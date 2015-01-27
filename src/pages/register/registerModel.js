@@ -1,6 +1,5 @@
 /**
  * Registering a new unique user.
- * @author Pontus Falk
  */
 
 var queries = null,

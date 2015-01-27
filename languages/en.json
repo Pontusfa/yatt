@@ -38,7 +38,13 @@
         "updated": "Last Updated",
         "remove": "Remove",
         "addNews": "Add News",
-        "by": "by"
+        "by": "by",
+        "usersOnline": "Users Online",
+        "registeredUsers": "Registered Users",
+        "leechers": "Leechers",
+        "seeders": "Seeders",
+        "uploadedTorrents": "Uploaded Torrents",
+        "newestMember": "Newest Member"
     },
     "": {
         "title": "Index"
@@ -100,6 +106,31 @@
     "logout": {
         "title": "Log Out"
     },
+    "user": {
+        "title": "User",
+        "created": "Created",
+        "online": "Online",
+        "offline": "Offline",
+        "active": "active",
+        "inactive": "inactive",
+        "banned": "banned",
+        "notBanned": "not banned",
+        "status": "Status",
+        "userIs": "User is",
+        "and": "and",
+        "rank": "Rank",
+        "uploaded": "Uploaded",
+        "downloaded": "Downloaded",
+        "notes": "Notes",
+        "email": "Email",
+        "moderateUser": "Moderate User",
+        "ban": "Ban",
+        "unBan": "Unban",
+        "modifyEmail": "Modify Email",
+        "modifyUsername": "Modify Username",
+        "promote": "Promote",
+        "demote": "Demote"
+    },
 
     "torrentCategories": {
         "category": "Category",
@@ -144,13 +175,24 @@
         "noUsername": "No on uploader username.",
         "notUploader": "This account is not allowed to upload torrents.",
         "failedSearch": "The search could not be processed.",
-        "databaseFail": "Could not query the database."
+        "databaseFail": "Could not query the database.",
+        "noID": "No user ID supplied.",
+        "noSuchUser": "That user does not exist."
     },
     "success": {
         "uploadSuccess": "Torrent uploaded.",
         "successRemoveNews": "News article removed.",
         "successfulRegistration": "Registration successful.",
         "successAddNews": "News article added.",
-        "successRemoveTorrent": "Torrent removed."
+        "successRemoveTorrent": "Torrent removed.",
+        "userModified": "User modified."
+    },
+    "ranks": {
+        "public": "Public",
+        "member": "Member",
+        "uploader": "Uploader",
+        "moderator": "Mod",
+        "administrator": "Admin",
+        "root": "Chief"
     }
 }

@@ -72,19 +72,9 @@ Controller.prototype.executeModel = function () {
 /**
  * @private
  */
-Controller.prototype._successCallback = function (alert, result) {
-    var redirect = null;
-
-    if (_.isObject(alert)) {
-        alert = {type: 'error', message: 'uploadFail'};
-        redirect = links.uploadtorrent;
-    }
-    else {
-        alert = {type: 'success', message: 'uploadSuccess'};
-        redirect = links.torrent + '?id=' + result._id;
-    }
-    this._req.session.alert = alert;
-    this._res.redirect(redirect);
+Controller.prototype._successCallback = function (result) {
+    this._req.session.alert = {type: 'success', message: 'uploadSuccess'};
+    this._res.redirect(links.torrent + '?id=' + result._id);
 };
 
 Controller.prototype._errorCallback = function (alert) {

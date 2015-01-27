@@ -44,7 +44,7 @@ function _updatePasskeyCallback(user, newPasskey, callback) {
             callback(err, null);
         }
         else if (!_.isObject(foundUser)) {
-            queries.updateDocument(queries.USERMODEL, {username: user.username}, {passkey: newPasskey}, callback);
+            queries.updateDocument({username: user.username}, queries.USERMODEL, {passkey: newPasskey}, callback);
         }
         else { // a user with that passkey exists, try another
             updatePasskey(user, callback);

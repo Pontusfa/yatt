@@ -194,7 +194,7 @@ function _initSession() {
             connectionConfig.host + ':' +
             connectionConfig.port + '/' +
             connectionConfig.database + '/sessions',
-        mongoStore = new MongoStore({url: mongoUri, auto_reconnect: true});
+        mongoStore = new MongoStore({url: mongoUri, auto_reconnect: true}); // jshint ignore:line
 
     app.use(express.session({
         proxy: app.config.uses.proxy,
@@ -202,6 +202,20 @@ function _initSession() {
         secret: app.config.setters.cookieSecret,
         store: mongoStore
     }));
+
+    // If the request is from a logged in user, mark him as online.
+    app.use(function(req, res, next){
+        if(req.session && req.session.user && req.session.user.username) {
+            app.queries.updateDocument(
+                {username: req.session.user.username},
+                app.queries.ONLINEMODEL,
+                {createdAt: Date.now()},
+                next);
+        }
+        else {
+            next();
+        }
+    });
 
     app.logger.info('Session setup.');
 }

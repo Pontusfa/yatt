@@ -48,12 +48,13 @@ function _initModels(config, db) {
             salt: String,
             email: {type: String, unique: true},
             active: {type: Boolean, default: true}, //TODO: false + send mail
-            banned: {type: Boolean, default: false},
+            banned: {type: Boolean, default: false}, //TODO: merge into status field: {"inactive", "active", "banned"}
             passkey: {type: String, index: true, default: -1},
             rank: {type: Number, default: config.site.ranks.MEMBER},
             created: {type: Date, default: Date.now},
             downloaded: {type: Number, default: 0},
-            uploaded: {type: Number, default: 0}
+            uploaded: {type: Number, default: 0},
+            notes: {type: String, default: ''}
         }),
 
         torrentSchema = db.Schema({
@@ -83,12 +84,18 @@ function _initModels(config, db) {
             text: String,
             author: {type: String, default: 'Unknown'},
             created: {type: Date, default: Date.now}
+        }),
+
+        onlineSchema = db.Schema({
+            username: {type: String, index: true},
+            createdAt: { type: Date, expires: 60, default: Date.now }
         });
 
     models.user = db.model('user', UserSchema);
     models.torrent = db.model('torrent', torrentSchema);
     models.news = db.model('news', newsSchema);
     models.request = db.model('request', requestSchema);
+    models.online = db.model('online', onlineSchema);
 }
 
 module.exports = function (app) {

@@ -4,3 +4,60 @@ html(lang=language)
     body.container
         include /partials/navbar
         include /partials/alerts
+
+        .panel.panel-primary
+            .panel-heading
+                - var isOnline = user.online ? lang.online: lang.offline;
+                .panel-title=user.username + ' [' + isOnline + ']'
+            .panel-body
+
+                table.table
+
+                    tr
+                        td.col-lg-1=lang.rank
+                        td=lang.ranks[user.rank]
+                    tr
+                        td.col-lg-1=lang.created
+                        td=user.created
+
+                    if user.email
+                        tr
+                            td.col-lg-1=lang.email
+                            td=user.email
+
+                    if user.active || user.banned
+                        tr
+                            - var isActive = user.active ? lang.active: lang.inactive
+                            - var isBanned = user.banned ? lang.banned: lang.notBanned
+
+                            td.col-lg-1=lang.status
+                            td=lang.userIs + ' ' + isActive + ' ' + lang.and + ' ' + isBanned + '.'
+
+                    if user.canBeModerated
+                        tr
+                            td.col-lg-1=lang.moderateUser
+                            td
+                                if user.canBeBanned
+                                    a.tag.btn.btn-sm.btn-default(href=url + '&ban=1')=lang.ban
+                                if user.canBeUnbanned
+                                    a.tag.btn.btn-sm.btn-default(href=url + '&unban=1')=lang.unBan
+                                if user.canBePromoted
+                                    a.tag.btn.btn-sm.btn-default(href=url + '&promote=1')=lang.promote
+                                if user.canBeDemoted
+                                    a.tag.btn.btn-sm.btn-default(href=url + '&demote=1')=lang.demote
+
+
+
+
+                    tr
+                        td.col-lg-1=lang.downloaded
+                        td=user.downloaded
+
+                    tr
+                        td.col-lg-1=lang.uploaded
+                        td=user.uploaded
+
+                    if user.notes
+                        td.col-lg-1=lang.notes
+                        td=user.notes
+

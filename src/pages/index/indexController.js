@@ -68,12 +68,19 @@ Controller.prototype.executeModel = function () {
 };
 
 Controller.prototype._successBuildCallback = function (result) {
-    var res = this._res;
+    var res = this._res,
+        locals = res.locals;
 
-    res.locals.canRemove = result.canRemove;
-    res.locals.canAdd = result.canAdd;
-    res.locals.index = result.index;
-    res.locals.site = site;
+    locals.canRemove = result.canRemove;
+    locals.canAdd = result.canAdd;
+    locals.index = result.index;
+    locals.site = site;
+    locals.onlineUsers = result.onlineUsers;
+    locals.registeredUsers = result.registeredUsers;
+    locals.newestMember = result.newestMember;
+    locals.uploadedTorrents = result.uploadedTorrents;
+    locals.leechers = result.leechers;
+    locals.seeders = result.seeders;
 
     res.send(template(res.locals));
 };

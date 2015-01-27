@@ -87,7 +87,7 @@ Verifier.prototype._validateUserCallback = function () {
         callbacks.errorCallback({type: 'error', message: 'wrongUserPass'});
     }
     else if (foundUser.banned) {
-        callbacks.ErrorCallback({type: 'error', message: 'banned'});
+        callbacks.errorCallback({type: 'error', message: 'banned'});
     }
     else if (!foundUser.active) {
         callbacks.errorCallback({type: 'error', message: 'notActive'});
