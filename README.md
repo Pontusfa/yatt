@@ -1,7 +1,7 @@
 yatt
 ====
 
-Yatt is a torrent tracker web page built using javascript with node.js.  
+Yatt is Yet Another Torrent Tracker web page built using javascript with node.js.  
 It is intended as a learning project only and is as such probably not suitable for use in the wild.  
 config.json contains information that should be kept secret from the outside world. Don't give it away.  
 
