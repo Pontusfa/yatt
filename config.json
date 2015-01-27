@@ -5,7 +5,7 @@
         "port": 8081,
         "https port": 8443,
         "certPath": "sslcert/",
-        "logFile": ".logs/app.log",
+        "logFile": "logs/app.log",
         "pages": "src/pages",
         "static": "public/",
         "cookieSecret": "OxDSOdYI5WTt5FFERSKOBveHpJcEtmyos7UtonagDieVNbkKrZO+P3kUlfQYS/1PvPGYxhSx5ROzBHFfhfV7rA==",
