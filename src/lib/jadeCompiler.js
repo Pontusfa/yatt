@@ -1,3 +1,10 @@
+/**
+ * Depending on if we're in production or development mode, we want to be able
+ * to either replace jade templates on the fly(easier to see changes, slower)
+ * or compile them(need to restart app to see changes, quicker)
+ * jadeCompiler is a function that does one of the two.
+ */
+
 var jade = require('jade');
 
 /**

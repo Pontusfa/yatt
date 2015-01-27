@@ -2,7 +2,6 @@
  * Main entry point to create and run the tracker web app as multi core clusters.
  * Good for production use with high payload running on a non-low end system.
  * Initiates the app and kicks back, letting the others do the heavy lifting.
- * @author Pontus Falk
  */
 var cluster = require('cluster');
 

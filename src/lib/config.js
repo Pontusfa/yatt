@@ -1,6 +1,5 @@
 /**
- *This module sets up the config object according
- *to the file config.json
+ *This module sets up the config object according to the file config.json
  */
 
 var fs = require('fs'),

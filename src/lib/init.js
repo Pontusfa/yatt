@@ -1,6 +1,5 @@
 /**
  * Installs middleware, routes and configures the app object.
- * @author Pontus Falk
  */
 
 var express = require('express'),
